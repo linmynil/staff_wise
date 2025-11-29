@@ -1,0 +1,35 @@
+// {
+//   "extends": "@react-native/typescript-config",
+//   "include": ["**/*.ts", "**/*.tsx"],
+//   "exclude": ["**/node_modules", "**/Pods"]
+// }
+
+{
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@assets": ["assets"],
+      "@components": ["components"],
+      "@navigation": ["navigation"],
+      "@layouts": ["layouts"],
+      "@screens": ["screens"],
+      "@utils": ["utils"],
+      "@services": ["services"],
+      "@redux": ["redux"],
+      "@hooks": ["hooks"],
+      "@config": ["config"],
+
+      "@assets/*": ["assets/*"],
+      "@components/*": ["components/*"],
+      "@navigation/*": ["navigation/*"],
+      "@layouts/*": ["layouts/*"],
+      "@screens/*": ["screens/*"],
+      "@utils/*": ["utils/*"],
+      "@services/*": ["services/*"],
+      "@redux/*": ["redux/*"],
+      "@hooks/*": ["hooks/*"],
+      "@config/*": ["config/*"]
+    }
+  }
+}
