@@ -1,8 +1,8 @@
 import { AddIcon } from '@assets';
-import { Button, View } from '@components';
+import { Button } from '@components';
 import MainLayout from '@components/layout/main-layout';
 import colors from '@utils/constants/colors';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';

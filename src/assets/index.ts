@@ -18,6 +18,9 @@ import DocumentTextIcon from '@assets/icons/DocumentText';
 import ChevronRight from '@assets/icons/ChevronRight';
 import ArrowLogout from '@assets/icons/ArrowLogout';
 import SwapIcon from '@assets/icons/SwapIcon';
+import ArrowRightIcon from '@assets/icons/ArrowRightIcon';
+import HolidaysIcon from '@assets/icons/HolidaysIcon';
+import AnnualIcon from '@assets/icons/AnnualIcon';
 
 export {
   CloseIcon,
@@ -40,4 +43,7 @@ export {
   ChevronRight,
   ArrowLogout,
   SwapIcon,
+  ArrowRightIcon,
+  HolidaysIcon,
+  AnnualIcon
 };
