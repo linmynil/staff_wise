@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@babel/plugin-transform-export-namespace-from": "^7.27.1",
-    "@gorhom/bottom-sheet": "^5.2.6",
+    "@gorhom/bottom-sheet": "^5.2.8",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native/new-app-screen": "0.82.1",
     "@react-navigation/bottom-tabs": "^7.8.6",
@@ -28,6 +28,8 @@
     "react": "19.1.1",
     "react-native": "0.82.1",
     "react-native-bootsplash": "^6.3.11",
+    "react-native-bouncy-checkbox": "^4.1.2", 
+    "react-native-date-picker": "^5.0.13",
     "react-native-error-boundary": "^3.1.0",
     "react-native-event-listeners": "^1.0.7",
     "react-native-gesture-handler": "^2.29.1",

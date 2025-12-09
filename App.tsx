@@ -17,6 +17,7 @@ import BottomSheetProvider2 from '@components/common/bottom-sheet-outside';
 import RootNavigator from '@navigation';
 import BootSplash from 'react-native-bootsplash';
 import { useEffect } from 'react';
+import BottomSheetProvider3 from '@components/common/bottom-sheet-for-multiple-select';
 
 configDayJS();
 
@@ -76,10 +77,12 @@ const AppContent = () => {
           <GestureHandlerRootView style={{ flex: 1 }}>
             <BottomSheetProvider>
               <BottomSheetProvider2>
-                <ModalProvider>
-                  <RootNavigator />
-                  <Toast config={toastConfig} />
-                </ModalProvider>
+                <BottomSheetProvider3>
+                  <ModalProvider>
+                    <RootNavigator />
+                    <Toast config={toastConfig} />
+                  </ModalProvider>
+                </BottomSheetProvider3>
               </BottomSheetProvider2>
             </BottomSheetProvider>
           </GestureHandlerRootView>

@@ -22,13 +22,13 @@ const HeaderAction = ({
       <Text weight={600} size={16}>
         {title}
       </Text>
-      {actionLabel && onActionPress && (
+      {actionLabel && icon && onActionPress && (
         <TouchableOpacity
           style={styles.actionButton}
           onPress={onActionPress}
           activeOpacity={0.8}
         >
-          <Text color={colors.primary.default} size={12} weight={600} marginRight={5}>
+          <Text color={colors.primary.default} size={12} weight={600}>
             {actionLabel}
           </Text>
           {icon}
@@ -45,10 +45,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
+    minHeight: 50,
   },
-    actionButton: {
+  actionButton: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 6,
@@ -56,5 +55,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 2,
     borderColor: colors.primary.default,
+    gap: 8,
   },
 });

@@ -16,58 +16,79 @@ import { Platform, Pressable, StyleSheet } from 'react-native';
 import colors from '@utils/constants/colors';
 import { useKeyboardStatus } from '@hooks';
 
+type PresentPayload = {
+  content: React.ReactNode;
+  onChange?: (v: any) => void;
+  closeCallback?: () => void;
+};
+
 const BottomSheetContext = createContext<{
-  onChangeRef: { current: any };
-  bottomSheetModalRef: { current: BottomSheetModal | null };
+  bottomSheetModalRef: any;
+  onChangeRef: any;
+  onUpdateStatusRef: any;
+  closeCallbackRef: any;
   isOpen: boolean;
-  setOpen: (v: any) => void;
+  setOpen: () => void;
   bottomSheetHeight: number;
-  onUpdateDataRef: { current: any };
-  onUpdateStatusRef: { current: any };
-  closeCallbackRef: { current: any };
-}>({
-  bottomSheetModalRef: {
-    current: null,
-  },
-  onChangeRef: {
-    current: null,
-  },
-  isOpen: false,
-  setOpen: () => {},
-  bottomSheetHeight: 0,
-  onUpdateDataRef: { current: null },
-  onUpdateStatusRef: { current: null },
-  closeCallbackRef: { current: null },
-});
+  openBottomSheet: (payload: PresentPayload) => void;
+  closeBottomSheet: () => void;
+}>({} as any);
 
 export const useBottomSheetContext = () => useContext(BottomSheetContext);
 
+const DEFAULT_HEIGHTS = [height * 0.6, height * 0.9];
+
 const BottomSheetProvider = ({ children }: { children: any }) => {
-  const heights = [height * 0.55, height * 0.9];
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const onChangeRef = useRef<any>(() => {});
-  const onUpdateDataRef = useRef<any>(() => {});
-  const onUpdateStatusRef = useRef<any>(() => {});
-  const [bottomSheetHeight, setBottomSheetHeight] = useState(0);
-  const snapPoints = heights;
+  const snapPoints = DEFAULT_HEIGHTS;
   const openIndex = 0;
-  const isOpenKeyboard = useKeyboardStatus();
+
+  const bottomSheetModalRef = useRef<BottomSheetModal | null>(null);
+  const onChangeRef = useRef<any>(null);
+  const onUpdateStatusRef = useRef<any>(null);
   const closeCallbackRef = useRef<any>(null);
 
+  const [sheetContent, setSheetContent] = useState<React.ReactNode>(null);
+  const [bottomSheetHeight, setBottomSheetHeight] = useState(0);
+
+  const isOpenKeyboard = useKeyboardStatus();
   const isOpen = bottomSheetHeight > 0;
+
   const setOpen = () => {
-    setBottomSheetHeight(heights[openIndex]);
+    bottomSheetModalRef.current?.present();
+    setBottomSheetHeight(snapPoints[openIndex]);
+  };
+
+  const openBottomSheet = (payload: PresentPayload) => {
+    if (payload?.content) setSheetContent(payload.content);
+    if (payload?.onChange) onChangeRef.current = payload.onChange;
+    if (payload?.closeCallback)
+      closeCallbackRef.current = payload.closeCallback;
+
+    requestAnimationFrame(() => {
+      bottomSheetModalRef.current?.present();
+      setBottomSheetHeight(snapPoints[openIndex]);
+    });
+  };
+
+  const closeBottomSheet = () => {
+    bottomSheetModalRef.current?.dismiss();
+    closeCallbackRef.current?.();
+    setBottomSheetHeight(0);
   };
 
   const handleSheetChanges = (i: number) => {
-    setBottomSheetHeight(heights[i]);
+    if (i === -1) {
+      closeBottomSheet();
+      return;
+    }
+    setBottomSheetHeight(snapPoints[i]);
   };
 
   useEffect(() => {
-    if (isOpenKeyboard) {
+    if (isOpen && isOpenKeyboard) {
       bottomSheetModalRef.current?.snapToIndex(1);
     }
-  }, [isOpenKeyboard]);
+  }, [isOpenKeyboard, isOpen]);
 
   return (
     <BottomSheetContext.Provider
@@ -75,11 +96,12 @@ const BottomSheetProvider = ({ children }: { children: any }) => {
         bottomSheetModalRef,
         isOpen,
         onChangeRef,
-        onUpdateDataRef,
         onUpdateStatusRef,
+        closeCallbackRef,
         setOpen,
         bottomSheetHeight,
-        closeCallbackRef,
+        openBottomSheet,
+        closeBottomSheet,
       }}
     >
       <BottomSheetModalProvider>
@@ -90,39 +112,24 @@ const BottomSheetProvider = ({ children }: { children: any }) => {
           style={styles.bottomSheetWrapper}
         >
           {isOpen && (
-            <>
-              <Pressable
-                style={styles.blur}
-                onPress={() => {
-                  bottomSheetModalRef.current?.close();
-                  setBottomSheetHeight(0);
-                }}
-              />
-            </>
+            <Pressable style={styles.blur} onPress={closeBottomSheet} />
           )}
+
           <BottomSheetModal
-            enableContentPanningGesture={false}
             ref={bottomSheetModalRef}
             index={openIndex}
             snapPoints={snapPoints}
             onChange={handleSheetChanges}
+            enableContentPanningGesture={false}
             handleStyle={{
               backgroundColor: colors.neutral.c100,
               borderTopLeftRadius: 12,
               borderTopRightRadius: 12,
             }}
           >
-            {({ data }: any) => {
-              onChangeRef.current = data.onChange;
-              if (data.closeCallback) {
-                closeCallbackRef.current = data.closeCallback;
-              }
-              return (
-                <BottomSheetView style={styles.contentContainer}>
-                  {data.content}
-                </BottomSheetView>
-              );
-            }}
+            <BottomSheetView style={styles.contentContainer}>
+              {sheetContent}
+            </BottomSheetView>
           </BottomSheetModal>
         </View>
       </BottomSheetModalProvider>
@@ -157,41 +164,6 @@ const styles = StyleSheet.create({
       },
     }),
     backgroundColor: colors.neutral.c100,
-  },
-  container: {
-    width: '100%',
-    maxHeight: 80,
-    gap: 4,
-  },
-  label: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: colors.neutral.c700,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 40,
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    gap: 8,
-  },
-  input: {
-    flex: 1,
-    height: 40,
-    fontSize: 14,
-    fontWeight: '400',
-    color: colors.neutral.c900,
-  },
-  error: {
-    fontSize: 12,
-    fontWeight: '400',
-    color: colors.red.c600,
-  },
-  disabled: {
-    opacity: 0.5,
   },
   blur: {
     position: 'absolute',

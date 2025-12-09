@@ -8,7 +8,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import HeaderAction from '@components/ui/header-action';
 import { ArrowRightIcon } from '@assets';
-import HorizontalList from '@components/ui/horizontal-list';
+import HorizontalList from '@components/ui/dashboard-item';
 const profileDefault: ProfileResponse = {
   id: 1,
   name: 'Mỹ Linh',

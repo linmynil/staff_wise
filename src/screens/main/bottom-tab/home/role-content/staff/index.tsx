@@ -1,14 +1,16 @@
 import MainLayout from '@components/layout/main-layout';
 import ProfileInfo from '@components/ui/proflie-info';
-import HorizontalList from '@components/ui/horizontal-list';
-import HorizontalSelectList from '@components/ui/horizontal-select-list';
 import HeaderAction from '@components/ui/header-action';
 import { MainRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
 import { ProfileResponse, Role } from '@utils/types/profile.type';
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import {ArrowRightIcon } from '@assets';
+import React, { Fragment } from 'react';
+import { FlatList, ScrollView, StyleSheet } from 'react-native';
+import { ArrowRightIcon } from '@assets';
+import DashboardItem, { Dashboard } from '@components/ui/dashboard-item';
+import ManagementItem from '@components/ui/management-item';
+import { View } from '@components';
+import { nanoid } from '@reduxjs/toolkit';
 
 const profileDefault: ProfileResponse = {
   id: 1,
@@ -17,55 +19,114 @@ const profileDefault: ProfileResponse = {
   avatar: '',
 };
 
-const menuData = [
+const menuData: Dashboard[] = [
   {
     id: '1',
     typeDate: 'Annual',
-    date: '7',       
-    totalDate: '12',  
+    date: '7',
+    totalDate: '12',
   },
   {
     id: '2',
     typeDate: 'Holidays',
-    date: '3',    
+    date: '3',
     totalDate: '3',
   },
 ];
 
+enum ManagementType {
+  LEAVE = 'leave',
+  STAFF = 'staff',
+}
+
+const menuData2 = [
+  {
+    id: '1',
+    title: 'Quản lý nghỉ phép',
+    time: '07/03/2025',
+    type: ManagementType.LEAVE,
+  },
+  {
+    id: '2',
+    title: 'Quản lý nhân viên',
+    time: '12/11/2025',
+    type: ManagementType.STAFF,
+  },
+];
 
 const StaffHome = () => {
   const navigation = useNavigation<any>();
   const onLeaveStatus = () => {
     navigation.navigate(MainRoutes.STAFF);
   };
-  const menuData2 = [
-  {
-    id: "1",
-    title: "Quản lý nghỉ phép",
-    time: "07/03/2025",
-    onPress:()=> {onLeaveStatus}
-  },
-  {
-    id: "2",
-    title: "Quản lý nhân viên",
-    time: "12/11/2025",
-    onPress:()=> {onLeaveStatus}
-  },
-];
+
+  const handleManagement = (type: string) => {
+    switch (type) {
+      case ManagementType.LEAVE:
+        // navigation.navigate(MainRoutes.STAFF);
+        console.log('leave');
+
+        break;
+      case ManagementType.STAFF:
+        // navigation.navigate(MainRoutes.STAFF);
+        console.log('staff');
+        break;
+
+      default:
+        break;
+    }
+  };
+
   return (
     <MainLayout
       title="Staff Wise"
       headerChildren={<ProfileInfo profile={profileDefault} />}
     >
-      <View style={styles.container}>     
-        <HeaderAction
-          title="Dashboard"
-          actionLabel="Leave Status"
-          icon={<ArrowRightIcon width={11} height={11} viewBox="0 0 11 11" />}
-          onActionPress={onLeaveStatus}
-        />
-        <HorizontalList data={menuData} />;
-        <HorizontalSelectList data={menuData2} />;
+      <View style={styles.container}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <HeaderAction
+            title="Dashboard"
+            actionLabel="Leave Status"
+            icon={<ArrowRightIcon width={11} height={11} viewBox="0 0 11 11" />}
+            onActionPress={onLeaveStatus}
+          />
+
+          <View
+            style={{
+              flexWrap: 'wrap',
+              flexDirection: 'row',
+              alignContent: 'center',
+              alignItems: 'center',
+              gap: 16,
+            }}
+          >
+            {menuData?.map(item => (
+              <DashboardItem key={`${item.id + nanoid()}`} item={item} />
+            ))}
+          </View>
+
+          <HeaderAction title="Management" onActionPress={onLeaveStatus} />
+          <View>
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              data={menuData2}
+              keyExtractor={item => `${item.id + nanoid()}`}
+              horizontal
+              renderItem={({ item }) => (
+                <ManagementItem
+                  item={item}
+                  onPress={() => handleManagement(item.type)}
+                />
+              )}
+              contentContainerStyle={{
+                gap: 16,
+              }}
+            />
+          </View>
+          <View height={32}>
+            <></>
+          </View>
+        </ScrollView>
       </View>
     </MainLayout>
   );
@@ -76,6 +137,6 @@ export default StaffHome;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 16,
   },
 });

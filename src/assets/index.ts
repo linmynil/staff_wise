@@ -21,6 +21,9 @@ import SwapIcon from '@assets/icons/SwapIcon';
 import ArrowRightIcon from '@assets/icons/ArrowRightIcon';
 import HolidaysIcon from '@assets/icons/HolidaysIcon';
 import AnnualIcon from '@assets/icons/AnnualIcon';
+import ArrowDown from '@assets/icons/ArrowDown';
+import Calendar from '@assets/icons/Calendar';
+import SearchIcon from '@assets/icons/SearchIcon';
 
 export {
   CloseIcon,
@@ -45,5 +48,8 @@ export {
   SwapIcon,
   ArrowRightIcon,
   HolidaysIcon,
-  AnnualIcon
+  AnnualIcon,
+  ArrowDown,
+  Calendar,
+  SearchIcon
 };
