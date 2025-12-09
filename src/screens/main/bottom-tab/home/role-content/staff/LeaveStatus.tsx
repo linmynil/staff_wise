@@ -12,6 +12,8 @@ import { useBottomSheetContext2 } from '@components/common/bottom-sheet-outside'
 import { height } from '@utils/helpers/dimension';
 import SelectBox from '@components/common/select-box';
 import colors from '@utils/constants/colors';
+import DatePicker from '@components/common/date-picker';
+import dayjs from 'dayjs';
 
 const options = [
   {
@@ -137,6 +139,7 @@ const LeaveStatus = () => {
   const [pickedDisease, setPickedDisease] = useState(
     [] as MultipleSelectOption[],
   );
+  const [time, setTime] = useState(new Date());
 
   const { openBottomSheet2, closeBottomSheet2 } = useBottomSheetContext2();
 
@@ -194,6 +197,13 @@ const LeaveStatus = () => {
           options={options}
           value={test}
           onChange={v => setTest(v)}
+        />
+        <DatePicker
+          placeholder="Chọn ngày đăng ký"
+          label="Ngày đăng ký"
+          max={dayjs()}
+          value={time as any}
+          onChange={date => setTime(date as any)}
         />
         <MultipleSelect
           value={pickedDisease}
