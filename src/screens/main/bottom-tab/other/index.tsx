@@ -8,6 +8,7 @@ import colors from '@utils/constants/colors';
 import axios from 'axios';
 import React from 'react';
 import { Pressable, ScrollView, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Other = () => {
   const dispatch = useAppDispatch();
@@ -20,13 +21,13 @@ const Other = () => {
             icon={<UserIdIcon />}
             title={'Thông tin cá nhân'}
             description={'Chỉnh sửa thông tin cá nhân của bạn'}
-            onPress={() => {}}
+            onPress={() => { }}
           />
           <OtherItem
             icon={<SwapIcon />}
             title={'Đổi mật khẩu'}
             description={'Thay đổi mật khẩu đăng nhập App'}
-            onPress={() => {}}
+            onPress={() => { }}
             isMissingMessage={'Tính năng đang phát triển'}
           />
           <Pressable
@@ -46,6 +47,7 @@ const Other = () => {
                     title="Đồng ý"
                     onPress={async () => {
                       modalControl?.close();
+                      await AsyncStorage.removeItem('accessToken');
                       axios.defaults.headers.common.Authorization = '';
                       dispatch(authSlice.actions.removeToken());
                     }}

@@ -3,18 +3,13 @@ import MainLayout from '@components/layout/main-layout';
 import ProfileInfo from '@components/ui/proflie-info';
 import { MainRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
+import { useAppSelector } from '@redux/selectors';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { ProfileResponse, Role } from '@utils/types/profile.type';
 
-const profileDefault: ProfileResponse = {
-  id: 1,
-  name: 'Mỹ Linh',
-  position: Role.ADMIN,
-  avatar: '',
-};
 
 const AdminHome = () => {
+  const accountInfo = useAppSelector(state => state.account.accountInfo)
   const navigation = useNavigation<any>();
   const onLeaveStatus = () => {
     navigation.navigate(MainRoutes.ADMIN);
@@ -22,7 +17,7 @@ const AdminHome = () => {
   return (
     <MainLayout
       title="Staff Wise"
-      headerChildren={<ProfileInfo profile={profileDefault} />}
+      headerChildren={<ProfileInfo profile={accountInfo} />}
     >
       <View style={styles.container}>
         <Text>AdminHome</Text>

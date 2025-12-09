@@ -6,8 +6,8 @@ export const passwordRegExp =
 const validateSchema = {
   password: Yup.string()
     .trim()
-    .required('Please enter password!')
-    .matches(passwordRegExp, 'Password is not in correct format!'),
+    .required('Please enter password!'),
+    // .matches(passwordRegExp, 'Password is not in correct format!'),
   username: Yup.string().trim().required('Please enter your username!'),
 };
 

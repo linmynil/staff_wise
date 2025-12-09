@@ -1,24 +1,29 @@
 import { AccountIcon, LockIcon } from '@assets';
 import { Button, PasswordInput, Text, TextInput, View } from '@components';
 import AuthLayout from '@components/layout/auth-layout';
+import { setAccountInfo } from '@redux/reducers/account.slice';
 import { setToken } from '@redux/reducers/auth.slice';
 import { useAppDispatch } from '@redux/selectors';
+import { useLoginMutation } from '@services/auth';
 import { baseAPI } from '@services/baseAPI';
 import colors from '@utils/constants/colors';
+import { AuthErrorsMap } from '@utils/errors/auth.errors';
 import validateSchema from '@utils/validations';
+import axios from 'axios';
 import { Formik } from 'formik';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 import * as Yup from 'yup';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialForm = { username: '', password: '' };
 
 const Login = () => {
   const dispatch = useAppDispatch();
-  // const setFieldErrorRef = useRef<
-  //   (field: string, message: string | undefined) => void
-  // >(() => {});
-  // const [login, { isLoading, error }] = useLoginMutation();
+  const setFieldErrorRef = useRef<
+    (field: string, message: string | undefined) => void
+  >(() => { });
+  const [login, { isLoading, error }] = useLoginMutation();
 
   const validationSchema = Yup.object({
     username: validateSchema.username,
@@ -26,25 +31,36 @@ const Login = () => {
   });
 
   const signIn = async (values: typeof initialForm) => {
-    console.log('values', JSON.stringify(values, null, 2));
-    const token = 'day-la-token';
-    if (token) {
-      dispatch(baseAPI.util.resetApiState());
-      dispatch(
-        setToken({
-          access_token: token,
-        }),
-      );
-    }
+    login({
+      username: values.username,
+      password: values.password
+    }).then(async (res: any) => {
+
+
+      const token = res?.data?.access_token;
+      const accountInfo = res?.data?.account;
+      if (token) {
+        await AsyncStorage.setItem('accessToken', token);
+        dispatch(baseAPI.util.resetApiState());
+        dispatch(
+          setToken({
+            access_token: token,
+          }),
+        );
+      }
+      if (accountInfo) {
+        dispatch(setAccountInfo(accountInfo))
+      }
+    })
   };
 
-  // const errorCode = (error as any)?.data?.statusCode;
-  // useEffect(() => {
-  //   if (errorCode && setFieldErrorRef.current) {
-  //     setFieldErrorRef.current('emailOrPhoneNumber', t('code.' + errorCode));
-  //     setFieldErrorRef.current('password', t('code.' + errorCode));
-  //   }
-  // }, [errorCode]);
+  const errorCode = (error as any)?.data?.errorCode;
+  useEffect(() => {
+    if (errorCode && setFieldErrorRef.current) {
+      setFieldErrorRef.current('username', AuthErrorsMap[errorCode]);
+      setFieldErrorRef.current('password', AuthErrorsMap[errorCode]);
+    }
+  }, [errorCode]);
 
   return (
     <AuthLayout>
@@ -59,13 +75,11 @@ const Login = () => {
           handleSubmit,
           errors,
           touched,
-          // isValid,
-          // dirty,
-          // setFieldError,
+          setFieldError,
           setFieldValue,
           setFieldTouched,
         }) => {
-          // setFieldErrorRef.current = setFieldError;
+          setFieldErrorRef.current = setFieldError;
           return (
             <View style={styles.container}>
               <View

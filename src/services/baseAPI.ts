@@ -2,8 +2,8 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import baseQuery from './axiosBaseQuery';
 
 export enum tagTypes {
-  Profile = 'Profile',
-  Order = 'Order',
+  Account = 'Account',
+  Auth = 'Auth',
 }
 
 export enum Method {

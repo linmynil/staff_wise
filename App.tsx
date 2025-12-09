@@ -16,8 +16,10 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BottomSheetProvider2 from '@components/common/bottom-sheet-outside';
 import RootNavigator from '@navigation';
 import BootSplash from 'react-native-bootsplash';
-import { useEffect } from 'react';
+import { Children, useEffect } from 'react';
 import BottomSheetProvider3 from '@components/common/bottom-sheet-for-multiple-select';
+import axios from 'axios';
+import { API_URL } from '@env';
 
 configDayJS();
 
@@ -91,8 +93,22 @@ const AppContent = () => {
     </ErrorBoundary>
   );
 };
+const PreLoadApp = ({ children }: any) => {
+  const getConfig = () => {
+    axios.defaults.baseURL = API_URL;
+  }
 
-const App = () => <AppContent />;
+  useEffect(() => {
+    getConfig()
+  }, [])
+
+  return children
+}
+const App = () => (
+  <PreLoadApp>
+    <AppContent />
+  </PreLoadApp>
+);
 
 const styles = StyleSheet.create({
   container: {

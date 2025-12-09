@@ -3,6 +3,7 @@ import { baseAPI } from '@services/baseAPI';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistStore, persistReducer } from 'redux-persist';
 import authReducer from './reducers/auth.slice';
+import accountReducer from './reducers/account.slice';
 import { createTransform } from 'redux-persist';
 
 const appTransform = createTransform(
@@ -23,6 +24,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  account: accountReducer,
   [baseAPI.reducerPath]: baseAPI.reducer,
 });
 
