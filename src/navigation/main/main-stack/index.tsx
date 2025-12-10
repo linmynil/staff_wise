@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BottomTabNavigation from '../bottom-tab-navigator';
 import StaffNavigation from '../staff-stack';
 import ChatNavigation from '../chat-stack';
+import OtherNavigation from '../other-stack';
 
 const MainStack = createNativeStackNavigator<any>();
 
@@ -21,6 +22,7 @@ const MainNavigation = () => {
         name={MainRoutes.CHAT_MAIN}
         component={ChatNavigation}
       />
+      <MainStack.Screen name={MainRoutes.OTHER} component={OtherNavigation} />
     </MainStack.Navigator>
   );
 };

@@ -39,6 +39,7 @@ interface IProps extends Omit<TextInputProps, 'onChange'> {
   isRequired?: boolean;
   isNumberHint?: boolean;
   isCurrency?: boolean;
+  passwordVisible?: boolean;
 }
 
 const TypesMap: {
@@ -178,8 +179,12 @@ TextInput.Type = InputType;
 
 export default TextInput;
 
-export const PasswordInput = ({ label, ...props }: IProps) => {
-  const [isPasswordVisible, setPasswordVisible] = useState(false);
+export const PasswordInput = ({
+  label,
+  passwordVisible = false,
+  ...props
+}: IProps) => {
+  const [isPasswordVisible, setPasswordVisible] = useState(passwordVisible);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!isPasswordVisible);

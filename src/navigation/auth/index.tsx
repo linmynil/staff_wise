@@ -1,7 +1,8 @@
-import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthRoutes } from '@navigation/routes';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ChangePassword from '@screens/auth/change-password';
 import Login from '@screens/auth/login';
+import React from 'react';
 
 const AuthStack = createNativeStackNavigator<any>();
 
@@ -12,6 +13,10 @@ const AuthNavigator = () => {
       initialRouteName={AuthRoutes.LOGIN}
     >
       <AuthStack.Screen name={AuthRoutes.LOGIN} component={Login} />
+      <AuthStack.Screen
+        name={AuthRoutes.CHANGE_PASSWORD}
+        component={ChangePassword}
+      />
     </AuthStack.Navigator>
   );
 };

@@ -1,28 +1,39 @@
 import { AccountIcon, LockIcon } from '@assets';
 import { Button, PasswordInput, Text, TextInput, View } from '@components';
 import AuthLayout from '@components/layout/auth-layout';
+import { setString } from '@config/mmkv';
+import { AuthRoutes } from '@navigation/routes';
+import { useNavigation } from '@react-navigation/native';
 import { setAccountInfo } from '@redux/reducers/account.slice';
-import { setToken } from '@redux/reducers/auth.slice';
+import { setToken, TokenType } from '@redux/reducers/auth.slice';
 import { useAppDispatch } from '@redux/selectors';
 import { useLoginMutation } from '@services/auth';
 import { baseAPI } from '@services/baseAPI';
 import colors from '@utils/constants/colors';
 import { AuthErrorsMap } from '@utils/errors/auth.errors';
 import validateSchema from '@utils/validations';
-import axios from 'axios';
-import { Formik } from 'formik';
+import { Formik, FormikErrors } from 'formik';
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet } from 'react-native';
+import Toast from 'react-native-toast-message';
 import * as Yup from 'yup';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialForm = { username: '', password: '' };
 
 const Login = () => {
+  const navigation = useNavigation<any>();
   const dispatch = useAppDispatch();
   const setFieldErrorRef = useRef<
     (field: string, message: string | undefined) => void
-  >(() => { });
+  >(() => {});
+  const setFieldValueRef = useRef<
+    | ((
+        field: string,
+        value: any,
+        shouldValidate?: boolean,
+      ) => Promise<void | FormikErrors<{ username: string; password: string }>>)
+    | null
+  >(null);
   const [login, { isLoading, error }] = useLoginMutation();
 
   const validationSchema = Yup.object({
@@ -33,25 +44,31 @@ const Login = () => {
   const signIn = async (values: typeof initialForm) => {
     login({
       username: values.username,
-      password: values.password
+      password: values.password,
     }).then(async (res: any) => {
-
-
       const token = res?.data?.access_token;
       const accountInfo = res?.data?.account;
-      if (token) {
-        await AsyncStorage.setItem('accessToken', token);
+      const mustChangePassword = res?.data?.account?.mustChangePassword;
+
+      if (token && accountInfo) {
         dispatch(baseAPI.util.resetApiState());
-        dispatch(
-          setToken({
-            access_token: token,
-          }),
-        );
+        dispatch(setAccountInfo(accountInfo));
+        setString(TokenType.ACCESS_TOKEN, token);
+
+        if (mustChangePassword) {
+          navigation.navigate(AuthRoutes.CHANGE_PASSWORD);
+          setFieldValueRef?.current?.('password', '', false);
+          Toast.show({
+            type: 'info',
+            text1:
+              'First-time login detected. Please update your password to access all features!',
+            visibilityTime: 8000,
+          });
+          return;
+        }
+        dispatch(setToken({ access_token: token }));
       }
-      if (accountInfo) {
-        dispatch(setAccountInfo(accountInfo))
-      }
-    })
+    });
   };
 
   const errorCode = (error as any)?.data?.errorCode;
@@ -80,6 +97,7 @@ const Login = () => {
           setFieldTouched,
         }) => {
           setFieldErrorRef.current = setFieldError;
+          setFieldValueRef.current = setFieldValue;
           return (
             <View style={styles.container}>
               <View
@@ -123,7 +141,7 @@ const Login = () => {
 
               <Button
                 title="Login"
-                // disabled={!isValid || !dirty}
+                loading={isLoading}
                 onPress={handleSubmit}
               />
             </View>

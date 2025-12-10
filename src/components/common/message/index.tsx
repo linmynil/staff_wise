@@ -42,6 +42,9 @@ const Message = ({
             borderLeftWidth: 1,
             borderLeftColor: colors.neutral.c200,
             paddingLeft: 8,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <Button.IconButton
@@ -63,13 +66,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     borderLeftWidth: 8,
-    borderLeftColor: colors.blue.c600,
+    borderLeftColor: colors.primary.darker,
     maxWidth: '90%',
     // overflow: 'hidden',
   },
   [Type.info]: {
     borderLeftWidth: 8,
-    borderLeftColor: colors.blue.c600,
+    borderLeftColor: colors.primary.darker,
   },
   [Type.error]: {
     borderLeftWidth: 8,

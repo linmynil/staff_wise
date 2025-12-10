@@ -1,25 +1,25 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { BottomSheetProvider, Message, ModalProvider } from '@components';
+import BottomSheetProvider3 from '@components/common/bottom-sheet-for-multiple-select';
+import BottomSheetProvider2 from '@components/common/bottom-sheet-outside';
 import Text from '@components/core/text';
 import View from '@components/core/view';
 import configDayJS from '@config/day';
+import { API_URL } from '@env';
 import { useGlobalError } from '@hooks';
+import RootNavigator from '@navigation';
 import store, { persistor } from '@redux/store';
 import colors from '@utils/constants/colors';
+import axios from 'axios';
+import { useEffect } from 'react';
 import { Image, StyleSheet } from 'react-native';
+import BootSplash from 'react-native-bootsplash';
 import ErrorBoundary from 'react-native-error-boundary';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import BottomSheetProvider2 from '@components/common/bottom-sheet-outside';
-import RootNavigator from '@navigation';
-import BootSplash from 'react-native-bootsplash';
-import { Children, useEffect } from 'react';
-import BottomSheetProvider3 from '@components/common/bottom-sheet-for-multiple-select';
-import axios from 'axios';
-import { API_URL } from '@env';
 
 configDayJS();
 
@@ -96,14 +96,14 @@ const AppContent = () => {
 const PreLoadApp = ({ children }: any) => {
   const getConfig = () => {
     axios.defaults.baseURL = API_URL;
-  }
+  };
 
   useEffect(() => {
-    getConfig()
-  }, [])
+    getConfig();
+  }, []);
 
-  return children
-}
+  return children;
+};
 const App = () => (
   <PreLoadApp>
     <AppContent />

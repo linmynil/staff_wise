@@ -8,23 +8,28 @@ import {
   Image,
   Keyboard,
   StyleSheet,
+  TouchableOpacity,
   ViewProps,
 } from 'react-native';
 import StatusBarLayout from '../status-bar';
+import { useNavigation } from '@react-navigation/native';
+import { ArrowLeft } from '@assets';
 
 interface IProps extends ViewProps {
   title?: string;
   back?: React.ReactNode;
   loading?: boolean;
+  heightHeader?: number;
 }
 
-const AuthLayout: React.FC<IProps> = ({
+const AuthLayout = ({
   title,
   back,
   children,
   loading,
+  heightHeader = 0.35,
   ...props
-}) => {
+}: IProps) => {
   return (
     <Fragment>
       {loading && (
@@ -49,7 +54,7 @@ const AuthLayout: React.FC<IProps> = ({
         statusBarColor={colors.primary.default}
       >
         <View
-          height={height * 0.35}
+          height={height * heightHeader}
           style={styles.container}
           onStartShouldSetResponder={() => {
             Keyboard.dismiss();
@@ -93,6 +98,22 @@ const AuthLayout: React.FC<IProps> = ({
     </Fragment>
   );
 };
+
+const BackToPreviousButton = () => {
+  const navigation = useNavigation();
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        navigation.goBack();
+      }}
+      style={{ width: 36 }}
+    >
+      <ArrowLeft color={colors.white} />
+    </TouchableOpacity>
+  );
+};
+
+AuthLayout.BackToPreviousButton = BackToPreviousButton;
 
 export default AuthLayout;
 

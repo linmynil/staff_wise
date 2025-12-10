@@ -5,6 +5,7 @@ enum RootRoutes {
 
 enum AuthRoutes {
   LOGIN = 'login',
+  CHANGE_PASSWORD = 'change_password',
 }
 
 enum MainRoutes {
@@ -14,6 +15,7 @@ enum MainRoutes {
   ADMIN = 'admin',
   MANAGER = 'manager',
   CHAT_MAIN = 'chat_main',
+  OTHER = 'other',
 }
 
 enum TabRoutes {
@@ -25,6 +27,10 @@ enum TabRoutes {
 
 enum ChatRoutes {
   CHAT_SCREEN = 'chat_screen',
+}
+
+enum OtherRoutes {
+  OTHER_CHANGE_PASSWORD = 'other_change_password',
 }
 
 enum StaffRoutes {
@@ -39,4 +45,5 @@ export {
   TabRoutes,
   StaffRoutes,
   ChatRoutes,
+  OtherRoutes,
 };

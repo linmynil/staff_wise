@@ -11,6 +11,7 @@ export enum Method {
   POST = 'POST',
   PUT = 'PUT',
   DELETE = 'DELETE',
+  PATCH = 'PATCH',
 }
 
 export const baseAPI = createApi({
