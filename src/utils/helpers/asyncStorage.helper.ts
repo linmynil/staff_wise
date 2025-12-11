@@ -10,7 +10,7 @@ export const storeData = async (key: string, value: string) => {
   try {
     await AsyncStorage.setItem(key, value);
   } catch (e) {
-    Toast.show({ type: 'error', text1: 'Không load được dữ liệu' });
+    Toast.show({ type: 'error', text1: 'Data could not be loaded.' });
   }
 };
 
