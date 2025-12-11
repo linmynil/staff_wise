@@ -2,7 +2,7 @@ import { ArrowRightIcon } from '@assets';
 import MainLayout from '@components/layout/main-layout';
 import AccountInfoHeader from '@components/ui/account-info-header';
 import HeaderAction from '@components/ui/header-action';
-import useGetAccountInfo from '@hooks/useGetAccountInfo';
+import { useGetAccountInfo } from '@hooks';
 import { MainRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';

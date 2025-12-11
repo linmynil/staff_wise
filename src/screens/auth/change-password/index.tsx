@@ -48,7 +48,7 @@ const ChangePassword = () => {
       oldPassword: values.oldPassword,
       newPassword: values.newPassword,
     })
-      .then(async (res: any) => {
+      .then(async res => {
         if (res?.data?.message) {
           await resetToken();
           navigation.goBack();

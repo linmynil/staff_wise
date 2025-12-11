@@ -6,7 +6,7 @@ import { AuthRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
 import { setAccountInfo } from '@redux/reducers/account.slice';
 import { setToken, TokenType } from '@redux/reducers/auth.slice';
-import { useAppDispatch } from '@redux/selectors';
+import { useAppDispatch } from '@redux/store';
 import { useLoginMutation } from '@services/auth';
 import { baseAPI } from '@services/baseAPI';
 import colors from '@utils/constants/colors';
@@ -45,7 +45,7 @@ const Login = () => {
     login({
       username: values.username,
       password: values.password,
-    }).then(async (res: any) => {
+    }).then(async res => {
       const token = res?.data?.access_token;
       const accountInfo = res?.data?.account;
       const mustChangePassword = res?.data?.account?.mustChangePassword;

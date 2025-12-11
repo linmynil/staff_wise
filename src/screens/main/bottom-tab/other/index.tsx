@@ -6,7 +6,7 @@ import { removeKey } from '@config/mmkv';
 import { MainRoutes, OtherRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
 import { authSlice, TokenType } from '@redux/reducers/auth.slice';
-import { useAppDispatch } from '@redux/selectors';
+import { useAppDispatch } from '@redux/store';
 import colors from '@utils/constants/colors';
 import axios from 'axios';
 import React from 'react';

@@ -1,8 +1,8 @@
 import Text from '@components/core/text';
 import View from '@components/core/view';
-import { useAppSelector } from '@redux/selectors';
-import { Account } from '@services/account';
+import { useAppSelector } from '@redux/store';
 import colors from '@utils/constants/colors';
+import { Account } from '@utils/types/account.type';
 import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 

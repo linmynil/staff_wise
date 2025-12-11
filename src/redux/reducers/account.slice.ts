@@ -1,14 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Account } from '@services/account';
+import { Account } from '@utils/types/account.type';
 
 export interface AccountState {
-  accountInfo?: Account
+  accountInfo?: Account;
 }
 
-
-
 const initialState: AccountState = {
-  accountInfo: undefined
+  accountInfo: undefined,
 };
 
 export const accountSlice = createSlice({
@@ -16,10 +14,10 @@ export const accountSlice = createSlice({
   initialState,
   reducers: {
     setAccountInfo: (state, action) => {
-      state.accountInfo = action.payload
+      state.accountInfo = action.payload;
     },
     resetAccountInfo: state => {
-      state.accountInfo = undefined
+      state.accountInfo = undefined;
     },
   },
 });

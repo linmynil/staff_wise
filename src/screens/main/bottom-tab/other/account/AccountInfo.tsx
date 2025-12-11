@@ -4,9 +4,9 @@ import { useBottomSheetContext2 } from '@components/common/bottom-sheet-outside'
 import Divider from '@components/common/divider';
 import MainLayout from '@components/layout/main-layout';
 import Row from '@components/ui/row';
-import useGetAccountInfo from '@hooks/useGetAccountInfo';
+import { useGetAccountInfo } from '@hooks';
 import { setAvatar } from '@redux/reducers/auth.slice';
-import { useAppDispatch, useAppSelector } from '@redux/selectors';
+import { useAppDispatch, useAppSelector } from '@redux/store';
 import colors from '@utils/constants/colors';
 import {
   getData,

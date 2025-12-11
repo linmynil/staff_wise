@@ -1,13 +1,13 @@
-import useAuthen from '@hooks/useAuthen';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { authSlice } from '@redux/reducers/auth.slice';
-import { useAppDispatch } from '@redux/selectors';
 import events, { eventKeys } from '@utils/helpers/events';
 import React, { useEffect } from 'react';
 import AuthNavigator from './auth';
 import MainNavigation from './main/main-stack';
 import { RootRoutes } from './routes';
+import { useAuthen } from '@hooks';
+import { useAppDispatch } from '@redux/store';
 
 const RootStack = createNativeStackNavigator<any>();
 

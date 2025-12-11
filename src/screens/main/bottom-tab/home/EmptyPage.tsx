@@ -9,7 +9,7 @@ const EmptyPage = () => {
     <View flex={1} center>
       <ActivityIndicator size="small" color={colors.neutral.c500} />
       <Text size={14} color={colors.neutral.c500} weight={600} marginTop={14}>
-        Trang đang được xây dựng...
+        The page is under construction...
       </Text>
     </View>
   );

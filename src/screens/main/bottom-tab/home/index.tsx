@@ -1,10 +1,10 @@
-import useGetAccountInfo from '@hooks/useGetAccountInfo';
-import { Role } from '@services/account';
 import React from 'react';
 import EmptyPage from './EmptyPage';
 import AdminHome from './role-content/admin';
 import ManagerHome from './role-content/manager';
 import StaffHome from './role-content/staff';
+import { Role } from '@utils/types/account.type';
+import { useGetAccountInfo } from '@hooks';
 
 const Home = () => {
   const accountInfo = useGetAccountInfo();

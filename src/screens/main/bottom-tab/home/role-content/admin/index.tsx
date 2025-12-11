@@ -5,7 +5,7 @@ import AccountInfoHeader from '@components/ui/account-info-header';
 import DashboardItem, { Dashboard } from '@components/ui/dashboard-item';
 import HeaderAction from '@components/ui/header-action';
 import ManagementItem from '@components/ui/management-item';
-import useGetAccountInfo from '@hooks/useGetAccountInfo';
+import { useGetAccountInfo } from '@hooks';
 import { MainRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
 import { nanoid } from '@reduxjs/toolkit';

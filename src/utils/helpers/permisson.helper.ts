@@ -10,7 +10,9 @@ export const requestStoragePermission = async () => {
       return true;
     }
     if (androidVersion < 33) {
-      const permisson = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+      const permisson = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      );
       if (permisson === PermissionsAndroid.RESULTS.GRANTED) {
         return true;
       }
@@ -29,7 +31,9 @@ export const requestCameraPermission = async () => {
       return true;
     }
     if (Platform.OS === 'android') {
-      const permission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
+      const permission = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+      );
       if (permission === PermissionsAndroid.RESULTS.GRANTED) {
         return true;
       }

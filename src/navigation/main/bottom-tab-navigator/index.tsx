@@ -2,7 +2,7 @@
 import { AddIcon, ChatIcon, MenuIcon } from '@assets';
 import HomeIcon from '@assets/icons/HomeIcon';
 import { View } from '@components';
-import useGetAccountInfo from '@hooks/useGetAccountInfo';
+import { useGetAccountInfo } from '@hooks';
 import { TabRoutes } from '@navigation/routes';
 import {
   BottomTabBarProps,
@@ -12,8 +12,8 @@ import ApplyLeave from '@screens/main/bottom-tab/apply-leave';
 import ChatHome from '@screens/main/bottom-tab/chat';
 import Home from '@screens/main/bottom-tab/home';
 import Other from '@screens/main/bottom-tab/other';
-import { Role } from '@services/account';
 import colors from '@utils/constants/colors';
+import { Role } from '@utils/types/account.type';
 import React, { useEffect } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import Animated, {

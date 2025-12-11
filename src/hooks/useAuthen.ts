@@ -1,4 +1,4 @@
-import { useAppSelector } from '@redux/selectors';
+import { useAppSelector } from '@redux/store';
 
 const useAuthen = () => {
   const isSignedIn = useAppSelector(state => state.auth.isSignedIn);
