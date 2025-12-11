@@ -3,7 +3,7 @@ import { Button, Text, useModal, View } from '@components';
 import MainLayout from '@components/layout/main-layout';
 import OtherItem from '@components/ui/other-item';
 import { removeKey } from '@config/mmkv';
-import { MainRoutes } from '@navigation/routes';
+import { MainRoutes, OtherRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
 import { authSlice, TokenType } from '@redux/reducers/auth.slice';
 import { useAppDispatch } from '@redux/selectors';
@@ -22,16 +22,20 @@ const Other = () => {
         <View flex={1} gap={12} paddingHorizontal={16} paddingVertical={24}>
           <OtherItem
             icon={<UserIdIcon />}
-            title={'Thông tin cá nhân'}
-            description={'Chỉnh sửa thông tin cá nhân của bạn'}
-            onPress={() => {}}
+            title={'Account Infomation'}
+            description={'Edit edit your information'}
+            onPress={() => {
+              navigation.navigate(MainRoutes.MAIN_OTHER, {
+                screen: OtherRoutes.OTHER_ACCOUNT_INFO,
+              });
+            }}
           />
           <OtherItem
             icon={<SwapIcon />}
-            title={'Đổi mật khẩu'}
-            description={'Thay đổi mật khẩu đăng nhập App'}
+            title={'Change pasword'}
+            description={'Change your app login password.'}
             onPress={() => {
-              navigation.getParent().navigate(MainRoutes.OTHER);
+              navigation.getParent().navigate(MainRoutes.MAIN_OTHER);
             }}
             // isMissingMessage={'Tính năng đang phát triển'}
           />
@@ -43,13 +47,13 @@ const Other = () => {
                   <View center gap={16}>
                     <SadFace color={colors.primary.default} />
                     <Text align="center">
-                      Bạn có đồng ý đăng xuất khỏi ứng dụng không?
+                      Do you agree to log out of the app?
                     </Text>
                   </View>
                 ),
                 button1: (
                   <Button
-                    title="Đồng ý"
+                    title="Agree"
                     onPress={async () => {
                       modalControl?.close();
                       removeKey(TokenType.ACCESS_TOKEN);
@@ -60,7 +64,7 @@ const Other = () => {
                 ),
                 button2: (
                   <Button
-                    title="Hủy"
+                    title="Cancel"
                     type={Button.Type.outline}
                     onPress={() => {
                       modalControl?.close();
@@ -73,7 +77,7 @@ const Other = () => {
             <View height={45} row center gap={4} style={styles.btn_logout}>
               <ArrowLogout />
               <Text size={14} color={colors.red.c500} weight={600}>
-                Đăng xuất
+                Log out
               </Text>
             </View>
           </Pressable>

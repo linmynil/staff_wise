@@ -10,14 +10,14 @@ const StaffNavigation = () => {
   return (
     <StaffStack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName={StaffRoutes.LEAVE_STATUS}
+      initialRouteName={StaffRoutes.STAFF_LEAVE_STATUS}
     >
       <StaffStack.Screen
-        name={StaffRoutes.LEAVE_STATUS}
+        name={StaffRoutes.STAFF_LEAVE_STATUS}
         component={LeaveStatus}
       />
       <StaffStack.Screen
-        name={StaffRoutes.ADDITIONAL_LEAVE}
+        name={StaffRoutes.STAFF_ADDITIONAL_LEAVE}
         component={AdditionalLeave}
       />
     </StaffStack.Navigator>

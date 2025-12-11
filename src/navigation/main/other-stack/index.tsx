@@ -1,6 +1,7 @@
 import { OtherRoutes } from '@navigation/routes';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ChangePassword from '@screens/auth/change-password';
+import AccountInfo from '@screens/main/bottom-tab/other/account/AccountInfo';
 import React from 'react';
 
 const OtherStack = createNativeStackNavigator<any>();
@@ -14,6 +15,10 @@ const OtherNavigation = () => {
       <OtherStack.Screen
         name={OtherRoutes.OTHER_CHANGE_PASSWORD}
         component={ChangePassword}
+      />
+      <OtherStack.Screen
+        name={OtherRoutes.OTHER_ACCOUNT_INFO}
+        component={AccountInfo}
       />
     </OtherStack.Navigator>
   );

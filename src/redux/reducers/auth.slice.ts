@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 export interface AuthState {
   isSignedIn: boolean;
+  avatarUri: string;
   access_token: string | null;
   refresh_token: string | null;
 }
@@ -14,6 +15,7 @@ export enum TokenType {
 
 const initialState: AuthState = {
   isSignedIn: !!getString(TokenType.ACCESS_TOKEN),
+  avatarUri: '',
   access_token: getString(TokenType.ACCESS_TOKEN),
   refresh_token: getString(TokenType.REFRESH_TOKEN),
 };
@@ -41,9 +43,12 @@ export const authSlice = createSlice({
       removeKey(TokenType.ACCESS_TOKEN);
       removeKey(TokenType.REFRESH_TOKEN);
     },
+    setAvatar: (state, action) => {
+      state.avatarUri = action.payload;
+    },
   },
 });
 
-export const { setToken, removeToken } = authSlice.actions;
+export const { setToken, removeToken, setAvatar } = authSlice.actions;
 
 export default authSlice.reducer;

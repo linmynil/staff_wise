@@ -2,6 +2,7 @@
 import { AddIcon, ChatIcon, MenuIcon } from '@assets';
 import HomeIcon from '@assets/icons/HomeIcon';
 import { View } from '@components';
+import useGetAccountInfo from '@hooks/useGetAccountInfo';
 import { TabRoutes } from '@navigation/routes';
 import {
   BottomTabBarProps,
@@ -11,6 +12,7 @@ import ApplyLeave from '@screens/main/bottom-tab/apply-leave';
 import ChatHome from '@screens/main/bottom-tab/chat';
 import Home from '@screens/main/bottom-tab/home';
 import Other from '@screens/main/bottom-tab/other';
+import { Role } from '@services/account';
 import colors from '@utils/constants/colors';
 import React, { useEffect } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
@@ -23,40 +25,64 @@ import Animated, {
 const MainTab = createBottomTabNavigator<any>();
 
 const BottomTabNavigation = () => {
+  const accountInfo = useGetAccountInfo();
+  const role = accountInfo?.accountRoles?.[0]?.role?.name;
+  const allowedTabs = ROLE_TABS_MAP[role || Role.EMPLOYEE];
+
   return (
     <MainTab.Navigator
-      screenOptions={{ headerShown: false,
-      tabBarHideOnKeyboard: true,
-       }}
+      screenOptions={{ headerShown: false, tabBarHideOnKeyboard: true }}
       initialRouteName={TabRoutes.HOME}
       tabBar={props => <TabBar {...props} />}
     >
-      <MainTab.Screen
-        name={TabRoutes.HOME}
-        component={Home}
-        options={{ headerShown: false }}
-      />
-      <MainTab.Screen name={TabRoutes.APPLY_LEAVE} component={ApplyLeave} />
-      <MainTab.Screen name={TabRoutes.CHAT} component={ChatHome} />
-      <MainTab.Screen name={TabRoutes.OTHER} component={Other} />
+      {allowedTabs.map(route => {
+        const { name, component } = TAB_CONFIG[route];
+        return <MainTab.Screen key={name} name={name} component={component} />;
+      })}
     </MainTab.Navigator>
   );
 };
 
-const TabRoutesMap: { [key: string]: any } = {
+const ROLE_TABS_MAP: Record<Role, TabRoutes[]> = {
+  [Role.ADMIN]: [TabRoutes.HOME, TabRoutes.APPLY_LEAVE, TabRoutes.OTHER],
+  [Role.EMPLOYEE]: [
+    TabRoutes.HOME,
+    TabRoutes.CHAT,
+    TabRoutes.APPLY_LEAVE,
+    TabRoutes.OTHER,
+  ],
+  [Role.CEO]: [TabRoutes.HOME, TabRoutes.CHAT, TabRoutes.OTHER],
+  [Role.MANAGER]: [
+    TabRoutes.HOME,
+    TabRoutes.APPLY_LEAVE,
+    TabRoutes.CHAT,
+    TabRoutes.OTHER,
+  ],
+};
+
+const TAB_CONFIG: { [key: string]: any } = {
   [TabRoutes.HOME]: {
+    name: TabRoutes.HOME,
+    component: Home,
+    options: { headerShown: false },
     icon: HomeIcon,
     label: 'Home',
   },
   [TabRoutes.APPLY_LEAVE]: {
+    name: TabRoutes.APPLY_LEAVE,
+    component: ApplyLeave,
     icon: AddIcon,
     label: 'Apply Leave',
   },
   [TabRoutes.CHAT]: {
+    name: TabRoutes.CHAT,
+    component: ChatHome,
     icon: ChatIcon,
     label: 'Chat',
   },
   [TabRoutes.OTHER]: {
+    name: TabRoutes.OTHER,
+    component: Other,
     icon: MenuIcon,
     label: 'Other',
   },
@@ -71,11 +97,11 @@ const TabItem = ({
   onPress: () => void;
   isFocused: boolean;
 }) => {
-  const IconElement = TabRoutesMap[name].icon || HomeIcon;
+  const IconElement = TAB_CONFIG[name].icon || HomeIcon;
   const icon = (
     <IconElement fill={isFocused ? colors.white : colors.neutral.c500} />
   );
-  const label = TabRoutesMap[name].label;
+  const label = TAB_CONFIG[name].label;
   const scale = useSharedValue(1);
   const translateY = useSharedValue(0);
   const circleScale = useSharedValue(0);
@@ -193,24 +219,3 @@ const styles = StyleSheet.create({
     color: colors.primary.default,
   },
 });
-
-// const styles = StyleSheet.create({
-//   container: {
-//     height: 64,
-//     borderRadius: 32,
-//     //backgroundColor: 'rgba(107, 125, 189, 0.15)',
-//     backgroundColor: colors.neutral.c200,
-//     position: 'absolute',
-//     bottom: 20,
-//     left: 16,
-//     right: 16,
-//     overflow: 'hidden',
-//   },
-//   item: {
-//     flex: 1,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     borderRadius: 32,
-//     margin: 8,
-//   },
-// });

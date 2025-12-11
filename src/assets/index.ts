@@ -24,6 +24,8 @@ import AnnualIcon from '@assets/icons/AnnualIcon';
 import ArrowDown from '@assets/icons/ArrowDown';
 import Calendar from '@assets/icons/Calendar';
 import SearchIcon from '@assets/icons/SearchIcon';
+import CameraMini from '@assets/icons/CameraMini';
+import PenEdit from '@assets/icons/PenEdit';
 
 export {
   CloseIcon,
@@ -51,5 +53,7 @@ export {
   AnnualIcon,
   ArrowDown,
   Calendar,
-  SearchIcon
+  SearchIcon,
+  CameraMini,
+  PenEdit,
 };

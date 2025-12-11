@@ -56,7 +56,7 @@ const Login = () => {
         setString(TokenType.ACCESS_TOKEN, token);
 
         if (mustChangePassword) {
-          navigation.navigate(AuthRoutes.CHANGE_PASSWORD);
+          navigation.navigate(AuthRoutes.AUTH_CHANGE_PASSWORD);
           setFieldValueRef?.current?.('password', '', false);
           Toast.show({
             type: 'info',

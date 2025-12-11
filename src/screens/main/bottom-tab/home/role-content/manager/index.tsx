@@ -1,52 +1,31 @@
-
+import { ArrowRightIcon } from '@assets';
 import MainLayout from '@components/layout/main-layout';
-import ProfileInfo from '@components/ui/proflie-info';
+import AccountInfoHeader from '@components/ui/account-info-header';
+import HeaderAction from '@components/ui/header-action';
+import useGetAccountInfo from '@hooks/useGetAccountInfo';
 import { MainRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
-import { ProfileResponse, Role } from '@utils/types/profile.type';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import HeaderAction from '@components/ui/header-action';
-import { ArrowRightIcon } from '@assets';
-import HorizontalList from '@components/ui/dashboard-item';
-const profileDefault: ProfileResponse = {
-  id: 1,
-  name: 'Mỹ Linh',
-  position: Role.MANAGER,
-  avatar: '',
-};
-const menuData = [
-  {
-    id: '1',
-    typeDate: 'Annual',
-    date: '7',       
-    totalDate: '12',  
-  },
-  {
-    id: '2',
-    typeDate: 'Holidays',
-    date: '3',    
-    totalDate: '3',
-  },
-];
+
 const ManagerHome = () => {
   const navigation = useNavigation<any>();
+  const accountInfo = useGetAccountInfo();
   const onLeaveStatus = () => {
-    navigation.navigate(MainRoutes.MANAGER);
+    navigation.navigate(MainRoutes.MAIN_MANAGER);
   };
   return (
     <MainLayout
       title="Staff Wise"
-      headerChildren={<ProfileInfo profile={profileDefault} />}
+      headerChildren={<AccountInfoHeader account={accountInfo} />}
     >
       <View style={styles.container}>
-       <HeaderAction
-                 title="Dashboard"
-                 actionLabel="Leave Status"
-                 icon={<ArrowRightIcon width={11} height={11} viewBox="0 0 11 11" />}
-                 onActionPress={onLeaveStatus}
-               />
-               <HorizontalList data={menuData} />;
+        <HeaderAction
+          title="Dashboard"
+          actionLabel="Leave Status"
+          icon={<ArrowRightIcon width={11} height={11} viewBox="0 0 11 11" />}
+          onActionPress={onLeaveStatus}
+        />
       </View>
     </MainLayout>
   );

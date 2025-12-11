@@ -11,18 +11,24 @@ const MainNavigation = () => {
   return (
     <MainStack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName={MainRoutes.BOTTOM_TAB}
+      initialRouteName={MainRoutes.MAIN_BOTTOM_TAB}
     >
       <MainStack.Screen
-        name={MainRoutes.BOTTOM_TAB}
+        name={MainRoutes.MAIN_BOTTOM_TAB}
         component={BottomTabNavigation}
       />
-      <MainStack.Screen name={MainRoutes.STAFF} component={StaffNavigation} />
       <MainStack.Screen
-        name={MainRoutes.CHAT_MAIN}
+        name={MainRoutes.MAIN_STAFF}
+        component={StaffNavigation}
+      />
+      <MainStack.Screen
+        name={MainRoutes.MAIN_CHAT}
         component={ChatNavigation}
       />
-      <MainStack.Screen name={MainRoutes.OTHER} component={OtherNavigation} />
+      <MainStack.Screen
+        name={MainRoutes.MAIN_OTHER}
+        component={OtherNavigation}
+      />
     </MainStack.Navigator>
   );
 };

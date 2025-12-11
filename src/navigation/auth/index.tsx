@@ -10,11 +10,11 @@ const AuthNavigator = () => {
   return (
     <AuthStack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName={AuthRoutes.LOGIN}
+      initialRouteName={AuthRoutes.AUTH_LOGIN}
     >
-      <AuthStack.Screen name={AuthRoutes.LOGIN} component={Login} />
+      <AuthStack.Screen name={AuthRoutes.AUTH_LOGIN} component={Login} />
       <AuthStack.Screen
-        name={AuthRoutes.CHANGE_PASSWORD}
+        name={AuthRoutes.AUTH_CHANGE_PASSWORD}
         component={ChangePassword}
       />
     </AuthStack.Navigator>

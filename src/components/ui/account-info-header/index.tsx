@@ -1,20 +1,21 @@
 import Text from '@components/core/text';
 import View from '@components/core/view';
+import { useAppSelector } from '@redux/selectors';
 import { Account } from '@services/account';
 import colors from '@utils/constants/colors';
 import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 
-const ProfileInfo = ({ profile }: { profile: Account  }) => {
-  const { username, accountRoles } = profile;
+const AccountInfoHeader = ({ account }: { account: Account }) => {
+  const { username, accountRoles } = account;
+  const avatarUri = useAppSelector(state => state.auth.avatarUri);
   return (
     <View style={styles.headerChildrenContainer}>
       <Image
         source={
-          // avatar
-          //   ? { uri: avatar }
-          //   : 
-            require('@assets/images/avatar-default.png')
+          avatarUri
+            ? { uri: avatarUri }
+            : require('@assets/images/avatar-default.png')
         }
         style={styles.avatar}
       />
@@ -30,7 +31,7 @@ const ProfileInfo = ({ profile }: { profile: Account  }) => {
   );
 };
 
-export default ProfileInfo;
+export default AccountInfoHeader;
 
 const styles = StyleSheet.create({
   headerChildrenContainer: {

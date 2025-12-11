@@ -103,7 +103,7 @@ DraggableChatbotProps) => {
         </Animated.View> */}
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => navigation.getParent().navigate(MainRoutes.CHAT_MAIN)}
+          onPress={() => navigation.getParent().navigate(MainRoutes.MAIN_CHAT)}
         >
           <Animated.View style={styles.icon}>
             <Image

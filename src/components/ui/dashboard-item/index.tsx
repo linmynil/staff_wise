@@ -14,17 +14,6 @@ const GAP = 16;
 const ITEM_WIDTH =
   (SCREEN_WIDTH - HORIZONTAL_PADDING * 2 - GAP * 2 - 0.00001) / 3;
 
-export interface Dashboard {
-  id: string;
-  typeDate: string;
-  date: string | number;
-  totalDate: string | number;
-}
-
-interface IProps extends ViewProps {
-  item: Dashboard;
-}
-
 export enum LeaveType {
   ANNUAL = 'Annual',
   HOLIDAYS = 'Holidays',
@@ -45,6 +34,17 @@ const LeaveTypeMap: Record<LeaveType, LeaveTypeMapProps> = {
     label: 'Holidays',
   },
 };
+
+export interface Dashboard {
+  id: string;
+  typeDate: string;
+  date: string | number;
+  totalDate: string | number;
+}
+
+interface IProps extends ViewProps {
+  item: Dashboard;
+}
 
 const DashboardItem = ({ item, ...props }: IProps) => {
   const { typeDate, date, totalDate } = item;

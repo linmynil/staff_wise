@@ -132,7 +132,7 @@ const data: MultipleSelectOption[] = [
 const LeaveStatus = () => {
   const navigation = useNavigation<any>();
   const onAdditionalLeave = () => {
-    navigation.navigate(StaffRoutes.ADDITIONAL_LEAVE);
+    navigation.navigate(StaffRoutes.STAFF_ADDITIONAL_LEAVE);
   };
 
   const [test, setTest] = useState('1');

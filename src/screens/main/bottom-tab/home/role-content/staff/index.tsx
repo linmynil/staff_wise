@@ -1,23 +1,16 @@
+import { ArrowRightIcon } from '@assets';
+import { View } from '@components';
 import MainLayout from '@components/layout/main-layout';
-import ProfileInfo from '@components/ui/proflie-info';
+import AccountInfoHeader from '@components/ui/account-info-header';
+import DashboardItem, { Dashboard } from '@components/ui/dashboard-item';
 import HeaderAction from '@components/ui/header-action';
+import ManagementItem from '@components/ui/management-item';
+import useGetAccountInfo from '@hooks/useGetAccountInfo';
 import { MainRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
-import { ProfileResponse, Role } from '@utils/types/profile.type';
-import React, { Fragment } from 'react';
-import { FlatList, ScrollView, StyleSheet } from 'react-native';
-import { ArrowRightIcon } from '@assets';
-import DashboardItem, { Dashboard } from '@components/ui/dashboard-item';
-import ManagementItem from '@components/ui/management-item';
-import { View } from '@components';
 import { nanoid } from '@reduxjs/toolkit';
-
-const profileDefault: ProfileResponse = {
-  id: 1,
-  name: 'Mỹ Linh',
-  position: Role.STAFF,
-  avatar: '',
-};
+import React from 'react';
+import { FlatList, ScrollView, StyleSheet } from 'react-native';
 
 const menuData: Dashboard[] = [
   {
@@ -56,22 +49,19 @@ const menuData2 = [
 
 const StaffHome = () => {
   const navigation = useNavigation<any>();
+  const accountInfo = useGetAccountInfo();
   const onLeaveStatus = () => {
-    navigation.navigate(MainRoutes.STAFF);
+    navigation.navigate(MainRoutes.MAIN_STAFF);
   };
 
   const handleManagement = (type: string) => {
     switch (type) {
       case ManagementType.LEAVE:
-        // navigation.navigate(MainRoutes.STAFF);
         console.log('leave');
-
         break;
       case ManagementType.STAFF:
-        // navigation.navigate(MainRoutes.STAFF);
         console.log('staff');
         break;
-
       default:
         break;
     }
@@ -80,7 +70,7 @@ const StaffHome = () => {
   return (
     <MainLayout
       title="Staff Wise"
-      headerChildren={<ProfileInfo profile={profileDefault} />}
+      headerChildren={<AccountInfoHeader account={accountInfo} />}
     >
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
