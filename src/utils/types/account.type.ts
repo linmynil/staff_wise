@@ -1,20 +1,11 @@
-export enum Role {
-  ADMIN = 'Admin',
-  CEO = 'CEO',
-  EMPLOYEE = 'Employee',
-  MANAGER = 'Manager',
-}
+import { IRole } from './role.type';
 
 export interface AccountRole {
   id: number;
   accountId: number;
   roleId: number;
   createdAt: string;
-  role: {
-    id: number;
-    name: Role;
-    description: string;
-  };
+  role: IRole;
 }
 
 export interface Account {

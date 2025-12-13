@@ -7,13 +7,13 @@ import accountReducer from './reducers/account.slice';
 import authReducer from './reducers/auth.slice';
 // import { createTransform } from 'redux-persist';
 
-// const resetChatbotTransform = createTransform(
+// const resetAvatarUriTransform = createTransform(
 //   inboundState => inboundState,
 //   (outboundState: any) => ({
 //     ...outboundState,
-//     isVisibleChatbot: true,
+//     avatarUri: '',
 //   }),
-//   { whitelist: ['account'] },
+//   { whitelist: ['auth'] },
 // );
 
 const persistConfig = {
@@ -21,7 +21,7 @@ const persistConfig = {
   storage: AsyncStorage,
   blacklist: [baseAPI.reducerPath],
   whitelist: ['auth', 'account'],
-  // transforms: [resetChatbotTransform],
+  // transforms: [resetAvatarUriTransform],
 };
 
 const rootReducer = combineReducers({

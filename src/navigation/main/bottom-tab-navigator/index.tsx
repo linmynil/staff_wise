@@ -6,6 +6,7 @@ import { useGetAccountInfo } from '@hooks';
 import { TabRoutes } from '@navigation/routes';
 import {
   BottomTabBarProps,
+  BottomTabNavigationOptions,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 import ApplyLeave from '@screens/main/bottom-tab/apply-leave';
@@ -13,7 +14,7 @@ import ChatHome from '@screens/main/bottom-tab/chat';
 import Home from '@screens/main/bottom-tab/home';
 import Other from '@screens/main/bottom-tab/other';
 import colors from '@utils/constants/colors';
-import { Role } from '@utils/types/account.type';
+import { Role } from '@utils/types/role.type';
 import React, { useEffect } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import Animated, {
@@ -21,6 +22,7 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import { SvgProps } from 'react-native-svg';
 
 const MainTab = createBottomTabNavigator<any>();
 
@@ -60,11 +62,18 @@ const ROLE_TABS_MAP: Record<Role, TabRoutes[]> = {
   ],
 };
 
-const TAB_CONFIG: { [key: string]: any } = {
+interface TabConfig {
+  name: TabRoutes;
+  component: () => React.JSX.Element;
+  options?: BottomTabNavigationOptions;
+  icon: (props: SvgProps) => React.JSX.Element;
+  label: string;
+}
+
+const TAB_CONFIG: { [key: string]: TabConfig } = {
   [TabRoutes.HOME]: {
     name: TabRoutes.HOME,
     component: Home,
-    options: { headerShown: false },
     icon: HomeIcon,
     label: 'Home',
   },

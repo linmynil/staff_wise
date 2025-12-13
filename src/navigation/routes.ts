@@ -32,6 +32,7 @@ enum ChatRoutes {
 enum OtherRoutes {
   OTHER_CHANGE_PASSWORD = 'other_change_password',
   OTHER_ACCOUNT_INFO = 'other_account_info',
+  OTHER_UPDATE_ACCOUNT_INFO = 'other_update_account_info',
 }
 
 enum StaffRoutes {

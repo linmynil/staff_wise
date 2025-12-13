@@ -206,8 +206,8 @@ const LeaveStatus = () => {
           onChange={date => setTime(date as any)}
         />
         <MultipleSelect
-          value={pickedDisease}
-          label={'Danh sách bệnh'}
+          value={pickedDisease?.map(v => v.value)}
+          title={'Danh sách bệnh'}
           style={styles.button}
           labelStyle={styles.title}
           searchLabel={'Tìm kiếm bệnh'}

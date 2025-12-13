@@ -33,7 +33,7 @@ const ChangePassword = () => {
       )
       .required('Please enter your new password'),
     reNewPassword: Yup.string()
-      .oneOf([Yup.ref('newPassword')], 'Passwords do not match')
+      .oneOf([Yup.ref('newPassword')], 'New passwords do not match')
       .required('Please re-enter your new password'),
   });
 

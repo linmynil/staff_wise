@@ -1,11 +1,13 @@
-import { ArrowDown, SearchIcon } from '@assets';
+import { ArrowDown, CircleCloseIcon, SearchIcon } from '@assets';
 import View from '@components/core/view';
 import { removeAccents } from '@utils/constants/string';
 import { keyBy, uniqBy } from 'lodash';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  Pressable,
+  ScrollView,
   StyleProp,
   StyleSheet,
   TextStyle,
@@ -30,15 +32,16 @@ interface IProps extends TouchableOpacityProps {
   onChange?: (_: any[]) => void;
   searchLabel?: string;
   searchPlaceholder?: string;
-  label: string;
+  title: string;
   labelStyle?: StyleProp<TextStyle>;
-  error?: string;
+  error?: string | string[];
   disabled?: boolean;
-  value?: any[];
+  value?: Array<string | number>;
   closeCallback?: () => void;
   isSearchable?: boolean;
   isRequired?: boolean;
   isLoading?: boolean;
+  maxCount?: number;
 }
 
 const SelectBoxItem = ({
@@ -84,98 +87,94 @@ const SelectBoxItem = ({
 
 const SelectBoxContent = ({
   options,
+  selectedOptions,
   searchLabel,
   searchPlaceholder,
-  selectedOptions,
   onChange,
 }: {
   options: MultipleSelectOption[];
+  selectedOptions: MultipleSelectOption[];
   searchLabel: string;
   searchPlaceholder: string;
-  selectedOptions: any[];
   onChange: (value: MultipleSelectOption[]) => void;
 }) => {
   const { bottomSheetHeight3, closeBottomSheet3 } = useBottomSheetContext3();
 
   const [searchText, setSearchText] = useState('');
-  const [localSelected, setLocalSelected] = useState<any[]>(
-    selectedOptions || [],
-  );
-  const [isLoading] = useState(false);
+  const [selected, setSelected] =
+    useState<MultipleSelectOption[]>(selectedOptions);
 
-  useEffect(() => {
-    setLocalSelected(selectedOptions || []);
-  }, [selectedOptions]);
+  const selectedMap = React.useMemo(() => keyBy(selected, 'value'), [selected]);
 
-  const filteredOptions = (options || []).filter(o =>
-    removeAccents((o.label || '').toLowerCase()).includes(
-      removeAccents((searchText || '').toLowerCase()),
-    ),
-  );
+  const filteredOptions = React.useMemo(() => {
+    const keyword = removeAccents(searchText.toLowerCase());
+    return options.filter(o =>
+      removeAccents(o.label.toLowerCase()).includes(keyword),
+    );
+  }, [options, searchText]);
 
-  const selectedMap = keyBy(localSelected, 'value');
+  const updateSelected = (next: MultipleSelectOption[]) => {
+    setSelected(next);
+    onChange(next);
+  };
 
-  useEffect(() => {
-    onChange(localSelected);
-  }, [localSelected]);
+  const toggleItem = (item: MultipleSelectOption) => {
+    if (selectedMap[item.value]) {
+      updateSelected(selected.filter(i => i.value !== item.value));
+    } else {
+      updateSelected([...selected, item]);
+    }
+  };
+
+  const selectAll = () => {
+    updateSelected(uniqBy([...selected, ...filteredOptions], 'value'));
+  };
+
+  const clearAll = () => {
+    const removeSet = new Set(filteredOptions.map(i => i.value));
+    updateSelected(selected.filter(i => !removeSet.has(i.value)));
+  };
 
   return (
     <View width="100%" height={bottomSheetHeight3}>
-      {isLoading && (
-        <View absolute center width="100%" height="100%">
-          <ActivityIndicator color={colors.primary.default} />
+      <View paddingHorizontal={16}>
+        <TextInput
+          label={searchLabel}
+          placeholder={searchPlaceholder}
+          leftIcon={<SearchIcon color={colors.neutral.c300} />}
+          onChangeText={setSearchText}
+        />
+      </View>
+      <View paddingHorizontal={16} paddingVertical={12} row space_between>
+        <Text weight={600}>All ({filteredOptions.length})</Text>
+
+        <View row gap={16}>
+          <TouchableOpacity onPress={selectAll}>
+            <Text color={colors.primary.default}>Select all</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={clearAll}>
+            <Text color={colors.red.c600}>Deselect</Text>
+          </TouchableOpacity>
         </View>
-      )}
-
-      {!isLoading && (
-        <>
-          <View paddingHorizontal={16}>
-            <TextInput
-              leftIcon={<SearchIcon color={colors.neutral.c300} />}
-              label={searchLabel}
-              placeholder={searchPlaceholder}
-              rightIcon={<ArrowDown />}
-              onChangeText={setSearchText}
+      </View>
+      <View flex={1} paddingHorizontal={16}>
+        <FlatList
+          data={filteredOptions}
+          keyExtractor={i => i.value.toString()}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <SelectBoxItem
+              item={item}
+              isSelected={!!selectedMap[item.value]}
+              onToggle={() => toggleItem(item)}
             />
-          </View>
-
-          <View paddingHorizontal={16}>
-            <Text paddingVertical={16} weight={600}>
-              Tất cả ({filteredOptions?.length})
-            </Text>
-          </View>
-
-          <View flex={1} paddingHorizontal={16}>
-            <FlatList
-              data={filteredOptions}
-              keyExtractor={item => item.value.toString()}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => (
-                <SelectBoxItem
-                  isSelected={selectedMap[item.value] !== undefined}
-                  key={item.value + item.label}
-                  item={item}
-                  onToggle={(selectedItem, action) => {
-                    if (action === 'remove') {
-                      setLocalSelected(prev =>
-                        prev.filter(i => i.value !== selectedItem.value),
-                      );
-                    } else {
-                      setLocalSelected(prev =>
-                        uniqBy([...prev, selectedItem], 'value'),
-                      );
-                    }
-                  }}
-                />
-              )}
-            />
-          </View>
-
-          <View paddingTop={16} paddingBottom={48} paddingHorizontal={16}>
-            <Button title="Đóng" onPress={closeBottomSheet3} />
-          </View>
-        </>
-      )}
+          )}
+        />
+      </View>
+      <View padding={16} paddingBottom={48}>
+        <Button title="Done" onPress={closeBottomSheet3} />
+      </View>
     </View>
   );
 };
@@ -185,60 +184,149 @@ const MultipleSelect = (props: IProps) => {
     options = [],
     value = [],
     onChange,
-    label,
+    title,
     labelStyle,
     style,
-    searchLabel = 'Tìm kiếm',
-    searchPlaceholder = 'Nhập từ khoá',
+    searchLabel = 'Search',
+    searchPlaceholder = 'Enter keywords',
     error,
     disabled,
+    isLoading,
+    isRequired,
+    maxCount = 2,
     closeCallback,
   } = props;
 
   const { openBottomSheet3 } = useBottomSheetContext3();
-  const valueRef = useRef<any[]>(value || []);
+
+  const optionMap = useMemo(() => keyBy(options, 'value'), [options]);
+
+  const removeValue = (val: string | number) => {
+    onChange?.(value.filter(v => v !== val));
+  };
+
+  const removeHiddenValues = () => {
+    onChange?.(value.slice(0, maxCount));
+  };
 
   const openSheet = () => {
     if (disabled) return;
 
-    valueRef.current = value || [];
-
     openBottomSheet3({
       closeCallback,
-      onChange: (item: any, action: 'remove' | 'add') => {
-        if (action === 'remove') {
-          valueRef.current = valueRef.current.filter(
-            i => i.value !== item.value,
-          );
-        } else {
-          valueRef.current = uniqBy([...valueRef.current, item], 'value');
-        }
-
-        onChange?.(valueRef.current);
-      },
       content: (
         <SelectBoxContent
-          selectedOptions={valueRef.current}
           options={options}
+          selectedOptions={value.map(v => optionMap[v]).filter(Boolean)}
           searchLabel={searchLabel}
           searchPlaceholder={searchPlaceholder}
-          onChange={onChange as any}
+          onChange={selected => onChange?.(selected.map(i => i.value))}
         />
       ),
     });
   };
 
   return (
-    <TouchableOpacity onPress={openSheet} disabled={disabled} style={style}>
-      <Text style={labelStyle}>{label}</Text>
+    <View style={styles.container}>
+      <Text style={labelStyle}>
+        {title} {isRequired && <Text color={colors.red.c500}>*</Text>}
+      </Text>
+
+      <Pressable
+        onPress={openSheet}
+        disabled={disabled}
+        style={[
+          styles.multiPicker,
+          style,
+          { borderColor: error ? colors.red.c600 : colors.neutral.c300 },
+          disabled && styles.disabled,
+        ]}
+      >
+        <View row center flex={1}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <View row gap={8} paddingLeft={12}>
+              {value.length > 0 ? (
+                <>
+                  {value.slice(0, maxCount).map(v => {
+                    const label = optionMap[v]?.label;
+                    if (!label) return null;
+
+                    return (
+                      <View
+                        key={v.toString()}
+                        style={styles.selectedLabel}
+                        row
+                        center
+                        gap={6}
+                      >
+                        <Text color={colors.white}>{label}</Text>
+                        <TouchableOpacity
+                          onPress={() => removeValue(v)}
+                          hitSlop={8}
+                        >
+                          <CircleCloseIcon fill={colors.white} />
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })}
+
+                  {value.length > maxCount && (
+                    <View
+                      style={[
+                        styles.selectedLabel,
+                        {
+                          backgroundColor: colors.white,
+                          borderWidth: 1,
+                          borderColor: colors.neutral.c500,
+                        },
+                      ]}
+                      row
+                      center
+                      gap={6}
+                    >
+                      <Text color={colors.black}>
+                        + {value.length - maxCount}
+                      </Text>
+                      <TouchableOpacity
+                        onPress={removeHiddenValues}
+                        hitSlop={8}
+                      >
+                        <CircleCloseIcon fill={colors.black} />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </>
+              ) : (
+                <Text color={colors.neutral.c500} marginLeft={3}>
+                  Select {title.toLowerCase()}
+                </Text>
+              )}
+            </View>
+          </ScrollView>
+
+          <View style={styles.arrow}>
+            {isLoading ? (
+              <ActivityIndicator size="small" color={colors.primary.default} />
+            ) : (
+              <ArrowDown color={colors.neutral.c700} />
+            )}
+          </View>
+        </View>
+      </Pressable>
+
       {error && <Text style={styles.error}>{error}</Text>}
-    </TouchableOpacity>
+    </View>
   );
 };
 
 export default MultipleSelect;
 
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    maxHeight: 100,
+    gap: 4,
+  },
   selectItem: {
     paddingVertical: 10,
     flexDirection: 'row',
@@ -248,5 +336,31 @@ const styles = StyleSheet.create({
   error: {
     fontSize: 12,
     color: colors.red.c600,
+  },
+  multiPicker: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 52,
+    borderWidth: 1,
+    borderRadius: 24,
+    gap: 8,
+  },
+  disabled: {
+    opacity: 0.5,
+  },
+  selectedLabel: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    backgroundColor: colors.primary.default,
+  },
+  arrow: {
+    width: 30,
+    height: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderLeftWidth: 1,
+    borderLeftColor: colors.neutral.c500,
+    marginRight: 6,
   },
 });

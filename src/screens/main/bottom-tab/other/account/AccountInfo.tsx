@@ -5,6 +5,7 @@ import Divider from '@components/common/divider';
 import MainLayout from '@components/layout/main-layout';
 import Row from '@components/ui/row';
 import { useGetAccountInfo } from '@hooks';
+import { OtherRoutes } from '@navigation/routes';
 import { setAvatar } from '@redux/reducers/auth.slice';
 import { useAppDispatch, useAppSelector } from '@redux/store';
 import colors from '@utils/constants/colors';
@@ -43,7 +44,7 @@ const AccountInfo = ({ navigation }: any) => {
             <Button.IconButton
               icon={<PenEdit />}
               onPress={() => {
-                // navigation.navigate(ProfileRoutes.PERSONAL_INFO_UPDATE);
+                navigation.navigate(OtherRoutes.OTHER_UPDATE_ACCOUNT_INFO);
               }}
             />
           </View>
@@ -75,7 +76,7 @@ const AccountInfo = ({ navigation }: any) => {
   );
 };
 
-const AvatarUploadable = ({}: {}) => {
+export const AvatarUploadable = ({}: {}) => {
   const account = useGetAccountInfo();
   const avatarKey = storageKeys.avatar + account?.id;
 
