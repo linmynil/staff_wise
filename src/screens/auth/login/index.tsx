@@ -49,7 +49,6 @@ const Login = () => {
       const token = res?.data?.access_token;
       const accountInfo = res?.data?.account;
       const mustChangePassword = res?.data?.account?.mustChangePassword;
-
       if (token && accountInfo) {
         dispatch(baseAPI.util.resetApiState());
         dispatch(setAccountInfo(accountInfo));

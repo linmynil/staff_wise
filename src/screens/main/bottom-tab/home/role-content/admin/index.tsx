@@ -1,66 +1,43 @@
-import { ArrowRightIcon } from '@assets';
 import { View } from '@components';
 import MainLayout from '@components/layout/main-layout';
 import AccountInfoHeader from '@components/ui/account-info-header';
-import DashboardItem, { Dashboard } from '@components/ui/dashboard-item';
 import HeaderAction from '@components/ui/header-action';
 import ManagementItem from '@components/ui/management-item';
 import { useGetAccountInfo } from '@hooks';
-import { MainRoutes } from '@navigation/routes';
+import { AdminRoutes, MainRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
 import { nanoid } from '@reduxjs/toolkit';
+import dayjs from 'dayjs';
 import React from 'react';
 import { FlatList, ScrollView, StyleSheet } from 'react-native';
 
-const menuData: Dashboard[] = [
-  {
-    id: '1',
-    typeDate: 'Annual',
-    date: '7',
-    totalDate: '12',
-  },
-  {
-    id: '2',
-    typeDate: 'Holidays',
-    date: '3',
-    totalDate: '3',
-  },
-];
-
 enum ManagementType {
   LEAVE = 'leave',
-  STAFF = 'staff',
+  EMPLOYEE = 'employee',
 }
 
 const menuData2 = [
   {
     id: '1',
-    title: 'Quản lý nghỉ phép',
-    time: '07/03/2025',
-    type: ManagementType.LEAVE,
-  },
-  {
-    id: '2',
     title: 'Quản lý nhân viên',
-    time: '12/11/2025',
-    type: ManagementType.STAFF,
+    time: dayjs().format('DD/MM/YYYY'),
+    type: ManagementType.EMPLOYEE,
   },
 ];
 
 const AdminHome = () => {
   const accountInfo = useGetAccountInfo();
   const navigation = useNavigation<any>();
-  const onLeaveStatus = () => {
-    navigation.navigate(MainRoutes.MAIN_ADMIN);
+  const goScreenManageEmployee = () => {
+    navigation.navigate(MainRoutes.MAIN_ADMIN, {
+      screen: AdminRoutes.ADMIN_MANAGE_EMPLOYEE,
+    });
   };
 
   const handleManagement = (type: string) => {
     switch (type) {
-      case ManagementType.LEAVE:
-        console.log('leave');
-        break;
-      case ManagementType.STAFF:
-        console.log('staff');
+      case ManagementType.EMPLOYEE:
+        goScreenManageEmployee();
         break;
       default:
         break;
@@ -73,28 +50,7 @@ const AdminHome = () => {
     >
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <HeaderAction
-            title="Dashboard"
-            actionLabel="Leave Status"
-            icon={<ArrowRightIcon width={11} height={11} viewBox="0 0 11 11" />}
-            onActionPress={onLeaveStatus}
-          />
-
-          <View
-            style={{
-              flexWrap: 'wrap',
-              flexDirection: 'row',
-              alignContent: 'center',
-              alignItems: 'center',
-              gap: 16,
-            }}
-          >
-            {menuData?.map(item => (
-              <DashboardItem key={`${item.id + nanoid()}`} item={item} />
-            ))}
-          </View>
-
-          <HeaderAction title="Management" onActionPress={onLeaveStatus} />
+          <HeaderAction title="Management" onActionPress={() => {}} />
           <View>
             <FlatList
               showsHorizontalScrollIndicator={false}

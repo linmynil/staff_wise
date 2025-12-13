@@ -13,7 +13,7 @@ enum TabRoutes {
 enum MainRoutes {
   MAIN_DRAWER_TAB = 'main_drawer_tab',
   MAIN_BOTTOM_TAB = 'main_bottom_tab',
-  MAIN_STAFF = 'main_staff',
+  MAIN_EMPLOYEE = 'main_employee',
   MAIN_ADMIN = 'main_admin',
   MAIN_MANAGER = 'main_manager',
   MAIN_CHAT = 'main_chat',
@@ -35,17 +35,20 @@ enum OtherRoutes {
   OTHER_UPDATE_ACCOUNT_INFO = 'other_update_account_info',
 }
 
-enum StaffRoutes {
-  STAFF_LEAVE_STATUS = 'staff_leave_status',
-  STAFF_ADDITIONAL_LEAVE = 'staff_additional_leave',
+enum EmployeeRoutes {
+  EMPLOYEE_LEAVE_STATUS = 'employee_leave_status',
+  EMPLOYEE_ADDITIONAL_LEAVE = 'employee_additional_leave',
 }
-
+enum AdminRoutes {
+  ADMIN_MANAGE_EMPLOYEE = 'admin_manage_employee',
+}
 export {
   RootRoutes,
   AuthRoutes,
   MainRoutes,
   TabRoutes,
-  StaffRoutes,
+  EmployeeRoutes,
   ChatRoutes,
   OtherRoutes,
+  AdminRoutes,
 };

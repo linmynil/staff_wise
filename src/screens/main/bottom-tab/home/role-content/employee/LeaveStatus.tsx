@@ -4,7 +4,7 @@ import MainLayout from '@components/layout/main-layout';
 import { Button, Text, TextInput, View } from '@components';
 import { AddIcon } from '@assets';
 import { useNavigation } from '@react-navigation/native';
-import { StaffRoutes } from '@navigation/routes';
+import { EmployeeRoutes } from '@navigation/routes';
 import MultipleSelect, {
   MultipleSelectOption,
 } from '@components/common/multiple-select';
@@ -132,7 +132,7 @@ const data: MultipleSelectOption[] = [
 const LeaveStatus = () => {
   const navigation = useNavigation<any>();
   const onAdditionalLeave = () => {
-    navigation.navigate(StaffRoutes.STAFF_ADDITIONAL_LEAVE);
+    navigation.navigate(EmployeeRoutes.EMPLOYEE_ADDITIONAL_LEAVE);
   };
 
   const [test, setTest] = useState('1');

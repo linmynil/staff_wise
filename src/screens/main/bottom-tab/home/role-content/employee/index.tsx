@@ -29,7 +29,7 @@ const menuData: Dashboard[] = [
 
 enum ManagementType {
   LEAVE = 'leave',
-  STAFF = 'staff',
+  EMPLOYEE = 'employee',
 }
 
 const menuData2 = [
@@ -43,15 +43,15 @@ const menuData2 = [
     id: '2',
     title: 'Quản lý nhân viên',
     time: '12/11/2025',
-    type: ManagementType.STAFF,
+    type: ManagementType.EMPLOYEE,
   },
 ];
 
-const StaffHome = () => {
+const EmployeeHome = () => {
   const navigation = useNavigation<any>();
   const accountInfo = useGetAccountInfo();
   const onLeaveStatus = () => {
-    navigation.navigate(MainRoutes.MAIN_STAFF);
+    navigation.navigate(MainRoutes.MAIN_EMPLOYEE);
   };
 
   const handleManagement = (type: string) => {
@@ -59,7 +59,7 @@ const StaffHome = () => {
       case ManagementType.LEAVE:
         console.log('leave');
         break;
-      case ManagementType.STAFF:
+      case ManagementType.EMPLOYEE:
         console.log('staff');
         break;
       default:
@@ -122,7 +122,7 @@ const StaffHome = () => {
   );
 };
 
-export default StaffHome;
+export default EmployeeHome;
 
 const styles = StyleSheet.create({
   container: {

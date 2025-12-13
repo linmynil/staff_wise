@@ -1,9 +1,10 @@
 import { MainRoutes } from '@navigation/routes';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BottomTabNavigation from '../bottom-tab-navigator';
-import StaffNavigation from '../staff-stack';
+import EmployeeNavigation from '../employee-stack';
 import ChatNavigation from '../chat-stack';
 import OtherNavigation from '../other-stack';
+import AdminNavigation from '../admin-stack';
 
 const MainStack = createNativeStackNavigator<any>();
 
@@ -18,8 +19,8 @@ const MainNavigation = () => {
         component={BottomTabNavigation}
       />
       <MainStack.Screen
-        name={MainRoutes.MAIN_STAFF}
-        component={StaffNavigation}
+        name={MainRoutes.MAIN_EMPLOYEE}
+        component={EmployeeNavigation}
       />
       <MainStack.Screen
         name={MainRoutes.MAIN_CHAT}
@@ -28,6 +29,10 @@ const MainNavigation = () => {
       <MainStack.Screen
         name={MainRoutes.MAIN_OTHER}
         component={OtherNavigation}
+      />
+      <MainStack.Screen
+        name={MainRoutes.MAIN_ADMIN}
+        component={AdminNavigation}
       />
     </MainStack.Navigator>
   );
