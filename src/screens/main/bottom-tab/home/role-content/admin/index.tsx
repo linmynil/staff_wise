@@ -3,7 +3,6 @@ import MainLayout from '@components/layout/main-layout';
 import AccountInfoHeader from '@components/ui/account-info-header';
 import HeaderAction from '@components/ui/header-action';
 import ManagementItem from '@components/ui/management-item';
-import { useGetAccountInfo } from '@hooks';
 import { AdminRoutes, MainRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
 import { nanoid } from '@reduxjs/toolkit';
@@ -12,49 +11,59 @@ import React from 'react';
 import { FlatList, ScrollView, StyleSheet } from 'react-native';
 
 enum ManagementType {
-  LEAVE = 'leave',
+  ACCOUNT = 'account',
   EMPLOYEE = 'employee',
 }
 
-const menuData2 = [
+const managementOptions = [
   {
     id: '1',
-    title: 'Quản lý nhân viên',
+    title: 'Account Management',
+    time: dayjs().format('DD/MM/YYYY'),
+    type: ManagementType.ACCOUNT,
+  },
+  {
+    id: '2',
+    title: 'Employee Management',
     time: dayjs().format('DD/MM/YYYY'),
     type: ManagementType.EMPLOYEE,
   },
 ];
 
 const AdminHome = () => {
-  const accountInfo = useGetAccountInfo();
   const navigation = useNavigation<any>();
-  const goScreenManageEmployee = () => {
+  const goScreenEmployeeManagemant = () => {
     navigation.navigate(MainRoutes.MAIN_ADMIN, {
       screen: AdminRoutes.ADMIN_MANAGE_EMPLOYEE,
+    });
+  };
+  const goScreenAccountManagement = () => {
+    navigation.navigate(MainRoutes.MAIN_ADMIN, {
+      screen: AdminRoutes.ADMIN_MANAGE_ACCOUNT,
     });
   };
 
   const handleManagement = (type: string) => {
     switch (type) {
       case ManagementType.EMPLOYEE:
-        goScreenManageEmployee();
+        goScreenEmployeeManagemant();
+        break;
+      case ManagementType.ACCOUNT:
+        goScreenAccountManagement();
         break;
       default:
         break;
     }
   };
   return (
-    <MainLayout
-      title="Staff Wise"
-      headerChildren={<AccountInfoHeader account={accountInfo} />}
-    >
+    <MainLayout title="Staff Wise" headerChildren={<AccountInfoHeader />}>
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <HeaderAction title="Management" onActionPress={() => {}} />
           <View>
             <FlatList
               showsHorizontalScrollIndicator={false}
-              data={menuData2}
+              data={managementOptions}
               keyExtractor={item => `${item.id + nanoid()}`}
               horizontal
               renderItem={({ item }) => (

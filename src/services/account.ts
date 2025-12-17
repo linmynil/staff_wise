@@ -1,4 +1,8 @@
-import { Account } from '@utils/types/account.type';
+import {
+  Account,
+  GetAccountRequest,
+  GetAccountResponse,
+} from '@utils/types/account.type';
 import { baseAPI, Method } from './baseAPI';
 
 export const accountServive = baseAPI.injectEndpoints({
@@ -9,7 +13,14 @@ export const accountServive = baseAPI.injectEndpoints({
         method: Method.GET,
       }),
     }),
+    getAccounts: buider.query<GetAccountResponse, GetAccountRequest>({
+      query: query => ({
+        endpoint: `/accounts`,
+        method: Method.GET,
+        params: query,
+      }),
+    }),
   }),
 });
 
-export const { useGetAccountInfoQuery } = accountServive;
+export const { useGetAccountInfoQuery, useGetAccountsQuery } = accountServive;

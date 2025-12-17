@@ -1,4 +1,5 @@
 import { Account } from './account.type';
+import { Role } from './role.type';
 
 export interface LoginBody {
   username: string;
@@ -8,6 +9,8 @@ export interface LoginBody {
 export interface LoginResponse {
   access_token: string;
   account: Account;
+  roles: Role[];
+  permissions: string[];
 }
 
 export interface ChangePasswordBody {

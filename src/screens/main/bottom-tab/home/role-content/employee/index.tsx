@@ -5,7 +5,6 @@ import AccountInfoHeader from '@components/ui/account-info-header';
 import DashboardItem, { Dashboard } from '@components/ui/dashboard-item';
 import HeaderAction from '@components/ui/header-action';
 import ManagementItem from '@components/ui/management-item';
-import { useGetAccountInfo } from '@hooks';
 import { MainRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
 import { nanoid } from '@reduxjs/toolkit';
@@ -49,7 +48,7 @@ const menuData2 = [
 
 const EmployeeHome = () => {
   const navigation = useNavigation<any>();
-  const accountInfo = useGetAccountInfo();
+
   const onLeaveStatus = () => {
     navigation.navigate(MainRoutes.MAIN_EMPLOYEE);
   };
@@ -68,10 +67,7 @@ const EmployeeHome = () => {
   };
 
   return (
-    <MainLayout
-      title="Staff Wise"
-      headerChildren={<AccountInfoHeader account={accountInfo} />}
-    >
+    <MainLayout title="Staff Wise" headerChildren={<AccountInfoHeader />}>
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <HeaderAction

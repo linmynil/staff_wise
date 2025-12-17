@@ -1,15 +1,16 @@
 import { useAppSelector } from '@redux/store';
 import { useGetAccountInfoQuery } from '@services/account';
-import { Account } from '@utils/types/account.type';
+import { Role } from '@utils/types/role.type';
 
 const useGetAccountInfo = () => {
-  const accountInfo = useAppSelector(state => state.account.accountInfo);
-  const id = accountInfo?.id!;
-
-  const { data: account } = useGetAccountInfoQuery(id, {
-    skip: !id,
+  const { accountInfo } = useAppSelector(state => state.account);
+  const { roles } = useAppSelector(state => state.auth);
+  const idAccount = accountInfo?.id!;
+  const isAdmin = roles?.includes(Role.ADMIN);
+  const { data: account } = useGetAccountInfoQuery(idAccount, {
+    skip: !idAccount || !isAdmin,
   });
 
-  return account as Account;
+  return account;
 };
 export default useGetAccountInfo;

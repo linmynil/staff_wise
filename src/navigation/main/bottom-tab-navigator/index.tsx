@@ -2,7 +2,7 @@
 import { AddIcon, ChatIcon, MenuIcon } from '@assets';
 import HomeIcon from '@assets/icons/HomeIcon';
 import { View } from '@components';
-import { useGetAccountInfo } from '@hooks';
+import { useTabFeatures } from '@hooks/useTabFeatures';
 import { TabRoutes } from '@navigation/routes';
 import {
   BottomTabBarProps,
@@ -14,7 +14,6 @@ import ChatHome from '@screens/main/bottom-tab/chat';
 import Home from '@screens/main/bottom-tab/home';
 import Other from '@screens/main/bottom-tab/other';
 import colors from '@utils/constants/colors';
-import { Role } from '@utils/types/role.type';
 import React, { useEffect } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import Animated, {
@@ -27,9 +26,8 @@ import { SvgProps } from 'react-native-svg';
 const MainTab = createBottomTabNavigator<any>();
 
 const BottomTabNavigation = () => {
-  const accountInfo = useGetAccountInfo();
-  const role = accountInfo?.accountRoles?.[0]?.role?.name;
-  const allowedTabs = ROLE_TABS_MAP[role || Role.EMPLOYEE];
+  const { getEnabledTabs } = useTabFeatures();
+  const enabledTabs = getEnabledTabs();
 
   return (
     <MainTab.Navigator
@@ -37,29 +35,12 @@ const BottomTabNavigation = () => {
       initialRouteName={TabRoutes.HOME}
       tabBar={props => <TabBar {...props} />}
     >
-      {allowedTabs.map(route => {
+      {enabledTabs.map(route => {
         const { name, component } = TAB_CONFIG[route];
         return <MainTab.Screen key={name} name={name} component={component} />;
       })}
     </MainTab.Navigator>
   );
-};
-
-const ROLE_TABS_MAP: Record<Role, TabRoutes[]> = {
-  [Role.ADMIN]: [TabRoutes.HOME, TabRoutes.APPLY_LEAVE, TabRoutes.OTHER],
-  [Role.EMPLOYEE]: [
-    TabRoutes.HOME,
-    TabRoutes.CHAT,
-    TabRoutes.APPLY_LEAVE,
-    TabRoutes.OTHER,
-  ],
-  [Role.CEO]: [TabRoutes.HOME, TabRoutes.CHAT, TabRoutes.OTHER],
-  [Role.MANAGER]: [
-    TabRoutes.HOME,
-    TabRoutes.APPLY_LEAVE,
-    TabRoutes.CHAT,
-    TabRoutes.OTHER,
-  ],
 };
 
 interface TabConfig {

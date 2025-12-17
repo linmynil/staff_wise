@@ -3,6 +3,7 @@ export enum Role {
   CEO = 'CEO',
   EMPLOYEE = 'Employee',
   MANAGER = 'Manager',
+  HR = 'HR',
 }
 
 export interface IPermission {

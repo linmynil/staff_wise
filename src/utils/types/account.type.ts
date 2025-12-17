@@ -1,3 +1,5 @@
+import { Employee } from './employee.type';
+import { IMeta } from './other.type';
 import { IRole } from './role.type';
 
 export interface AccountRole {
@@ -17,5 +19,25 @@ export interface Account {
   createdAt?: string;
   updatedAt?: string;
   accountRoles?: AccountRole[];
-  employee: any;
+  employee: Employee;
+}
+
+export interface AccountInfoView {
+  id: number;
+  username: string;
+  email: string;
+  fullName: string;
+  phone?: string;
+}
+
+export interface GetAccountRequest {
+  page: number;
+  limit: number;
+  search?: string;
+  isActive?: boolean;
+}
+
+export interface GetAccountResponse {
+  data: Account[];
+  meta: IMeta;
 }

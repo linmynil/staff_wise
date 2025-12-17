@@ -49,6 +49,8 @@ const Login = () => {
       const token = res?.data?.access_token;
       const accountInfo = res?.data?.account;
       const mustChangePassword = res?.data?.account?.mustChangePassword;
+      const roles = res?.data?.roles;
+      const permissions = res?.data?.permissions;
       if (token && accountInfo) {
         dispatch(baseAPI.util.resetApiState());
         dispatch(setAccountInfo(accountInfo));
@@ -65,7 +67,13 @@ const Login = () => {
           });
           return;
         }
-        dispatch(setToken({ access_token: token }));
+        dispatch(
+          setToken({
+            access_token: token,
+            roles: roles,
+            permissions: permissions,
+          }),
+        );
       }
     });
   };

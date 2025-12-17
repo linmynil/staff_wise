@@ -1,5 +1,27 @@
 import { Linking, PermissionsAndroid, Platform } from 'react-native';
 
+export const hasPermission = (
+  userPermissions: string[],
+  required: string | string[],
+) => {
+  if (!userPermissions?.length) return false;
+
+  if (userPermissions.includes('*.*')) return true;
+
+  const match = (p: string) => {
+    if (userPermissions.includes(p)) return true;
+
+    const [scope] = p.split('.');
+    return userPermissions.includes(`${scope}.*`);
+  };
+
+  if (Array.isArray(required)) {
+    return required.every(match);
+  }
+
+  return match(required);
+};
+
 export const requestStoragePermission = async () => {
   try {
     if (Platform.OS === 'ios') {

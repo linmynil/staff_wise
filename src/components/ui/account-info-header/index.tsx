@@ -1,14 +1,22 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import Text from '@components/core/text';
 import View from '@components/core/view';
+import { useGetAccountInfo, useGetEmployeeInfo } from '@hooks';
 import { useAppSelector } from '@redux/store';
 import colors from '@utils/constants/colors';
-import { Account } from '@utils/types/account.type';
+import { Employee } from '@utils/types/employee.type';
+import { Role } from '@utils/types/role.type';
 import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 
-const AccountInfoHeader = ({ account }: { account: Account }) => {
-  const { username, accountRoles } = account;
+const AccountInfoHeader = () => {
+  const roles = useAppSelector(state => state.auth.roles);
+  const isAdmin = roles?.includes(Role.ADMIN);
   const avatarUri = useAppSelector(state => state.auth.avatarUri);
+  const info = isAdmin ? useGetAccountInfo() : useGetEmployeeInfo();
+  const displayName = isAdmin ? '' : `, ${(info as Employee)?.fullName}`;
+  const role = isAdmin ? Role.ADMIN : (info as Employee)?.phone;
+
   return (
     <View style={styles.headerChildrenContainer}>
       <Image
@@ -21,10 +29,10 @@ const AccountInfoHeader = ({ account }: { account: Account }) => {
       />
       <View gap={2} center>
         <Text color={colors.white} size={16}>
-          Welcome back, {username}
+          Welcome back {displayName}
         </Text>
         <Text color={colors.white} weight={600} size={16}>
-          {accountRoles?.[0]?.role?.name}
+          {role}
         </Text>
       </View>
     </View>

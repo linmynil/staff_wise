@@ -51,7 +51,6 @@ const axiosBaseQuery =
       ...axios.defaults.headers.common,
       accept: 'application/json',
       'Content-Type': 'application/json',
-      'x-api-version': axios.defaults.headers.common['x-api-version'],
       ...headers,
     } as unknown as AxiosHeaders;
 

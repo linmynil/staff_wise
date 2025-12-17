@@ -4,7 +4,7 @@ import { useBottomSheetContext2 } from '@components/common/bottom-sheet-outside'
 import Divider from '@components/common/divider';
 import MainLayout from '@components/layout/main-layout';
 import Row from '@components/ui/row';
-import { useGetAccountInfo } from '@hooks';
+import { useGetAccountInfo, useGetEmployeeInfo } from '@hooks';
 import { OtherRoutes } from '@navigation/routes';
 import { setAvatar } from '@redux/reducers/auth.slice';
 import { useAppDispatch, useAppSelector } from '@redux/store';
@@ -15,6 +15,8 @@ import {
   storeData,
 } from '@utils/helpers/asyncStorage.helper';
 import { requestCameraPermission } from '@utils/helpers/permisson.helper';
+import { AccountInfoView } from '@utils/types/account.type';
+import { Role } from '@utils/types/role.type';
 
 import React, { Fragment, useEffect } from 'react';
 import { Image, Platform, ScrollView, StyleSheet } from 'react-native';
@@ -22,8 +24,28 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Toast from 'react-native-toast-message';
 
 const AccountInfo = ({ navigation }: any) => {
-  const account = useGetAccountInfo();
-  const roles = account.accountRoles;
+  const roles = useAppSelector(state => state.auth.roles);
+  const isAdmin = roles?.includes(Role.ADMIN);
+
+  const accountInfo = useGetAccountInfo();
+  const employeeInfo = useGetEmployeeInfo();
+
+  const info: AccountInfoView | undefined = isAdmin
+    ? accountInfo && {
+        id: accountInfo?.id,
+        username: accountInfo?.username,
+        email: accountInfo?.email,
+        fullName: accountInfo?.employee?.fullName,
+        phone: accountInfo?.employee?.phone,
+      }
+    : employeeInfo?.account && {
+        id: employeeInfo?.account?.id,
+        username: employeeInfo?.account?.username,
+        email: employeeInfo?.account?.email,
+        fullName: employeeInfo?.fullName,
+        phone: employeeInfo?.phone,
+      };
+
   return (
     <MainLayout
       title="Account Information"
@@ -33,7 +55,7 @@ const AccountInfo = ({ navigation }: any) => {
         <View center gap={8}>
           <AvatarUploadable />
           <Text size={16} color={colors.neutral.c900} weight={600}>
-            {account?.username?.toLocaleUpperCase()}
+            {info?.username?.toLocaleUpperCase()}
           </Text>
         </View>
         <View marginVertical={20} gap={4}>
@@ -49,13 +71,13 @@ const AccountInfo = ({ navigation }: any) => {
             />
           </View>
           <View style={styles.info_container}>
-            <Row title={'Username'} value={account?.username} />
+            <Row title={'Username'} value={info?.username} />
             <Divider />
-            <Row title={'Email'} value={account?.email} />
+            <Row title={'Email'} value={info?.email} />
           </View>
         </View>
         <Divider />
-        <View marginVertical={20} gap={4}>
+        {/* <View marginVertical={20} gap={4}>
           <Text size={16} weight={600} color={colors.neutral.c900}>
             Roles & Permissions
           </Text>
@@ -70,15 +92,15 @@ const AccountInfo = ({ navigation }: any) => {
               </View>
             );
           })}
-        </View>
+        </View> */}
       </ScrollView>
     </MainLayout>
   );
 };
 
 export const AvatarUploadable = ({}: {}) => {
-  const account = useGetAccountInfo();
-  const avatarKey = storageKeys.avatar + account?.id;
+  const accountInfo = useAppSelector(state => state.account.accountInfo);
+  const avatarKey = storageKeys.avatar + accountInfo?.id;
 
   const dispatch = useAppDispatch();
   const { openBottomSheet2, closeBottomSheet2 } = useBottomSheetContext2();

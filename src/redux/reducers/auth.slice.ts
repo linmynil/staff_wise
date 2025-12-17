@@ -1,11 +1,14 @@
 import { getString, removeKey, setString } from '@config/mmkv';
 import { createSlice } from '@reduxjs/toolkit';
+import { Role } from '@utils/types/role.type';
 
 export interface AuthState {
   isSignedIn: boolean;
   avatarUri: string;
   access_token: string | null;
   refresh_token: string | null;
+  roles: Role[];
+  permissions: string[];
 }
 
 export enum TokenType {
@@ -18,6 +21,8 @@ const initialState: AuthState = {
   avatarUri: '',
   access_token: getString(TokenType.ACCESS_TOKEN),
   refresh_token: getString(TokenType.REFRESH_TOKEN),
+  roles: [],
+  permissions: [],
 };
 
 export const authSlice = createSlice({
@@ -25,10 +30,13 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setToken: (state, action) => {
-      const { access_token, refresh_token } = action.payload;
+      const { access_token, refresh_token, roles, permissions } =
+        action.payload;
       state.isSignedIn = !!access_token;
       state.access_token = access_token;
       state.refresh_token = refresh_token;
+      state.roles = roles;
+      state.permissions = permissions;
       if (access_token) {
         setString(TokenType.ACCESS_TOKEN, access_token);
       }
