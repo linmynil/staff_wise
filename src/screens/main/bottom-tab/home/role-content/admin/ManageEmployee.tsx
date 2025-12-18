@@ -213,6 +213,10 @@ const EmployeeFilterContent: React.FC<EmployeeFilterContentProps> = ({
         flexDirection: 'column',
         justifyContent: 'space-between',
       }}
+      onStartShouldSetResponder={() => {
+        Keyboard.dismiss();
+        return false;
+      }}
     >
       <View gap={12}>
         <Text weight={600} size={20} style={{ textAlign: 'center' }}>
