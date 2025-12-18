@@ -105,6 +105,7 @@ const MainLayout = ({
           </View>
           {headerChildren}
         </View>
+
         <View
           flex={1}
           onStartShouldSetResponder={() => {

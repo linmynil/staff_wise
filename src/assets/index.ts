@@ -27,6 +27,7 @@ import SearchIcon from '@assets/icons/SearchIcon';
 import CameraMini from '@assets/icons/CameraMini';
 import PenEdit from '@assets/icons/PenEdit';
 import CircleCloseIcon from '@assets/icons/CircleCloseIcon';
+import FilterIcon from './icons/FilterIcon';
 
 export {
   CloseIcon,
@@ -58,4 +59,5 @@ export {
   CameraMini,
   PenEdit,
   CircleCloseIcon,
+  FilterIcon,
 };

@@ -108,7 +108,18 @@ const BottomSheetProvider2 = ({ children }: { children: any }) => {
             borderTopRightRadius: 12,
           }}
         >
-          <BottomSheetView style={styles.contentContainer}>
+          <BottomSheetView
+            style={[
+              styles.contentContainer,
+              {
+                height: enableDynamicSizing
+                  ? 'auto'
+                  : isOpenKeyboard
+                  ? snapPoints[1] - 32
+                  : snapPoints[0] - 32,
+              },
+            ]}
+          >
             {sheetContent2}
           </BottomSheetView>
         </BottomSheetModal>
@@ -122,8 +133,7 @@ export default BottomSheetProvider2;
 const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
-    alignItems: 'center',
-    backgroundColor: colors.neutral.c100,
+    paddingBottom: 16,
   },
   blur: {
     position: 'absolute',

@@ -13,11 +13,15 @@ export interface Employee {
   createdAt?: string;
   updatedAt?: string;
   account?: Account;
-  manager?: string | null;
+  manager?: {
+    id: number;
+    fullName: string;
+    employeeCode: string | null;
+  } | null;
   subordinates?: any;
 }
 
-export interface GetEmployeeRequest {
+export interface GetEmployeeWithPaginationRequest {
   page: number;
   limit: number;
   search?: string;
@@ -25,7 +29,7 @@ export interface GetEmployeeRequest {
   managerId?: number;
 }
 
-export interface GetEmployeeResponse {
+export interface GetEmployeeWithPaginationResponse {
   data: Employee[];
   meta: IMeta;
 }

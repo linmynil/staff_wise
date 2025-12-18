@@ -14,7 +14,7 @@ interface IProps extends TouchableOpacityProps {
 }
 
 const EmployeeItem = ({ item, ...props }: IProps) => {
-  const { fullName } = item;
+  const { fullName, department, manager } = item;
 
   return (
     <TouchableOpacity {...props} style={styles.container}>
@@ -24,7 +24,14 @@ const EmployeeItem = ({ item, ...props }: IProps) => {
           {fullName}
         </Text>
         <Text weight={600}>
-          <Text>Role: </Text>
+          <Text>Department: </Text>
+          {department}
+        </Text>
+        <Text>
+          Manager:{' '}
+          <Text weight={600}>
+            {!!manager && ` ${manager.fullName} - ${manager.id}`}{' '}
+          </Text>
         </Text>
       </View>
       <Image

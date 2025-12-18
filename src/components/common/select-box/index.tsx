@@ -3,6 +3,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  Keyboard,
   Pressable,
   StyleSheet,
   TextInputProps,
@@ -160,7 +161,7 @@ const SelectBox = ({ ...props }: IProps) => {
 
   const onOpenSelectbox = (os?: SelectOption[]) => {
     if (disabled) return;
-
+    Keyboard.dismiss();
     openBottomSheet({
       closeCallback,
       onChange: (item: any) => {
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: colors.neutral.c300,
+    borderColor: colors.neutral.c500,
     justifyContent: 'center',
     paddingHorizontal: 10,
     marginVertical: 4,
