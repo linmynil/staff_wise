@@ -22,14 +22,7 @@ interface IProps extends ViewProps {
   heightHeader?: number;
 }
 
-const AuthLayout = ({
-  title,
-  back,
-  children,
-  loading,
-  heightHeader = 0.35,
-  ...props
-}: IProps) => {
+const AuthLayout = ({ title, back, children, loading, heightHeader = 0.35, ...props }: IProps) => {
   return (
     <Fragment>
       {loading && (
@@ -66,10 +59,7 @@ const AuthLayout = ({
             <Image source={require('@assets/images/circle-background.png')} />
           </View>
           <View style={[styles.circleLogo, styles.shadow]}>
-            <Image
-              style={styles.imgCircleLogo}
-              source={require('@assets/images/logo.png')}
-            />
+            <Image style={styles.imgCircleLogo} source={require('@assets/images/logo.png')} />
             <Text color={colors.primary.default} weight={600} size={20}>
               Staffwise
             </Text>

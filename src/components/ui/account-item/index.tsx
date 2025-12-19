@@ -2,12 +2,7 @@ import Text from '@components/core/text';
 import View from '@components/core/view';
 import colors from '@utils/constants/colors';
 import { Account } from '@utils/types/account.type';
-import {
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  TouchableOpacityProps,
-} from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
 interface IProps extends TouchableOpacityProps {
   item: Account;
@@ -31,10 +26,7 @@ const AccountItem = ({ item, ...props }: IProps) => {
           <Text>Role:</Text> {rolesText}
         </Text>
       </View>
-      <Image
-        style={styles.img_profile}
-        source={require('@assets/images/avatar-default.png')}
-      />
+      <Image style={styles.img_profile} source={require('@assets/images/avatar-default.png')} />
     </TouchableOpacity>
   );
 };

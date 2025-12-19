@@ -23,9 +23,7 @@ const initialForm = { username: '', password: '' };
 const Login = () => {
   const navigation = useNavigation<any>();
   const dispatch = useAppDispatch();
-  const setFieldErrorRef = useRef<
-    (field: string, message: string | undefined) => void
-  >(() => {});
+  const setFieldErrorRef = useRef<(field: string, message: string | undefined) => void>(() => {});
   const setFieldValueRef = useRef<
     | ((
         field: string,
@@ -61,8 +59,7 @@ const Login = () => {
           setFieldValueRef?.current?.('password', '', false);
           Toast.show({
             type: 'info',
-            text1:
-              'First-time login detected. Please update your password to access all features!',
+            text1: 'First-time login detected. Please update your password to access all features!',
             visibilityTime: 8000,
           });
           return;
@@ -88,11 +85,7 @@ const Login = () => {
 
   return (
     <AuthLayout>
-      <Formik
-        initialValues={initialForm}
-        onSubmit={signIn}
-        validationSchema={validationSchema}
-      >
+      <Formik initialValues={initialForm} onSubmit={signIn} validationSchema={validationSchema}>
         {({
           values,
           handleChange,
@@ -146,11 +139,7 @@ const Login = () => {
                 />
               </View>
 
-              <Button
-                title="Login"
-                loading={isLoading}
-                onPress={handleSubmit}
-              />
+              <Button title="Login" loading={isLoading} onPress={handleSubmit} />
             </View>
           );
         }}

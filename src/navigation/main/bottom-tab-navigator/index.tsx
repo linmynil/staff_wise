@@ -16,11 +16,7 @@ import Other from '@screens/main/bottom-tab/other';
 import colors from '@utils/constants/colors';
 import React, { useEffect } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { SvgProps } from 'react-native-svg';
 
 const MainTab = createBottomTabNavigator<any>();
@@ -88,9 +84,7 @@ const TabItem = ({
   isFocused: boolean;
 }) => {
   const IconElement = TAB_CONFIG[name].icon || HomeIcon;
-  const icon = (
-    <IconElement fill={isFocused ? colors.white : colors.neutral.c500} />
-  );
+  const icon = <IconElement fill={isFocused ? colors.white : colors.neutral.c500} />;
   const label = TAB_CONFIG[name].label;
   const scale = useSharedValue(1);
   const translateY = useSharedValue(0);
@@ -141,13 +135,7 @@ const TabItem = ({
     <Pressable onPress={onPress} style={styles.item}>
       {isFocused && <Animated.View style={animatedCircleStyle} />}
       <Animated.View style={animatedIconStyle}>{icon}</Animated.View>
-      <Animated.Text
-        style={[
-          styles.text,
-          isFocused && styles.activeText,
-          animatedLabelStyle,
-        ]}
-      >
+      <Animated.Text style={[styles.text, isFocused && styles.activeText, animatedLabelStyle]}>
         {label}
       </Animated.Text>
     </Pressable>
@@ -171,12 +159,7 @@ const TabBar: React.FC<BottomTabBarProps> = ({ state, navigation }) => {
           }
         };
         return (
-          <TabItem
-            key={route.key}
-            name={route.name}
-            onPress={onPress}
-            isFocused={isFocused}
-          />
+          <TabItem key={route.key} name={route.name} onPress={onPress} isFocused={isFocused} />
         );
       })}
     </View>

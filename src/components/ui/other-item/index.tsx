@@ -3,11 +3,7 @@ import Text from '@components/core/text';
 import View from '@components/core/view';
 import colors from '@utils/constants/colors';
 import React from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  TouchableOpacityProps,
-} from 'react-native';
+import { StyleSheet, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
 export interface IProps extends TouchableOpacityProps {
   icon?: React.ReactNode;
@@ -16,13 +12,7 @@ export interface IProps extends TouchableOpacityProps {
   isMissingMessage?: string;
 }
 
-const OtherItem = ({
-  icon,
-  title,
-  description,
-  isMissingMessage,
-  ...props
-}: IProps) => {
+const OtherItem = ({ icon, title, description, isMissingMessage, ...props }: IProps) => {
   return (
     <TouchableOpacity {...props} style={styles.container}>
       {isMissingMessage && (

@@ -1,6 +1,6 @@
 import { ArrowRightIcon } from '@assets';
 import MainLayout from '@components/layout/main-layout';
-import AccountInfoHeader from '@components/ui/account-info-header';
+import ProfileInfoHeader from '@components/ui/profile-info-header';
 import HeaderAction from '@components/ui/header-action';
 import { useGetAccountInfo } from '@hooks';
 import { MainRoutes } from '@navigation/routes';
@@ -15,10 +15,7 @@ const ManagerHome = () => {
     navigation.navigate(MainRoutes.MAIN_MANAGER);
   };
   return (
-    <MainLayout
-      title="Staff Wise"
-      headerChildren={<AccountInfoHeader account={accountInfo} />}
-    >
+    <MainLayout title="Staff Wise" headerChildren={<ProfileInfoHeader account={accountInfo} />}>
       <View style={styles.container}>
         <HeaderAction
           title="Dashboard"

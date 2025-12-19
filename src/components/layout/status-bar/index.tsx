@@ -28,11 +28,7 @@ const StatusBarLayout = ({
   };
   return (
     <Fragment>
-      <StatusBar
-        barStyle={barStyle}
-        backgroundColor={colors.transparent}
-        translucent
-      />
+      <StatusBar barStyle={barStyle} backgroundColor={colors.transparent} translucent />
       <View style={statusBarStyle} />
       <View style={childrenStyle}>{children}</View>
     </Fragment>

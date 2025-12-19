@@ -58,9 +58,7 @@ const MainLayout = ({
         statusBarColor={backgroundColor || colors.primary.default}
       >
         <View
-          backgroundColor={
-            headerChildren ? colors.primary.default : colors.background
-          }
+          backgroundColor={headerChildren ? colors.primary.default : colors.background}
           style={{
             borderBottomStartRadius: headerChildren ? 48 : 0,
             borderBottomEndRadius: headerChildren ? 48 : 0,
@@ -80,9 +78,7 @@ const MainLayout = ({
             style={{
               flex: 0,
               backgroundColor:
-                backgroundColor || headerChildren
-                  ? colors.transparent
-                  : colors.primary.default,
+                backgroundColor || headerChildren ? colors.transparent : colors.primary.default,
             }}
             onStartShouldSetResponder={() => {
               Keyboard.dismiss();

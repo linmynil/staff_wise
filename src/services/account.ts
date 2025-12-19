@@ -1,8 +1,4 @@
-import {
-  Account,
-  GetAccountRequest,
-  GetAccountResponse,
-} from '@utils/types/account.type';
+import { Account, GetAccountRequest, GetAccountResponse } from '@utils/types/account.type';
 import { baseAPI, Method } from './baseAPI';
 
 export const accountServive = baseAPI.injectEndpoints({

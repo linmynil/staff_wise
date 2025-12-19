@@ -36,9 +36,7 @@ const RootContent = () => {
   useEffect(() => {
     navigation.reset({
       index: 0,
-      routes: [
-        { name: (isSignedIn ? RootRoutes.MAIN : RootRoutes.AUTH) as never },
-      ],
+      routes: [{ name: (isSignedIn ? RootRoutes.MAIN : RootRoutes.AUTH) as never }],
     });
   }, [isSignedIn]);
 

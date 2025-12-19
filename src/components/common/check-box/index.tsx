@@ -1,7 +1,5 @@
 import React from 'react';
-import BouncyCheckbox, {
-  BouncyCheckboxProps,
-} from 'react-native-bouncy-checkbox';
+import BouncyCheckbox, { BouncyCheckboxProps } from 'react-native-bouncy-checkbox';
 import colors from '../../../utils/constants/colors';
 import View from '../../core/view';
 import Text from '@components/core/text';
@@ -51,12 +49,7 @@ const CheckBox = ({
           }}
           textComponent={
             typeof label === 'string' ? (
-              <Text
-                paddingLeft={8}
-                size={14}
-                color={colors.neutral.c700}
-                maxWidth={'98%'}
-              >
+              <Text paddingLeft={8} size={14} color={colors.neutral.c700} maxWidth={'98%'}>
                 {label}
               </Text>
             ) : undefined

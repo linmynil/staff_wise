@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  Pressable,
-  StyleProp,
-  ViewStyle,
-  TextStyle,
-} from 'react-native';
+import { StyleSheet, Pressable, StyleProp, ViewStyle, TextStyle } from 'react-native';
 import Text from '../../core/text';
 import View from '../../core/view';
 import colors from '../../../utils/constants/colors';
@@ -13,8 +7,7 @@ import RNDatePicker, { DatePickerProps } from 'react-native-date-picker';
 import dayjs, { Dayjs } from 'dayjs';
 import { Calendar } from '@assets';
 
-interface IProps
-  extends Omit<DatePickerProps, 'onConfirm' | 'onCancel' | 'date'> {
+interface IProps extends Omit<DatePickerProps, 'onConfirm' | 'onCancel' | 'date'> {
   label?: string;
   // defaultValue?: string;
   min?: dayjs.ConfigType;
@@ -52,8 +45,7 @@ const DatePicker = ({
 }: IProps) => {
   const [visible, setVisible] = useState(false);
   const date: Dayjs | undefined = value ? dayjs.utc(value) : undefined;
-  const dateValue =
-    date || (max ? dayjs.utc(max) : min ? dayjs.utc(min) : dayjs.utc());
+  const dateValue = date || (max ? dayjs.utc(max) : min ? dayjs.utc(min) : dayjs.utc());
   // const dateValue = date ? dayjs.utc(date) : min ? dayjs.utc(min) : max ? dayjs.utc(max) : dayjs.utc();
 
   const handleVisible = () => {
@@ -87,13 +79,9 @@ const DatePicker = ({
         ]}
       >
         {date ? (
-          <Text style={[styles.text, textStyle]}>
-            {date?.format('DD/MM/YYYY')}
-          </Text>
+          <Text style={[styles.text, textStyle]}>{date?.format('DD/MM/YYYY')}</Text>
         ) : (
-          <Text
-            style={[styles.text, textStyle, { color: colors.neutral.c300 }]}
-          >
+          <Text style={[styles.text, textStyle, { color: colors.neutral.c300 }]}>
             {placeholder || ''}
           </Text>
         )}

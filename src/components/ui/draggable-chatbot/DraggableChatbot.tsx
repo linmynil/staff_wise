@@ -1,17 +1,10 @@
 import { MainRoutes } from '@navigation/routes';
 import colors from '@utils/constants/colors';
-import {
-  height as SCREEN_HEIGHT,
-  width as SCREEN_WIDTH,
-} from '@utils/helpers/dimension';
+import { height as SCREEN_HEIGHT, width as SCREEN_WIDTH } from '@utils/helpers/dimension';
 import React from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 const DRAGGABLE_SIZE = 60;
 

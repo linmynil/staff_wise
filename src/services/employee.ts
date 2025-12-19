@@ -29,6 +29,12 @@ export const employeeServive = baseAPI.injectEndpoints({
         method: Method.GET,
       }),
     }),
+    getEmployeeDetail: buider.query<Employee, number>({
+      query: id => ({
+        endpoint: `/employees/${id}`,
+        method: Method.GET,
+      }),
+    }),
   }),
 });
 
@@ -36,4 +42,5 @@ export const {
   useGetEmployeeInfoQuery,
   useGetEmployeesWithPaginationQuery,
   useGetEmployeesNoPaginationQuery,
+  useGetEmployeeDetailQuery,
 } = employeeServive;

@@ -9,7 +9,7 @@ import { Role } from '@utils/types/role.type';
 import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 
-const AccountInfoHeader = () => {
+const ProfileInfoHeader = () => {
   const roles = useAppSelector(state => state.auth.roles);
   const isAdmin = roles?.includes(Role.ADMIN);
   const avatarUri = useAppSelector(state => state.auth.avatarUri);
@@ -20,11 +20,7 @@ const AccountInfoHeader = () => {
   return (
     <View style={styles.headerChildrenContainer}>
       <Image
-        source={
-          avatarUri
-            ? { uri: avatarUri }
-            : require('@assets/images/avatar-default.png')
-        }
+        source={avatarUri ? { uri: avatarUri } : require('@assets/images/avatar-default.png')}
         style={styles.avatar}
       />
       <View gap={2} center>
@@ -39,7 +35,7 @@ const AccountInfoHeader = () => {
   );
 };
 
-export default AccountInfoHeader;
+export default ProfileInfoHeader;
 
 const styles = StyleSheet.create({
   headerChildrenContainer: {

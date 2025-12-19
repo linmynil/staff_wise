@@ -3,9 +3,9 @@ import { useAppDispatch, useAppSelector } from '@redux/store';
 import { getData, storageKeys } from '@utils/helpers/asyncStorage.helper';
 import { Role } from '@utils/types/role.type';
 import React, { useEffect } from 'react';
-import PermissionGuard from './components/PermissionGuard';
 import AdminHome from './role-content/admin';
 import EmployeeHome from './role-content/employee';
+import { PermissionGuard } from '@components';
 
 const Home = () => {
   const dispatch = useAppDispatch();
@@ -22,14 +22,10 @@ const Home = () => {
 
   return (
     <>
-      <PermissionGuard
-        excludeRoles={[Role.CEO, Role.EMPLOYEE, Role.HR, Role.MANAGER]}
-      >
+      <PermissionGuard excludeRoles={[Role.CEO, Role.EMPLOYEE, Role.HR, Role.MANAGER]}>
         <AdminHome />
       </PermissionGuard>
-      <PermissionGuard
-        excludeRoles={[Role.CEO, Role.ADMIN, Role.HR, Role.MANAGER]}
-      >
+      <PermissionGuard excludeRoles={[Role.CEO, Role.ADMIN, Role.HR, Role.MANAGER]}>
         <EmployeeHome />
       </PermissionGuard>
     </>

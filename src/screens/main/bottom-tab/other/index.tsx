@@ -46,9 +46,7 @@ const Other = () => {
                 content: (
                   <View center gap={16}>
                     <SadFace color={colors.primary.default} />
-                    <Text align="center">
-                      Do you agree to log out of the app?
-                    </Text>
+                    <Text align="center">Do you agree to log out of the app?</Text>
                   </View>
                 ),
                 button1: (

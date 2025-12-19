@@ -12,10 +12,7 @@ const EmployeeNavigation = () => {
       screenOptions={{ headerShown: false }}
       initialRouteName={EmployeeRoutes.EMPLOYEE_LEAVE_STATUS}
     >
-      <EmployeeStack.Screen
-        name={EmployeeRoutes.EMPLOYEE_LEAVE_STATUS}
-        component={LeaveStatus}
-      />
+      <EmployeeStack.Screen name={EmployeeRoutes.EMPLOYEE_LEAVE_STATUS} component={LeaveStatus} />
       <EmployeeStack.Screen
         name={EmployeeRoutes.EMPLOYEE_ADDITIONAL_LEAVE}
         component={AdditionalLeave}

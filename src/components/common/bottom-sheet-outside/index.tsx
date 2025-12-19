@@ -1,17 +1,7 @@
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetView,
-} from '@gorhom/bottom-sheet';
+import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useKeyboardStatus } from '@hooks/useKeyboardStatus';
 import { height } from '@utils/helpers/dimension';
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import colors from '../../../utils/constants/colors';
 
@@ -91,9 +81,7 @@ const BottomSheetProvider2 = ({ children }: { children: any }) => {
       <BottomSheetModalProvider>
         {children}
 
-        {isOpen2 && (
-          <Pressable style={styles.blur} onPress={closeBottomSheet2} />
-        )}
+        {isOpen2 && <Pressable style={styles.blur} onPress={closeBottomSheet2} />}
 
         <BottomSheetModal
           ref={bottomSheetModalRef2}

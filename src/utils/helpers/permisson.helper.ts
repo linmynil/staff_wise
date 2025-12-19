@@ -1,9 +1,6 @@
 import { Linking, PermissionsAndroid, Platform } from 'react-native';
 
-export const hasPermission = (
-  userPermissions: string[],
-  required: string | string[],
-) => {
+export const hasPermission = (userPermissions: string[], required: string | string[]) => {
   if (!userPermissions?.length) return false;
 
   if (userPermissions.includes('*.*')) return true;
@@ -53,9 +50,7 @@ export const requestCameraPermission = async () => {
       return true;
     }
     if (Platform.OS === 'android') {
-      const permission = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-      );
+      const permission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA);
       if (permission === PermissionsAndroid.RESULTS.GRANTED) {
         return true;
       }

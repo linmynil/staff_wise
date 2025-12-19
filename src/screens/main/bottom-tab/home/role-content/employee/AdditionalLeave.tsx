@@ -4,10 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 const AdditionalLeave = () => {
   return (
-    <MainLayout
-      back={<MainLayout.BackToPreviousButton />}
-      title="Additional Leave"
-    >
+    <MainLayout back={<MainLayout.BackToPreviousButton />} title="Additional Leave">
       <View style={styles.container}>
         <Text>AdditionalLeave</Text>
       </View>

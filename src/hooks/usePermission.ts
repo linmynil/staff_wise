@@ -5,7 +5,6 @@ export const usePermission = () => {
   const permissions = useAppSelector(state => state.auth.permissions);
 
   return {
-    can: (permission: string | string[]) =>
-      hasPermission(permissions, permission),
+    can: (permission: string | string[]) => hasPermission(permissions, permission),
   };
 };

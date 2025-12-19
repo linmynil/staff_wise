@@ -4,10 +4,4 @@ import useAuthen from './useAuthen';
 import useGetAccountInfo from './useGetAccountInfo';
 import useGetEmployeeInfo from './useGetEmployeeInfo';
 
-export {
-  useGlobalError,
-  useKeyboardStatus,
-  useAuthen,
-  useGetAccountInfo,
-  useGetEmployeeInfo,
-};
+export { useGlobalError, useKeyboardStatus, useAuthen, useGetAccountInfo, useGetEmployeeInfo };

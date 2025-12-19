@@ -14,7 +14,15 @@ interface DividerProps {
   marginBottom?: number;
 }
 
-const Divider = ({ text, textStyle, height, margin, color, marginTop, marginBottom }: DividerProps) => {
+const Divider = ({
+  text,
+  textStyle,
+  height,
+  margin,
+  color,
+  marginTop,
+  marginBottom,
+}: DividerProps) => {
   const divider: {} = {
     flex: 1,
     height: height || 1,
@@ -22,7 +30,14 @@ const Divider = ({ text, textStyle, height, margin, color, marginTop, marginBott
     borderTopWidth: 1,
   };
   return (
-    <View row center gap={12} marginHorizontal={margin} marginTop={marginTop} marginBottom={marginBottom}>
+    <View
+      row
+      center
+      gap={12}
+      marginHorizontal={margin}
+      marginTop={marginTop}
+      marginBottom={marginBottom}
+    >
       <View style={divider} />
       {text && (
         <React.Fragment>

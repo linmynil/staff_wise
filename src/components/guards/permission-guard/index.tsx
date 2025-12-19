@@ -20,15 +20,9 @@ const PermissionGuard: React.FC<PermissionGuardProps> = ({
 
   const normalizedRoles = roles.map(r => r.toUpperCase());
 
-  if (
-    visibleRoles &&
-    !visibleRoles.some(r => normalizedRoles.includes(r.toUpperCase()))
-  )
+  if (visibleRoles && !visibleRoles.some(r => normalizedRoles.includes(r.toUpperCase())))
     return null;
-  if (
-    excludeRoles &&
-    excludeRoles.some(r => normalizedRoles.includes(r.toUpperCase()))
-  )
+  if (excludeRoles && excludeRoles.some(r => normalizedRoles.includes(r.toUpperCase())))
     return null;
   if (permission && !permissions.includes(permission)) return null;
 

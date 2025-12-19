@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  Text as RNText,
-  TextProps,
-  StyleProp,
-  TextStyle,
-} from 'react-native';
+import { StyleSheet, Text as RNText, TextProps, StyleProp, TextStyle } from 'react-native';
 import React from 'react';
 import colors from '../../../utils/constants/colors';
 

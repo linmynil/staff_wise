@@ -19,18 +19,13 @@ const initialForm = { oldPassword: '', newPassword: '', reNewPassword: '' };
 
 const ChangePassword = () => {
   const navigation = useNavigation<any>();
-  const setFieldErrorRef = useRef<
-    (field: string, message: string | undefined) => void
-  >(() => {});
+  const setFieldErrorRef = useRef<(field: string, message: string | undefined) => void>(() => {});
   const [changePassword, { isLoading, error }] = useChangePasswordMutation();
 
   const validationSchema = Yup.object({
     oldPassword: Yup.string().required('Please enter your old password'),
     newPassword: Yup.string()
-      .notOneOf(
-        [Yup.ref('oldPassword')],
-        'New password must be different from old password',
-      )
+      .notOneOf([Yup.ref('oldPassword')], 'New password must be different from old password')
       .required('Please enter your new password'),
     reNewPassword: Yup.string()
       .oneOf([Yup.ref('newPassword')], 'New passwords do not match')

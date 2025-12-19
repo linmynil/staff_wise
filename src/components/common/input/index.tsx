@@ -78,9 +78,7 @@ const TextInput = ({
   return (
     <View style={[styles.container, style]}>
       {label && (
-        <Text
-          style={[styles.label, labelStyle, { marginTop: isRequired ? 0 : 2 }]}
-        >
+        <Text style={[styles.label, labelStyle, { marginTop: isRequired ? 0 : 2 }]}>
           {label} {isRequired && <Text color={colors.red.c500}>*</Text>}
         </Text>
       )}
@@ -100,12 +98,7 @@ const TextInput = ({
           editable={!disabled}
           onChangeText={text => {
             setIsShowHint(true);
-            onChange &&
-              onChange(
-                isCurrency
-                  ? text.replaceAll(',', '').replaceAll('.', '')
-                  : text,
-              );
+            onChange && onChange(isCurrency ? text.replaceAll(',', '').replaceAll('.', '') : text);
           }}
           placeholderTextColor={placeholderColor || colors.neutral.c500}
           value={displayValue}
@@ -115,11 +108,7 @@ const TextInput = ({
       </View>
 
       {isNumberHint && isShowHint && (
-        <Hints
-          onChange={onChange}
-          value={value}
-          setIsShowHint={setIsShowHint}
-        />
+        <Hints onChange={onChange} value={value} setIsShowHint={setIsShowHint} />
       )}
 
       {error && <Text style={styles.error}>{error}</Text>}
@@ -179,11 +168,7 @@ TextInput.Type = InputType;
 
 export default TextInput;
 
-export const PasswordInput = ({
-  label,
-  passwordVisible = false,
-  ...props
-}: IProps) => {
+export const PasswordInput = ({ label, passwordVisible = false, ...props }: IProps) => {
   const [isPasswordVisible, setPasswordVisible] = useState(passwordVisible);
 
   const togglePasswordVisibility = () => {

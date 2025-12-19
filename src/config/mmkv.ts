@@ -14,8 +14,7 @@ export const setBoolean = (key: string, value: boolean) => mmkv.set(key, value);
 export const getBoolean = (key: string) => mmkv.getBoolean(key) ?? null;
 
 // save and get object
-export const setObject = <T>(key: string, value: T) =>
-  mmkv.set(key, JSON.stringify(value));
+export const setObject = <T>(key: string, value: T) => mmkv.set(key, JSON.stringify(value));
 export const getObject = <T>(key: string): T | null => {
   const jsonString = mmkv.getString(key);
   return jsonString ? JSON.parse(jsonString) : null;

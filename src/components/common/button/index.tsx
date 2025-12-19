@@ -52,12 +52,7 @@ const Button = ({
   ...props
 }: IProps) => {
   const isDisabled = disabled || loading;
-  const buttonStyle = [
-    styles.button,
-    styles[type],
-    isDisabled && styles.disabledButton,
-    style,
-  ];
+  const buttonStyle = [styles.button, styles[type], isDisabled && styles.disabledButton, style];
   const textStyleCombined = [
     styles.text,
     styles[`${type}Text`],
@@ -66,18 +61,11 @@ const Button = ({
   ];
 
   return (
-    <TouchableOpacity
-      style={buttonStyle}
-      onPress={onPress}
-      disabled={isDisabled}
-      {...props}
-    >
+    <TouchableOpacity style={buttonStyle} onPress={onPress} disabled={isDisabled} {...props}>
       {loading ? (
         <ActivityIndicator
           size="small"
-          color={
-            type === ButtonType.filled ? colors.white : colors.primary.default
-          }
+          color={type === ButtonType.filled ? colors.white : colors.primary.default}
         />
       ) : (
         <Text style={textStyleCombined}>{title}</Text>
@@ -86,24 +74,14 @@ const Button = ({
   );
 };
 
-const OutlineButton = ({
-  icon,
-  iconRight,
-  title,
-  color,
-  ...props
-}: OutlineButtonProps) => {
+const OutlineButton = ({ icon, iconRight, title, color, ...props }: OutlineButtonProps) => {
   const style: {} = [color && { borderColor: color }];
   const textStyle: {} = [color && { color: color }];
   return (
     <TouchableOpacity style={[styles.buttonOutlineStyle, style]} {...props}>
       {icon}
       {props.children}
-      {title && (
-        <Text style={[styles.textOfButtonOutlineStyle, textStyle]}>
-          {title}
-        </Text>
-      )}
+      {title && <Text style={[styles.textOfButtonOutlineStyle, textStyle]}>{title}</Text>}
       {iconRight}
     </TouchableOpacity>
   );

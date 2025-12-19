@@ -30,17 +30,12 @@ const rootReducer = combineReducers({
   [baseAPI.reducerPath]: baseAPI.reducer,
 });
 
-const persistedReducer = persistReducer<ReturnType<typeof rootReducer>>(
-  persistConfig,
-  rootReducer,
-);
+const persistedReducer = persistReducer<ReturnType<typeof rootReducer>>(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({ serializableCheck: false }).concat(
-      baseAPI.middleware,
-    ),
+    getDefaultMiddleware({ serializableCheck: false }).concat(baseAPI.middleware),
 });
 
 export const persistor = persistStore(store);

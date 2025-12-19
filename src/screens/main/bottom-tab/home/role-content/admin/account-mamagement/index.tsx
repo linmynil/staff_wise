@@ -21,10 +21,9 @@ const ManageAccount = () => {
     search: '',
   });
 
-  const { data: dataGetAccounts, isFetching: isFetchingAccounts } =
-    useGetAccountsQuery(query, {
-      refetchOnMountOrArgChange: true,
-    });
+  const { data: dataGetAccounts, isFetching: isFetchingAccounts } = useGetAccountsQuery(query, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [hasMore, setHasMore] = useState(true);
@@ -90,10 +89,7 @@ const ManageAccount = () => {
           onEndReached={loadMore}
           onEndReachedThreshold={0.4}
           renderItem={({ item }) => (
-            <AccountItem
-              item={item}
-              onPress={() => console.log('id', item?.id)}
-            />
+            <AccountItem item={item} onPress={() => console.log('id', item?.id)} />
           )}
         />
       </View>

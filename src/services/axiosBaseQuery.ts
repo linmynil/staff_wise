@@ -70,12 +70,7 @@ const axiosBaseQuery =
         timeout: TIMEOUT,
       });
 
-      console.info(
-        'DATA of',
-        url,
-        '_____',
-        JSON.stringify(result?.data, null, 2),
-      );
+      console.info('DATA of', url, '_____', JSON.stringify(result?.data, null, 2));
       return { data: result?.data };
     } catch (axiosError) {
       const err = axiosError as AxiosError;
@@ -106,8 +101,7 @@ const axiosBaseQuery =
         );
 
       switch (true) {
-        case err.isAxiosError &&
-          ['ERR_BAD_RESPONSE', 'ECONNABORTED'].includes(err.code || ''): {
+        case err.isAxiosError && ['ERR_BAD_RESPONSE', 'ECONNABORTED'].includes(err.code || ''): {
           Toast.show({
             type: 'error',
             text1: 'The system is not responding. Please try again later!',

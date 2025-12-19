@@ -101,16 +101,13 @@ const SelectBoxContent = ({
   const { bottomSheetHeight3, closeBottomSheet3 } = useBottomSheetContext3();
 
   const [searchText, setSearchText] = useState('');
-  const [selected, setSelected] =
-    useState<MultipleSelectOption[]>(selectedOptions);
+  const [selected, setSelected] = useState<MultipleSelectOption[]>(selectedOptions);
 
   const selectedMap = React.useMemo(() => keyBy(selected, 'value'), [selected]);
 
   const filteredOptions = React.useMemo(() => {
     const keyword = removeAccents(searchText.toLowerCase());
-    return options.filter(o =>
-      removeAccents(o.label.toLowerCase()).includes(keyword),
-    );
+    return options.filter(o => removeAccents(o.label.toLowerCase()).includes(keyword));
   }, [options, searchText]);
 
   const updateSelected = (next: MultipleSelectOption[]) => {
@@ -252,18 +249,9 @@ const MultipleSelect = (props: IProps) => {
                     if (!label) return null;
 
                     return (
-                      <View
-                        key={v.toString()}
-                        style={styles.selectedLabel}
-                        row
-                        center
-                        gap={6}
-                      >
+                      <View key={v.toString()} style={styles.selectedLabel} row center gap={6}>
                         <Text color={colors.white}>{label}</Text>
-                        <TouchableOpacity
-                          onPress={() => removeValue(v)}
-                          hitSlop={8}
-                        >
+                        <TouchableOpacity onPress={() => removeValue(v)} hitSlop={8}>
                           <CircleCloseIcon fill={colors.white} />
                         </TouchableOpacity>
                       </View>
@@ -284,13 +272,8 @@ const MultipleSelect = (props: IProps) => {
                       center
                       gap={6}
                     >
-                      <Text color={colors.black}>
-                        + {value.length - maxCount}
-                      </Text>
-                      <TouchableOpacity
-                        onPress={removeHiddenValues}
-                        hitSlop={8}
-                      >
+                      <Text color={colors.black}>+ {value.length - maxCount}</Text>
+                      <TouchableOpacity onPress={removeHiddenValues} hitSlop={8}>
                         <CircleCloseIcon fill={colors.black} />
                       </TouchableOpacity>
                     </View>

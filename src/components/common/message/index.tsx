@@ -19,13 +19,7 @@ const IconMap: Record<Type, ReactNode> = {
   // [Type.warning]: <InfoCircleIcon />,
 };
 
-const Message = ({
-  type = Type.info,
-  text1,
-}: {
-  type: Type;
-  text1: string;
-}) => {
+const Message = ({ type = Type.info, text1 }: { type: Type; text1: string }) => {
   const Icon = IconMap[type];
   const containerStyle = [styles.messageContainer, styles[type]];
 
@@ -47,10 +41,7 @@ const Message = ({
             alignItems: 'center',
           }}
         >
-          <Button.IconButton
-            icon={<CloseIcon />}
-            onPress={() => Toast.hide()}
-          />
+          <Button.IconButton icon={<CloseIcon />} onPress={() => Toast.hide()} />
         </View>
       </View>
     </View>

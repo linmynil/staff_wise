@@ -76,11 +76,7 @@ const ModalProvider = ({ children }: any) => {
             <View
               marginTop={24}
               gap={8}
-              style={
-                data.row
-                  ? { flexDirection: 'row', justifyContent: 'space-evenly' }
-                  : {}
-              }
+              style={data.row ? { flexDirection: 'row', justifyContent: 'space-evenly' } : {}}
             >
               {data.button1}
               {data.button2}

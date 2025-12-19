@@ -1,8 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { AdminRoutes } from '@navigation/routes';
-import ManageEmployee from '@screens/main/bottom-tab/home/role-content/admin/ManageEmployee';
-import ManageAccount from '@screens/main/bottom-tab/home/role-content/admin/ManageAccount';
+import ManageEmployee from '@screens/main/bottom-tab/home/role-content/admin/employee-management';
+import ManageAccount from '@screens/main/bottom-tab/home/role-content/admin/account-mamagement';
+import EmployeeDetail from '@screens/main/bottom-tab/home/role-content/admin/employee-management/EmployeeDetail';
+import UpdateInfoEmployee from '@screens/main/bottom-tab/home/role-content/admin/employee-management/UpdateInfoEmployee';
 
 const AdminStack = createNativeStackNavigator<any>();
 
@@ -12,13 +14,12 @@ const AdminNavigation = () => {
       screenOptions={{ headerShown: false }}
       initialRouteName={AdminRoutes.ADMIN_MANAGE_EMPLOYEE}
     >
+      <AdminStack.Screen name={AdminRoutes.ADMIN_MANAGE_EMPLOYEE} component={ManageEmployee} />
+      <AdminStack.Screen name={AdminRoutes.ADMIN_MANAGE_ACCOUNT} component={ManageAccount} />
+      <AdminStack.Screen name={AdminRoutes.ADMIN_EMPLOYEE_INFO} component={EmployeeDetail} />
       <AdminStack.Screen
-        name={AdminRoutes.ADMIN_MANAGE_EMPLOYEE}
-        component={ManageEmployee}
-      />
-      <AdminStack.Screen
-        name={AdminRoutes.ADMIN_MANAGE_ACCOUNT}
-        component={ManageAccount}
+        name={AdminRoutes.ADMIN_UPDATE_INFO_EMPLOYEE}
+        component={UpdateInfoEmployee}
       />
     </AdminStack.Navigator>
   );

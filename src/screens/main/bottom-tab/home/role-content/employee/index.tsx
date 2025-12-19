@@ -1,7 +1,7 @@
 import { ArrowRightIcon } from '@assets';
 import { View } from '@components';
 import MainLayout from '@components/layout/main-layout';
-import AccountInfoHeader from '@components/ui/account-info-header';
+import ProfileInfoHeader from '@components/ui/profile-info-header';
 import DashboardItem, { Dashboard } from '@components/ui/dashboard-item';
 import HeaderAction from '@components/ui/header-action';
 import ManagementItem from '@components/ui/management-item';
@@ -67,7 +67,7 @@ const EmployeeHome = () => {
   };
 
   return (
-    <MainLayout title="Staff Wise" headerChildren={<AccountInfoHeader />}>
+    <MainLayout title="Staff Wise" headerChildren={<ProfileInfoHeader />}>
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <HeaderAction
@@ -99,10 +99,7 @@ const EmployeeHome = () => {
               keyExtractor={item => `${item.id + nanoid()}`}
               horizontal
               renderItem={({ item }) => (
-                <ManagementItem
-                  item={item}
-                  onPress={() => handleManagement(item.type)}
-                />
+                <ManagementItem item={item} onPress={() => handleManagement(item.type)} />
               )}
               contentContainerStyle={{
                 gap: 16,

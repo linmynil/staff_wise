@@ -1,10 +1,10 @@
-import { AddIcon, FilterIcon, SearchIcon } from '@assets';
-import { Button, Text, TextInput, View } from '@components';
+import { FilterIcon, SearchIcon } from '@assets';
+import { Button, EmptyData, Text, TextInput, View } from '@components';
 import { useBottomSheetContext2 } from '@components/common/bottom-sheet-outside';
 import SelectBox, { SelectOption } from '@components/common/select-box';
 import MainLayout from '@components/layout/main-layout';
 import EmployeeItem from '@components/ui/employee-item';
-import { EmployeeRoutes } from '@navigation/routes';
+import { AdminRoutes, MainRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
 import {
   useGetEmployeesNoPaginationQuery,
@@ -13,12 +13,9 @@ import {
 import colors from '@utils/constants/colors';
 import { LIMIT } from '@utils/constants/constants';
 import { height } from '@utils/helpers/dimension';
-import {
-  Employee,
-  GetEmployeeWithPaginationRequest,
-} from '@utils/types/employee.type';
+import { Employee, GetEmployeeWithPaginationRequest } from '@utils/types/employee.type';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Keyboard, StyleSheet } from 'react-native';
+import { FlatList, Keyboard, RefreshControl, StyleSheet } from 'react-native';
 import { useDebouncedCallback } from 'use-debounce';
 
 interface FilterBottomSheetValue {
@@ -26,44 +23,38 @@ interface FilterBottomSheetValue {
   managerId?: number;
 }
 
+const initialQuery: GetEmployeeWithPaginationRequest = {
+  page: 1,
+  limit: LIMIT,
+  search: '',
+  department: '',
+  managerId: undefined as unknown as number,
+};
+
 const ManageEmployee = () => {
   const navigation = useNavigation<any>();
-
   const { openBottomSheet2, closeBottomSheet2 } = useBottomSheetContext2();
+  const [query, setQuery] = useState(initialQuery);
 
-  const [query, setQuery] = useState({
-    page: 1,
-    limit: LIMIT,
-    search: '',
-    department: '',
-    managerId: undefined as unknown as number,
-  });
-
-  const {
-    data: dataGetEmployeesWithPagination,
-    isFetching: isFetchingEmployeesWithPagination,
-  } = useGetEmployeesWithPaginationQuery(
-    {
-      ...query,
-      ...(query.managerId != null && {
-        managerId:
-          query.managerId?.toString() !== '-1'
-            ? Number(query.managerId)
-            : undefined,
-      }),
-    },
-    {
-      refetchOnMountOrArgChange: true,
-    },
-  );
-
-  const { data: dataGetEmployeesNoPagination } =
-    useGetEmployeesNoPaginationQuery(
-      {},
+  const { data: dataGetEmployeesWithPagination, isFetching: isFetchingEmployeesWithPagination } =
+    useGetEmployeesWithPaginationQuery(
+      {
+        ...query,
+        ...(query.managerId != null && {
+          managerId: query.managerId?.toString() !== '-1' ? Number(query.managerId) : undefined,
+        }),
+      },
       {
         refetchOnMountOrArgChange: true,
       },
     );
+
+  const { data: dataGetEmployeesNoPagination } = useGetEmployeesNoPaginationQuery(
+    {},
+    {
+      refetchOnMountOrArgChange: true,
+    },
+  );
 
   const employeesOptions = dataGetEmployeesNoPagination?.map(employee => ({
     value: employee?.id?.toString(),
@@ -99,14 +90,11 @@ const ManageEmployee = () => {
 
   const loadMore = () => {
     if (isFetchingEmployeesWithPagination || !hasMore) return;
-    setQuery(prev => ({
-      ...prev,
-      page: prev.page + 1,
-    }));
+    setQuery(prev => ({ ...prev, page: prev.page + 1 }));
   };
 
-  const onAdditionalLeave = () => {
-    navigation.navigate(EmployeeRoutes.EMPLOYEE_ADDITIONAL_LEAVE);
+  const onRefresh = () => {
+    setQuery(initialQuery);
   };
 
   const handleApplyFilter = (filter: FilterBottomSheetValue) => {
@@ -137,24 +125,22 @@ const ManageEmployee = () => {
     });
   };
 
+  const navigateEmployeeInfo = (id: number) => {
+    navigation.getParent().navigate(MainRoutes.MAIN_ADMIN, {
+      screen: AdminRoutes.ADMIN_EMPLOYEE_INFO,
+      params: {
+        id: id,
+      },
+    });
+  };
+
   return (
-    <MainLayout
-      back={<MainLayout.BackToPreviousButton />}
-      title="Employee Management"
-      next={
-        <Button.IconButton
-          icon={<AddIcon width={25} height={25} viewBox="0 0 30 30" />}
-          onPress={onAdditionalLeave}
-        />
-      }
-    >
+    <MainLayout back={<MainLayout.BackToPreviousButton />} title="Employee Management">
       <View style={styles.container}>
         <View row space_between center gap={10}>
           <View flex={1}>
             <TextInput
-              inputContainerStyle={{
-                borderColor: colors.neutral.c500,
-              }}
+              inputContainerStyle={{ borderColor: colors.neutral.c500 }}
               placeholder="Search Employee"
               leftIcon={<SearchIcon />}
               onChange={debouncedSearch}
@@ -167,20 +153,19 @@ const ManageEmployee = () => {
           />
         </View>
         <FlatList
+          refreshControl={
+            <RefreshControl refreshing={isFetchingEmployeesWithPagination} onRefresh={onRefresh} />
+          }
           keyExtractor={item => item?.id?.toString()}
           data={employees}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            gap: 12,
-          }}
+          contentContainerStyle={styles.containerFlatlist}
           onEndReached={loadMore}
           onEndReachedThreshold={0.4}
           renderItem={({ item }) => (
-            <EmployeeItem
-              item={item}
-              onPress={() => console.log('id', item?.id)}
-            />
+            <EmployeeItem item={item} onPress={() => navigateEmployeeInfo(item?.id)} />
           )}
+          ListEmptyComponent={<EmptyData title="Employee is empty" />}
         />
       </View>
     </MainLayout>
@@ -227,12 +212,7 @@ const EmployeeFilterContent: React.FC<EmployeeFilterContentProps> = ({
           label="Department"
           placeholder="Enter search department"
           defaultValue={filterBottom.department}
-          onChange={value =>
-            setFilterBottom(prev => ({
-              ...prev,
-              department: value,
-            }))
-          }
+          onChange={value => setFilterBottom(prev => ({ ...prev, department: value }))}
         />
 
         <SelectBox
@@ -278,5 +258,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderColor: colors.neutral.c500,
     borderRadius: 10,
+  },
+  containerFlatlist: {
+    gap: 12,
+    flex: 1,
   },
 });

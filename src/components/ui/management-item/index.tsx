@@ -4,11 +4,7 @@ import View from '@components/core/view';
 import colors from '@utils/constants/colors';
 import { width } from '@utils/helpers/dimension';
 import React from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  TouchableOpacityProps,
-} from 'react-native';
+import { StyleSheet, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
 const SCREEN_WIDTH = width;
 
@@ -31,22 +27,12 @@ interface IProps extends TouchableOpacityProps {
 const ManagementItem = ({ item, ...props }: IProps) => {
   return (
     <TouchableOpacity {...props} activeOpacity={0.7} style={styles.card}>
-      <Text
-        size={16}
-        weight={600}
-        color={colors.white}
-        style={{ marginBottom: 4 }}
-      >
+      <Text size={16} weight={600} color={colors.white} style={{ marginBottom: 4 }}>
         {item.title}
       </Text>
 
       <View style={styles.row}>
-        <AnnualIcon
-          color={colors.white}
-          width={12}
-          height={14}
-          viewBox="0 0 17 19"
-        />
+        <AnnualIcon color={colors.white} width={12} height={14} viewBox="0 0 17 19" />
         <Text size={12} color={colors.white}>
           {item.time}
         </Text>

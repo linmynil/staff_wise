@@ -5,9 +5,7 @@ import { Button, Text, TextInput, View } from '@components';
 import { AddIcon } from '@assets';
 import { useNavigation } from '@react-navigation/native';
 import { EmployeeRoutes } from '@navigation/routes';
-import MultipleSelect, {
-  MultipleSelectOption,
-} from '@components/common/multiple-select';
+import MultipleSelect, { MultipleSelectOption } from '@components/common/multiple-select';
 import { useBottomSheetContext2 } from '@components/common/bottom-sheet-outside';
 import { height } from '@utils/helpers/dimension';
 import SelectBox from '@components/common/select-box';
@@ -136,9 +134,7 @@ const LeaveStatus = () => {
   };
 
   const [test, setTest] = useState('1');
-  const [pickedDisease, setPickedDisease] = useState(
-    [] as MultipleSelectOption[],
-  );
+  const [pickedDisease, setPickedDisease] = useState([] as MultipleSelectOption[]);
   const [time, setTime] = useState(new Date());
 
   const { openBottomSheet2, closeBottomSheet2 } = useBottomSheetContext2();

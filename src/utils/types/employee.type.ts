@@ -18,7 +18,7 @@ export interface Employee {
     fullName: string;
     employeeCode: string | null;
   } | null;
-  subordinates?: any;
+  subordinates?: Employee;
 }
 
 export interface GetEmployeeWithPaginationRequest {

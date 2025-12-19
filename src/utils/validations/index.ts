@@ -1,7 +1,6 @@
 import * as Yup from 'yup';
 
-export const passwordRegExp =
-  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\W_]{8,}$/;
+export const passwordRegExp = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\W_]{8,}$/;
 export const emailRegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 const validateSchema = {

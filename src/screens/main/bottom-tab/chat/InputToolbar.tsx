@@ -2,12 +2,7 @@
 import { View } from '@components';
 import colors from '@utils/constants/colors';
 import React from 'react';
-import {
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  useColorScheme,
-} from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
 import {
   InputToolbar,
   Actions,
@@ -32,11 +27,12 @@ export const RenderInputToolbar = (props: InputToolbarProps<IMessage>) => {
         {
           backgroundColor: isDark ? '#1a1a1a' : colors.white,
           borderTopWidth: 0,
-          marginBottom: 18,
+          marginBottom: 24,
           marginHorizontal: 16,
           borderRadius: 32,
           paddingVertical: 8,
           paddingLeft: 12,
+          marginTop: 8,
         },
       ]}
       primaryStyle={{ alignItems: 'center' }}
@@ -110,10 +106,7 @@ export const renderSend = (props: SendProps<IMessage>) => (
         justifyContent: 'center',
       }}
     >
-      <Image
-        style={{ width: 32, height: 32 }}
-        source={require('@assets/images/microphone.png')}
-      />
+      <Image style={{ width: 32, height: 32 }} source={require('@assets/images/microphone.png')} />
     </TouchableOpacity>
 
     <Send
@@ -128,17 +121,14 @@ export const renderSend = (props: SendProps<IMessage>) => (
         marginHorizontal: 4,
       }}
     >
-      <Image
-        style={{ width: 32, height: 32 }}
-        source={require('@assets/images/send.png')}
-      />
+      <Image style={{ width: 32, height: 32 }} source={require('@assets/images/send.png')} />
     </Send>
   </View>
 );
 
 const styles = StyleSheet.create({
   shadow: {
-    shadowColor: colors.black,
+    shadowColor: colors.primary.c200,
     shadowOffset: {
       width: 0,
       height: 2,

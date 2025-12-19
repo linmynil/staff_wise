@@ -11,8 +11,7 @@ const SCREEN_WIDTH = width;
 const HORIZONTAL_PADDING = 16;
 const GAP = 16;
 
-const ITEM_WIDTH =
-  (SCREEN_WIDTH - HORIZONTAL_PADDING * 2 - GAP * 2 - 0.00001) / 3;
+const ITEM_WIDTH = (SCREEN_WIDTH - HORIZONTAL_PADDING * 2 - GAP * 2 - 0.00001) / 3;
 
 export enum LeaveType {
   ANNUAL = 'Annual',

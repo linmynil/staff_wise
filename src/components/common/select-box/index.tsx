@@ -108,12 +108,7 @@ const SelectBoxContent = ({
           </View>
 
           <View paddingHorizontal={16} alignSelf="flex-start">
-            <Text
-              paddingVertical={16}
-              align="left"
-              color={colors.black}
-              weight={600}
-            >
+            <Text paddingVertical={16} align="left" color={colors.black} weight={600}>
               Tất cả ({filteredOptions?.length})
             </Text>
           </View>
@@ -194,10 +189,7 @@ const SelectBox = ({ ...props }: IProps) => {
             value={textValue}
             rightIcon={
               isLoading ? (
-                <ActivityIndicator
-                  size="small"
-                  color={colors.primary.default}
-                />
+                <ActivityIndicator size="small" color={colors.primary.default} />
               ) : (
                 <ArrowDown color={colors.neutral.c700} />
               )

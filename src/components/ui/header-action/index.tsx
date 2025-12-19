@@ -11,23 +11,14 @@ interface SectionHeaderProps {
   icon?: React.ReactNode;
 }
 
-const HeaderAction = ({
-  title,
-  actionLabel,
-  onActionPress,
-  icon,
-}: SectionHeaderProps) => {
+const HeaderAction = ({ title, actionLabel, onActionPress, icon }: SectionHeaderProps) => {
   return (
     <View style={styles.container}>
       <Text weight={600} size={16}>
         {title}
       </Text>
       {actionLabel && icon && onActionPress && (
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={onActionPress}
-          activeOpacity={0.8}
-        >
+        <TouchableOpacity style={styles.actionButton} onPress={onActionPress} activeOpacity={0.8}>
           <Text color={colors.primary.default} size={12} weight={600}>
             {actionLabel}
           </Text>

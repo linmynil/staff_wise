@@ -9,11 +9,7 @@ import { OtherRoutes } from '@navigation/routes';
 import { setAvatar } from '@redux/reducers/auth.slice';
 import { useAppDispatch, useAppSelector } from '@redux/store';
 import colors from '@utils/constants/colors';
-import {
-  getData,
-  storageKeys,
-  storeData,
-} from '@utils/helpers/asyncStorage.helper';
+import { getData, storageKeys, storeData } from '@utils/helpers/asyncStorage.helper';
 import { requestCameraPermission } from '@utils/helpers/permisson.helper';
 import { AccountInfoView } from '@utils/types/account.type';
 import { Role } from '@utils/types/role.type';
@@ -23,7 +19,7 @@ import { Image, Platform, ScrollView, StyleSheet } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Toast from 'react-native-toast-message';
 
-const AccountInfo = ({ navigation }: any) => {
+const ProfileInfo = ({ navigation }: any) => {
   const roles = useAppSelector(state => state.auth.roles);
   const isAdmin = roles?.includes(Role.ADMIN);
 
@@ -47,10 +43,7 @@ const AccountInfo = ({ navigation }: any) => {
       };
 
   return (
-    <MainLayout
-      title="Account Information"
-      back={<MainLayout.BackToPreviousButton />}
-    >
+    <MainLayout title="Account Information" back={<MainLayout.BackToPreviousButton />}>
       <ScrollView style={styles.wrapper}>
         <View center gap={8}>
           <AvatarUploadable />
@@ -124,11 +117,7 @@ export const AvatarUploadable = ({}: {}) => {
       <View>
         <Image
           style={styles.img_profile}
-          source={
-            avatarUri
-              ? { uri: avatarUri }
-              : require('@assets/images/avatar-default.png')
-          }
+          source={avatarUri ? { uri: avatarUri } : require('@assets/images/avatar-default.png')}
           onError={() => {
             dispatch(setAvatar(''));
           }}
@@ -153,28 +142,24 @@ export const AvatarUploadable = ({}: {}) => {
                       const cameraPermission = await requestCameraPermission();
                       if (cameraPermission) {
                         closeBottomSheet2();
-                        launchCamera(
-                          { mediaType: 'photo' },
-                          ({ assets }: { assets?: any[] }) => {
-                            const file = assets?.[0];
-                            if (file?.uri) {
-                              let data = {
-                                name: file.fileName,
-                                type: file.type,
-                                uri:
-                                  Platform.OS === 'android'
-                                    ? file.uri
-                                    : file.uri.replace('file://', ''),
-                              };
-                              saveAvatarUri(data.uri);
-                            }
-                          },
-                        );
+                        launchCamera({ mediaType: 'photo' }, ({ assets }: { assets?: any[] }) => {
+                          const file = assets?.[0];
+                          if (file?.uri) {
+                            let data = {
+                              name: file.fileName,
+                              type: file.type,
+                              uri:
+                                Platform.OS === 'android'
+                                  ? file.uri
+                                  : file.uri.replace('file://', ''),
+                            };
+                            saveAvatarUri(data.uri);
+                          }
+                        });
                       } else {
                         Toast.show({
                           type: 'error',
-                          text1:
-                            'Please grant camera access to use this feature!',
+                          text1: 'Please grant camera access to use this feature!',
                         });
                       }
                     }}
@@ -215,7 +200,7 @@ export const AvatarUploadable = ({}: {}) => {
   );
 };
 
-export default AccountInfo;
+export default ProfileInfo;
 
 const styles = StyleSheet.create({
   wrapper: {

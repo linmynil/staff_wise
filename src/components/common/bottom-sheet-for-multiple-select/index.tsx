@@ -1,17 +1,7 @@
 import View from '../../core/view';
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetView,
-} from '@gorhom/bottom-sheet';
+import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
 import { height } from '@utils/helpers/dimension';
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { Platform, Pressable, StyleSheet } from 'react-native';
 import colors from '@utils/constants/colors';
 import { useKeyboardStatus } from '@hooks';
@@ -61,8 +51,7 @@ const BottomSheetProvider3 = ({ children }: { children: any }) => {
   const openBottomSheet3 = (payload: PresentPayload) => {
     if (payload?.content) setSheetContent3(payload.content);
     if (payload?.onChange) onChangeRef3.current = payload.onChange;
-    if (payload?.closeCallback)
-      closeCallbackRef3.current = payload.closeCallback;
+    if (payload?.closeCallback) closeCallbackRef3.current = payload.closeCallback;
 
     requestAnimationFrame(() => {
       bottomSheetModalRef3.current?.present();
@@ -107,13 +96,8 @@ const BottomSheetProvider3 = ({ children }: { children: any }) => {
       <BottomSheetModalProvider>
         {children}
 
-        <View
-          pointerEvents={isOpen3 ? 'auto' : 'none'}
-          style={styles.bottomSheetWrapper}
-        >
-          {isOpen3 && (
-            <Pressable style={styles.blur} onPress={closeBottomSheet3} />
-          )}
+        <View pointerEvents={isOpen3 ? 'auto' : 'none'} style={styles.bottomSheetWrapper}>
+          {isOpen3 && <Pressable style={styles.blur} onPress={closeBottomSheet3} />}
 
           <BottomSheetModal
             ref={bottomSheetModalRef3}
@@ -127,9 +111,7 @@ const BottomSheetProvider3 = ({ children }: { children: any }) => {
               borderTopRightRadius: 12,
             }}
           >
-            <BottomSheetView style={styles.contentContainer}>
-              {sheetContent3}
-            </BottomSheetView>
+            <BottomSheetView style={styles.contentContainer}>{sheetContent3}</BottomSheetView>
           </BottomSheetModal>
         </View>
       </BottomSheetModalProvider>

@@ -1,9 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Button, Text, TextInput, View } from '@components';
 import Divider from '@components/common/divider';
-import MultipleSelect, {
-  MultipleSelectOption,
-} from '@components/common/multiple-select';
+import MultipleSelect, { MultipleSelectOption } from '@components/common/multiple-select';
 import MainLayout from '@components/layout/main-layout';
 import { useGetAccountInfo } from '@hooks';
 import { useGetRolesQuery } from '@services/role';
@@ -11,16 +9,11 @@ import colors from '@utils/constants/colors';
 import { checkIsRequired } from '@utils/helpers/form.helper';
 import validateSchema from '@utils/validations';
 import { Formik } from 'formik';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
 import * as Yup from 'yup';
-import { AvatarUploadable } from './AccountInfo';
+import { AvatarUploadable } from '.';
 
-const UpdateAccountInfo = () => {
+const UpdateProfileInfo = () => {
   const account = useGetAccountInfo();
   // const accountRoles = account.accountRoles;
   const initialForm = {
@@ -43,19 +36,8 @@ const UpdateAccountInfo = () => {
   });
 
   return (
-    <Formik
-      initialValues={initialForm}
-      onSubmit={onConfirm}
-      validationSchema={validationSchema}
-    >
-      {({
-        values,
-        setFieldTouched,
-        setFieldValue,
-        errors,
-        handleSubmit,
-        touched,
-      }) => {
+    <Formik initialValues={initialForm} onSubmit={onConfirm} validationSchema={validationSchema}>
+      {({ values, setFieldTouched, setFieldValue, errors, handleSubmit, touched }) => {
         const isRequired = checkIsRequired(validationSchema);
 
         const getHandleChangeByName = (name: string) => {
@@ -83,19 +65,14 @@ const UpdateAccountInfo = () => {
           };
         };
 
-        const { data: rolesRaw, isLoading: isRolesRawLoading } =
-          useGetRolesQuery({});
+        const { data: rolesRaw, isLoading: isRolesRawLoading } = useGetRolesQuery({});
         const roleOptions: MultipleSelectOption[] =
-          rolesRaw?.data?.map(role => ({ value: role.id, label: role.name })) ||
-          [];
+          rolesRaw?.data?.map(role => ({ value: role.id, label: role.name })) || [];
 
         console.log(errors);
 
         return (
-          <MainLayout
-            title="Update Account Info"
-            back={<MainLayout.BackToPreviousButton />}
-          >
+          <MainLayout title="Update Account Info" back={<MainLayout.BackToPreviousButton />}>
             <KeyboardAvoidingView
               style={{
                 flex: 1,
@@ -125,11 +102,7 @@ const UpdateAccountInfo = () => {
                       placeholder="Enter username"
                       {...getFormProps('username')}
                     />
-                    <TextInput
-                      label="Email"
-                      placeholder="Enter email"
-                      {...getFormProps('email')}
-                    />
+                    <TextInput label="Email" placeholder="Enter email" {...getFormProps('email')} />
                   </View>
                 </View>
                 <Divider />
@@ -162,7 +135,7 @@ const UpdateAccountInfo = () => {
   );
 };
 
-export default UpdateAccountInfo;
+export default UpdateProfileInfo;
 
 const styles = StyleSheet.create({
   wrapper: {

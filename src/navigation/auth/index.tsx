@@ -13,10 +13,7 @@ const AuthNavigator = () => {
       initialRouteName={AuthRoutes.AUTH_LOGIN}
     >
       <AuthStack.Screen name={AuthRoutes.AUTH_LOGIN} component={Login} />
-      <AuthStack.Screen
-        name={AuthRoutes.AUTH_CHANGE_PASSWORD}
-        component={ChangePassword}
-      />
+      <AuthStack.Screen name={AuthRoutes.AUTH_CHANGE_PASSWORD} component={ChangePassword} />
     </AuthStack.Navigator>
   );
 };

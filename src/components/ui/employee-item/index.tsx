@@ -2,12 +2,7 @@ import Text from '@components/core/text';
 import View from '@components/core/view';
 import colors from '@utils/constants/colors';
 import { Employee } from '@utils/types/employee.type';
-import {
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  TouchableOpacityProps,
-} from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
 interface IProps extends TouchableOpacityProps {
   item: Employee;
@@ -28,16 +23,10 @@ const EmployeeItem = ({ item, ...props }: IProps) => {
           {department}
         </Text>
         <Text>
-          Manager:{' '}
-          <Text weight={600}>
-            {!!manager && ` ${manager.fullName} - ${manager.id}`}{' '}
-          </Text>
+          Manager: <Text weight={600}>{!!manager && ` ${manager.fullName} - ${manager.id}`} </Text>
         </Text>
       </View>
-      <Image
-        style={styles.img_profile}
-        source={require('@assets/images/avatar-default.png')}
-      />
+      <Image style={styles.img_profile} source={require('@assets/images/avatar-default.png')} />
     </TouchableOpacity>
   );
 };

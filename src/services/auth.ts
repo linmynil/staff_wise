@@ -15,15 +15,13 @@ export const authServive = baseAPI.injectEndpoints({
         data: data,
       }),
     }),
-    changePassword: buider.mutation<ChangePasswordResponse, ChangePasswordBody>(
-      {
-        query: data => ({
-          endpoint: '/auth/change-password',
-          method: Method.PATCH,
-          data: data,
-        }),
-      },
-    ),
+    changePassword: buider.mutation<ChangePasswordResponse, ChangePasswordBody>({
+      query: data => ({
+        endpoint: '/auth/change-password',
+        method: Method.PATCH,
+        data: data,
+      }),
+    }),
   }),
 });
 
