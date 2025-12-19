@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@ascendtis/react-native-voice-to-text@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@ascendtis/react-native-voice-to-text/-/react-native-voice-to-text-0.3.2.tgz#31f13529d2a9df4b1502e80c068f1e149aec6d4d"
+  integrity sha512-KpLZLhLN80Dtd2cKVDFvtG15TT/kDpykmgPknnpYdbxGJ3i7h5rGksErVTVUkQ09QhOs1/4AYHkY9RSQY1PF/Q==
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.12.13", "@babel/code-frame@^7.24.7", "@babel/code-frame@^7.27.1":
   version "7.27.1"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.27.1.tgz#200f715e66d52a23b221a9435534a91cc13ad5be"

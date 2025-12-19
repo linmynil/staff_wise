@@ -9,10 +9,17 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { renderAvatar, renderBubble, renderMessage, renderMessageText } from './customComponents';
 import { RenderInputToolbar, renderSend } from './InputToolbar';
 import initialMessages from './messages';
+import {
+  startListening,
+  stopListening,
+  addEventListener,
+} from '@ascendtis/react-native-voice-to-text';
+import { requestMicrophonePermission } from '@utils/helpers/permisson.helper';
 
 const Chat = () => {
   const [text, setText] = useState('');
   const [messages, setMessages] = useState<IMessage[]>([]);
+  const [isListening, setIsListening] = useState(false);
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const insets = useSafeAreaInsets();
@@ -23,6 +30,57 @@ const Chat = () => {
   useEffect(() => {
     setMessages(initialMessages.reverse());
   }, []);
+
+  useEffect(() => {
+    requestMicrophonePermission();
+
+    const startEventListener = addEventListener('onSpeechStart', () => {
+      console.log('speech started');
+    });
+
+    const endEventListener = addEventListener('onSpeechEnd', () => {
+      console.log('onSpeechEnd');
+      setIsListening(false);
+    });
+
+    const resultsEventListener = addEventListener('onSpeechResults', e => {
+      console.log('onSpeechResults', e);
+      setText(e.value);
+    });
+
+    const errorEventListener = addEventListener('onSpeechError', e => {
+      console.log('onSpeechError', e);
+      setIsListening(false);
+    });
+
+    const resultsPartialEventListener = addEventListener('onSpeechPartialResults', e => {
+      console.log('onSpeechPartialResults', e);
+      setText(e.value);
+    });
+
+    return () => {
+      startEventListener.remove();
+      endEventListener.remove();
+      resultsEventListener.remove();
+      errorEventListener.remove();
+      resultsPartialEventListener.remove();
+    };
+  }, []);
+
+  const _handlePressButton = async () => {
+    try {
+      if (isListening) {
+        setIsListening(false);
+        await stopListening();
+      } else {
+        setText('');
+        await startListening();
+        setIsListening(true);
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
 
   const onSend = (newMessages: IMessage[] = []) => {
     setMessages(prevMessages => GiftedChat.append(prevMessages, newMessages));
@@ -48,7 +106,12 @@ const Chat = () => {
         isAvatarOnTop={false}
         onPressAvatar={console.log}
         renderInputToolbar={RenderInputToolbar}
-        renderSend={renderSend}
+        renderSend={props =>
+          renderSend(props, {
+            isListening,
+            onToggleRecord: _handlePressButton,
+          })
+        }
         renderAvatar={renderAvatar}
         renderMessage={renderMessage}
         renderMessageText={renderMessageText}
@@ -59,7 +122,7 @@ const Chat = () => {
         textInputProps={{
           onChangeText: setText,
           placeholderTextColor: colors.neutral.c500,
-          placeholder: 'Write your message',
+          placeholder: isListening ? 'Recording...' : 'Write your message',
         }}
         keyboardAvoidingViewProps={{ keyboardVerticalOffset }}
       />

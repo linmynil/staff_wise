@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unstable-nested-components */
+import MicrophoneIcon from '@assets/icons/MicrophoneIcon';
 import { View } from '@components';
 import colors from '@utils/constants/colors';
 import React from 'react';
@@ -97,34 +98,83 @@ export const RenderComposer = (props: ComposerProps) => {
   );
 };
 
-export const renderSend = (props: SendProps<IMessage>) => (
-  <View row center>
-    <TouchableOpacity
-      onPress={() => console.log('xử lý ghi âm')}
-      style={{
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <Image style={{ width: 32, height: 32 }} source={require('@assets/images/microphone.png')} />
-    </TouchableOpacity>
+// export const renderSend = (props: SendProps<IMessage>) => (
+//   <View row center>
+//     <TouchableOpacity
+//       onPress={() => console.log('xử lý ghi âm')}
+//       style={{
+//         alignItems: 'center',
+//         justifyContent: 'center',
+//       }}
+//     >
+//       <Image style={{ width: 32, height: 32 }} source={require('@assets/images/microphone.png')} />
+//     </TouchableOpacity>
 
-    <Send
-      {...props}
-      //@ts-ignore
-      isDisabled={!props.text}
-      containerStyle={{
-        width: 44,
-        height: 44,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginHorizontal: 4,
-      }}
-    >
-      <Image style={{ width: 32, height: 32 }} source={require('@assets/images/send.png')} />
-    </Send>
-  </View>
-);
+//     <Send
+//       {...props}
+//       //@ts-ignore
+//       isDisabled={!props.text}
+//       containerStyle={{
+//         width: 44,
+//         height: 44,
+//         alignItems: 'center',
+//         justifyContent: 'center',
+//         marginHorizontal: 4,
+//       }}
+//     >
+//       <Image style={{ width: 32, height: 32 }} source={require('@assets/images/send.png')} />
+//     </Send>
+//   </View>
+// );
+
+type VoiceProps = {
+  isListening: boolean;
+  onToggleRecord: () => void;
+};
+
+export const renderSend = (props: SendProps<IMessage>, voice: VoiceProps) => {
+  const { isListening, onToggleRecord } = voice;
+
+  return (
+    <View row center>
+      <TouchableOpacity
+        onPress={onToggleRecord}
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <MicrophoneIcon
+          width={32}
+          height={32}
+          fill={isListening ? colors.primary.default : colors.neutral.c500}
+        />
+      </TouchableOpacity>
+
+      <Send
+        {...props}
+        //@ts-ignore
+        isDisabled={!props.text || isListening}
+        containerStyle={{
+          width: 44,
+          height: 44,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginHorizontal: 4,
+        }}
+      >
+        <Image
+          source={require('@assets/images/send.png')}
+          style={{
+            width: 32,
+            height: 32,
+            opacity: isListening ? 0.3 : 1,
+          }}
+        />
+      </Send>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   shadow: {

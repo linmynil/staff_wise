@@ -50,6 +50,10 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app needs access to your microphone for speech recognition</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>This app needs access to speech recognition to convert your voice to text</string>
 	<false/>
 </dict>
 </plist>

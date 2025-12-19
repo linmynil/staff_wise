@@ -10,7 +10,7 @@ const ChatHome = () => {
     <MainLayout title="Chat">
       <View>
         <DraggableChatbot navigation={navigation} />
-        <Text>ApplyLeave</Text>
+        <Text>Chat</Text>
       </View>
     </MainLayout>
   );
