@@ -24,6 +24,7 @@ import SearchIcon from '@assets/icons/SearchIcon';
 import SignOutIcon from '@assets/icons/SignOutIcon';
 import SwapIcon from '@assets/icons/SwapIcon';
 import UserIdIcon from '@assets/icons/UserIdIcon';
+import AudioStopIcon from './icons/AudioStopIcon';
 import CloseIcon from './icons/CloseIcon';
 import EmptyIcon from './icons/EmptyIcon';
 import ErrorCircleIcon from './icons/ErrorCircleIcon';
@@ -38,6 +39,7 @@ export {
   ArrowLeft,
   ArrowLogout,
   ArrowRightIcon,
+  AudioStopIcon,
   Calendar,
   CameraMini,
   ChatIcon,
