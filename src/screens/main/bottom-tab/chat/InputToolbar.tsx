@@ -1,18 +1,17 @@
 /* eslint-disable react/no-unstable-nested-components */
-import MicrophoneIcon from '@assets/icons/MicrophoneIcon';
 import { View } from '@components';
 import colors from '@utils/constants/colors';
 import React from 'react';
 import { Image, StyleSheet, TouchableOpacity, useColorScheme } from 'react-native';
 import {
-  InputToolbar,
   Actions,
-  Composer,
-  Send,
-  IMessage,
-  InputToolbarProps,
   ActionsProps,
+  Composer,
   ComposerProps,
+  IMessage,
+  InputToolbar,
+  InputToolbarProps,
+  Send,
   SendProps,
 } from 'react-native-gifted-chat';
 
@@ -98,35 +97,6 @@ export const RenderComposer = (props: ComposerProps) => {
   );
 };
 
-// export const renderSend = (props: SendProps<IMessage>) => (
-//   <View row center>
-//     <TouchableOpacity
-//       onPress={() => console.log('xử lý ghi âm')}
-//       style={{
-//         alignItems: 'center',
-//         justifyContent: 'center',
-//       }}
-//     >
-//       <Image style={{ width: 32, height: 32 }} source={require('@assets/images/microphone.png')} />
-//     </TouchableOpacity>
-
-//     <Send
-//       {...props}
-//       //@ts-ignore
-//       isDisabled={!props.text}
-//       containerStyle={{
-//         width: 44,
-//         height: 44,
-//         alignItems: 'center',
-//         justifyContent: 'center',
-//         marginHorizontal: 4,
-//       }}
-//     >
-//       <Image style={{ width: 32, height: 32 }} source={require('@assets/images/send.png')} />
-//     </Send>
-//   </View>
-// );
-
 type VoiceProps = {
   isListening: boolean;
   onToggleRecord: () => void;
@@ -144,10 +114,12 @@ export const renderSend = (props: SendProps<IMessage>, voice: VoiceProps) => {
           justifyContent: 'center',
         }}
       >
-        <MicrophoneIcon
-          width={32}
-          height={32}
-          fill={isListening ? colors.primary.default : colors.neutral.c500}
+        <Image
+          source={require('@assets/images/microphone.png')}
+          style={{
+            width: 32,
+            height: 32,
+          }}
         />
       </TouchableOpacity>
 
@@ -160,7 +132,7 @@ export const renderSend = (props: SendProps<IMessage>, voice: VoiceProps) => {
           height: 44,
           alignItems: 'center',
           justifyContent: 'center',
-          marginHorizontal: 4,
+          marginRight: 6,
         }}
       >
         <Image
@@ -168,7 +140,6 @@ export const renderSend = (props: SendProps<IMessage>, voice: VoiceProps) => {
           style={{
             width: 32,
             height: 32,
-            opacity: isListening ? 0.3 : 1,
           }}
         />
       </Send>
@@ -186,5 +157,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
+  },
+  audioIcon: {
+    marginRight: 10,
   },
 });

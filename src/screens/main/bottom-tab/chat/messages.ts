@@ -8,8 +8,8 @@ const messages: IMessage[] = [
     // system: true,
     user: {
       _id: 0,
-      avatar:
-        'https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740&q=80',
+      // avatar:
+      //   'https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740&q=80',
     },
   },
   {
@@ -19,8 +19,8 @@ const messages: IMessage[] = [
     user: {
       _id: 2,
       name: 'React Native',
-      avatar:
-        'https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740&q=80',
+      // avatar:
+      //   'https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740&q=80',
     },
   },
   {
@@ -30,8 +30,8 @@ const messages: IMessage[] = [
     user: {
       _id: 1,
       name: 'React Native',
-      avatar:
-        'https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740&q=80',
+      // avatar:
+      //   'https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740&q=80',
     },
     image:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWwfh7IWRn0KVsr4PB5rvTG3OS8UKoph9Z8w&s',
@@ -43,8 +43,8 @@ const messages: IMessage[] = [
     user: {
       _id: 2,
       name: 'React Native',
-      avatar:
-        'https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740&q=80',
+      // avatar:
+      //   'https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740&q=80',
     },
     quickReplies: {
       type: 'radio', // or 'checkbox',
@@ -72,8 +72,8 @@ const messages: IMessage[] = [
     user: {
       _id: 2,
       name: 'React Native',
-      avatar:
-        'https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740&q=80',
+      // avatar:
+      //   'https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740&q=80',
     },
     quickReplies: {
       type: 'checkbox', // or 'radio',
@@ -100,8 +100,8 @@ const messages: IMessage[] = [
     user: {
       _id: 2,
       name: 'React Native',
-      avatar:
-        'https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740&q=80',
+      // avatar:
+      //   'https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740&q=80',
     },
   },
   {
@@ -111,8 +111,8 @@ const messages: IMessage[] = [
     user: {
       _id: 2,
       name: 'React Native',
-      avatar:
-        'https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740&q=80',
+      // avatar:
+      //   'https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740&q=80',
     },
   },
   {
@@ -125,8 +125,8 @@ const messages: IMessage[] = [
     user: {
       _id: 1,
       name: 'React Native',
-      avatar:
-        'https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740&q=80',
+      // avatar:
+      //   'https://img.freepik.com/premium-vector/person-with-blue-shirt-that-says-name-person_1029948-7040.jpg?semt=ais_hybrid&w=740&q=80',
     },
   },
 ];

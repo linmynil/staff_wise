@@ -1,9 +1,17 @@
-import { AddIcon } from '@assets';
-import { Button } from '@components';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { AddIcon, AudioStopIcon } from '@assets';
+import { Button, Text, View } from '@components';
 import MainLayout from '@components/layout/main-layout';
 import colors from '@utils/constants/colors';
 import React, { useEffect, useState } from 'react';
-import { useColorScheme } from 'react-native';
+import {
+  Image,
+  Keyboard,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+  useColorScheme,
+} from 'react-native';
 import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { renderAvatar, renderBubble, renderMessage, renderMessageText } from './customComponents';
@@ -15,17 +23,27 @@ import {
   addEventListener,
 } from '@ascendtis/react-native-voice-to-text';
 import { requestMicrophonePermission } from '@utils/helpers/permisson.helper';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Chat = () => {
   const [text, setText] = useState('');
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [isListening, setIsListening] = useState(false);
+  const [isVisibleRecordAudio, setIsVisibleRecordAudio] = useState(false);
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const insets = useSafeAreaInsets();
 
   const tabbarHeight = 50;
   const keyboardVerticalOffset = insets.bottom + tabbarHeight;
+
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        Keyboard.dismiss();
+      };
+    }, []),
+  );
 
   useEffect(() => {
     setMessages(initialMessages.reverse());
@@ -36,6 +54,7 @@ const Chat = () => {
 
     const startEventListener = addEventListener('onSpeechStart', () => {
       console.log('speech started');
+      setIsListening(true);
     });
 
     const endEventListener = addEventListener('onSpeechEnd', () => {
@@ -63,7 +82,6 @@ const Chat = () => {
       endEventListener.remove();
       resultsEventListener.remove();
       errorEventListener.remove();
-      resultsPartialEventListener.remove();
     };
   }, []);
 
@@ -71,7 +89,7 @@ const Chat = () => {
     try {
       if (isListening) {
         setIsListening(false);
-        await stopListening();
+        stopListening();
       } else {
         setText('');
         await startListening();
@@ -82,9 +100,16 @@ const Chat = () => {
     }
   };
 
-  const onSend = (newMessages: IMessage[] = []) => {
+  const onSend = async (newMessages: IMessage[] = []) => {
     setMessages(prevMessages => GiftedChat.append(prevMessages, newMessages));
   };
+
+  const showRecordAudio = () => {
+    Keyboard.dismiss();
+    setIsVisibleRecordAudio(!isVisibleRecordAudio);
+  };
+
+  console.log('>>>>>>>>>>>>>>', isListening);
 
   return (
     <MainLayout
@@ -109,7 +134,7 @@ const Chat = () => {
         renderSend={props =>
           renderSend(props, {
             isListening,
-            onToggleRecord: _handlePressButton,
+            onToggleRecord: showRecordAudio,
           })
         }
         renderAvatar={renderAvatar}
@@ -120,14 +145,61 @@ const Chat = () => {
           backgroundColor: isDark ? '#1a1a1a' : colors.background,
         }}
         textInputProps={{
+          value: text,
           onChangeText: setText,
           placeholderTextColor: colors.neutral.c500,
           placeholder: isListening ? 'Recording...' : 'Write your message',
+          submitBehavior: 'newline',
         }}
         keyboardAvoidingViewProps={{ keyboardVerticalOffset }}
+        listProps={{
+          keyboardShouldPersistTaps: 'always',
+        }}
       />
+
+      {isVisibleRecordAudio && (
+        <View style={styles.recordAudio}>
+          <Text weight={600} size={16}>
+            Click to record your voice
+          </Text>
+          {isListening ? (
+            <Pressable style={styles.buttonAudioRecord} onPress={_handlePressButton}>
+              <AudioStopIcon width={48} height={48} />
+            </Pressable>
+          ) : (
+            <Pressable style={styles.buttonAudioRecord} onPress={_handlePressButton}>
+              <Image
+                source={require('@assets/images/microphone.png')}
+                style={{
+                  width: 48,
+                  height: 48,
+                }}
+              />
+            </Pressable>
+          )}
+        </View>
+      )}
     </MainLayout>
   );
 };
 
 export default Chat;
+
+const styles = StyleSheet.create({
+  recordAudio: {
+    paddingHorizontal: 16,
+    paddingVertical: 30,
+    alignItems: 'center',
+    marginTop: -24,
+    backgroundColor: colors.white,
+    gap: 16,
+  },
+  buttonAudioRecord: {
+    width: 75,
+    height: 75,
+    backgroundColor: colors.primary.default,
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

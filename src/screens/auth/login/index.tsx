@@ -14,7 +14,7 @@ import { AuthErrorsMap } from '@utils/errors/auth.errors';
 import validateSchema from '@utils/validations';
 import { Formik, FormikErrors } from 'formik';
 import React, { useEffect, useRef } from 'react';
-import { StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
 import * as Yup from 'yup';
 
@@ -41,7 +41,7 @@ const Login = () => {
 
   const signIn = async (values: typeof initialForm) => {
     login({
-      username: values.username,
+      username: values.username?.trim(),
       password: values.password,
     }).then(async res => {
       const token = res?.data?.access_token;
@@ -99,48 +99,61 @@ const Login = () => {
           setFieldErrorRef.current = setFieldError;
           setFieldValueRef.current = setFieldValue;
           return (
-            <View style={styles.container}>
-              <View
-                column
-                flex={1}
-                gap={16}
+            <React.Fragment>
+              <KeyboardAvoidingView
                 style={{
+                  flex: 1,
+                  flexDirection: 'column',
                   justifyContent: 'center',
                 }}
+                enabled
+                behavior={Platform.select({ ios: 'padding', android: undefined })}
+                keyboardVerticalOffset={200}
               >
-                <Text size={16} weight={600}>
-                  Welcome back!
-                </Text>
+                <View style={styles.container}>
+                  <View
+                    column
+                    flex={1}
+                    gap={16}
+                    style={{
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Text size={16} weight={600}>
+                      Welcome back!
+                    </Text>
 
-                <TextInput
-                  value={values.username}
-                  onChangeText={handleChange('username')}
-                  placeholder="Username/Email"
-                  leftIcon={<AccountIcon />}
-                  inputContainerStyle={{
-                    borderColor: colors.primary.default,
-                  }}
-                  placeholderColor={colors.neutral.c500}
-                  error={touched.username && errors.username}
-                />
-                <PasswordInput
-                  value={values.password}
-                  onChangeText={(text: string) => {
-                    setFieldTouched('password', true);
-                    setFieldValue('password', text);
-                  }}
-                  inputContainerStyle={{
-                    borderColor: colors.primary.default,
-                  }}
-                  placeholderColor={colors.neutral.c500}
-                  placeholder="Password"
-                  leftIcon={<LockIcon />}
-                  error={touched.password && errors.password}
-                />
-              </View>
+                    <TextInput
+                      value={values.username}
+                      onChangeText={handleChange('username')}
+                      placeholder="Username/Email"
+                      leftIcon={<AccountIcon />}
+                      inputContainerStyle={{
+                        borderColor: colors.primary.default,
+                      }}
+                      placeholderColor={colors.neutral.c500}
+                      error={touched.username && errors.username}
+                    />
+                    <PasswordInput
+                      value={values.password}
+                      onChangeText={(text: string) => {
+                        setFieldTouched('password', true);
+                        setFieldValue('password', text);
+                      }}
+                      inputContainerStyle={{
+                        borderColor: colors.primary.default,
+                      }}
+                      placeholderColor={colors.neutral.c500}
+                      placeholder="Password"
+                      leftIcon={<LockIcon />}
+                      error={touched.password && errors.password}
+                    />
+                  </View>
 
-              <Button title="Login" loading={isLoading} onPress={handleSubmit} />
-            </View>
+                  <Button title="Login" loading={isLoading} onPress={handleSubmit} />
+                </View>
+              </KeyboardAvoidingView>
+            </React.Fragment>
           );
         }}
       </Formik>
