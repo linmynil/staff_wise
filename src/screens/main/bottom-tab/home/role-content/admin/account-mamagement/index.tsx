@@ -40,6 +40,8 @@ const ManageAccount = () => {
   }, [dataGetAccounts]);
 
   const debouncedSearch = useDebouncedCallback((value: string) => {
+    setAccounts([]);
+    setHasMore(true);
     setQuery({
       page: 1,
       limit: LIMIT,

@@ -35,6 +35,7 @@ const ManageEmployee = () => {
   const navigation = useNavigation<any>();
   const { openBottomSheet2, closeBottomSheet2 } = useBottomSheetContext2();
   const [query, setQuery] = useState(initialQuery);
+  const [searchText, setSearchText] = useState('');
 
   const { data: dataGetEmployeesWithPagination, isFetching: isFetchingEmployeesWithPagination } =
     useGetEmployeesWithPaginationQuery(
@@ -81,9 +82,12 @@ const ManageEmployee = () => {
   }, [dataGetEmployeesWithPagination]);
 
   const debouncedSearch = useDebouncedCallback((value: string) => {
+    setEmployees([]);
+    setHasMore(true);
     setQuery(prev => ({
       ...prev,
       page: 1,
+      limit: LIMIT,
       search: value,
     }));
   }, 400);
@@ -94,6 +98,9 @@ const ManageEmployee = () => {
   };
 
   const onRefresh = () => {
+    setHasMore(true);
+    setEmployees([]);
+    setSearchText('');
     setQuery(initialQuery);
   };
 
@@ -143,7 +150,11 @@ const ManageEmployee = () => {
               inputContainerStyle={{ borderColor: colors.neutral.c500 }}
               placeholder="Search Employee"
               leftIcon={<SearchIcon />}
-              onChange={debouncedSearch}
+              value={searchText}
+              onChange={value => {
+                setSearchText(value);
+                debouncedSearch(value);
+              }}
             />
           </View>
           <Button.IconButton
@@ -159,13 +170,15 @@ const ManageEmployee = () => {
           keyExtractor={item => item?.id?.toString()}
           data={employees}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.containerFlatlist}
+          contentContainerStyle={[styles.containerFlatlist, {}]}
           onEndReached={loadMore}
           onEndReachedThreshold={0.4}
           renderItem={({ item }) => (
             <EmployeeItem item={item} onPress={() => navigateEmployeeInfo(item?.id)} />
           )}
-          ListEmptyComponent={<EmptyData title="Employee is empty" />}
+          ListEmptyComponent={
+            isFetchingEmployeesWithPagination ? <></> : <EmptyData title="Employee is empty" />
+          }
         />
       </View>
     </MainLayout>
@@ -261,6 +274,5 @@ const styles = StyleSheet.create({
   },
   containerFlatlist: {
     gap: 12,
-    flex: 1,
   },
 });

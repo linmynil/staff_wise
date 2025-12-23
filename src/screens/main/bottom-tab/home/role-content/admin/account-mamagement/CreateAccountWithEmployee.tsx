@@ -58,7 +58,7 @@ const CreateAccountWithEmployee = () => {
     const dataBody: CreateAccountWithEmployeeBody = {
       username: values.username,
       password: values.password,
-      fullName: values.password,
+      fullName: values.fullName,
       roleIds: [Number(values.roleIds)],
       ...(values?.email && { email: values.email }),
       ...(values?.employeeCode && { employeeCode: values.employeeCode }),

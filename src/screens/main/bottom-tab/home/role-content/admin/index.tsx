@@ -22,12 +22,12 @@ const managementOptions = [
     time: dayjs().format('DD/MM/YYYY'),
     type: ManagementType.ACCOUNT,
   },
-  // {
-  //   id: '2',
-  //   title: 'Employee Management',
-  //   time: dayjs().format('DD/MM/YYYY'),
-  //   type: ManagementType.EMPLOYEE,
-  // },
+  {
+    id: '2',
+    title: 'Employee Management',
+    time: dayjs().format('DD/MM/YYYY'),
+    type: ManagementType.EMPLOYEE,
+  },
 ];
 
 const AdminHome = () => {
