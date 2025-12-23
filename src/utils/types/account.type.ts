@@ -41,3 +41,16 @@ export interface GetAccountResponse {
   data: Account[];
   meta: IMeta;
 }
+
+export interface CreateAccountWithEmployeeBody {
+  username: string;
+  email?: string;
+  password: string;
+  roleIds: string[];
+  employeeCode?: string;
+  fullName: string;
+  phone?: string;
+  department?: string;
+  position?: string;
+  managerId?: number;
+}

@@ -1,4 +1,9 @@
-import { Account, GetAccountRequest, GetAccountResponse } from '@utils/types/account.type';
+import {
+  Account,
+  CreateAccountWithEmployeeBody,
+  GetAccountRequest,
+  GetAccountResponse,
+} from '@utils/types/account.type';
 import { baseAPI, Method } from './baseAPI';
 
 export const accountServive = baseAPI.injectEndpoints({
@@ -16,7 +21,15 @@ export const accountServive = baseAPI.injectEndpoints({
         params: query,
       }),
     }),
+    createAccountWithEmployee: buider.mutation<Account, CreateAccountWithEmployeeBody>({
+      query: data => ({
+        endpoint: '/accounts/with-employee',
+        method: Method.POST,
+        data: data,
+      }),
+    }),
   }),
 });
 
-export const { useGetAccountInfoQuery, useGetAccountsQuery } = accountServive;
+export const { useGetAccountInfoQuery, useGetAccountsQuery, useCreateAccountWithEmployeeMutation } =
+  accountServive;
