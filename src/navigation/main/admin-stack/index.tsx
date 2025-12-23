@@ -5,6 +5,7 @@ import ManageEmployee from '@screens/main/bottom-tab/home/role-content/admin/emp
 import ManageAccount from '@screens/main/bottom-tab/home/role-content/admin/account-mamagement';
 import EmployeeDetail from '@screens/main/bottom-tab/home/role-content/admin/employee-management/EmployeeDetail';
 import UpdateInfoEmployee from '@screens/main/bottom-tab/home/role-content/admin/employee-management/UpdateInfoEmployee';
+import CreateAccountWithEmployee from '@screens/main/bottom-tab/home/role-content/admin/account-mamagement/CreateAccountWithEmployee';
 
 const AdminStack = createNativeStackNavigator<any>();
 
@@ -16,10 +17,16 @@ const AdminNavigation = () => {
     >
       <AdminStack.Screen name={AdminRoutes.ADMIN_MANAGE_EMPLOYEE} component={ManageEmployee} />
       <AdminStack.Screen name={AdminRoutes.ADMIN_MANAGE_ACCOUNT} component={ManageAccount} />
+      {/*Employee */}
       <AdminStack.Screen name={AdminRoutes.ADMIN_EMPLOYEE_INFO} component={EmployeeDetail} />
       <AdminStack.Screen
         name={AdminRoutes.ADMIN_UPDATE_INFO_EMPLOYEE}
         component={UpdateInfoEmployee}
+      />
+      {/*Account */}
+      <AdminStack.Screen
+        name={AdminRoutes.ADMIN_CREATE_ACOUNT_WITH_EMPLOYEE}
+        component={CreateAccountWithEmployee}
       />
     </AdminStack.Navigator>
   );

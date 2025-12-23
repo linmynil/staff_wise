@@ -4,7 +4,7 @@ import {
   GetAccountRequest,
   GetAccountResponse,
 } from '@utils/types/account.type';
-import { baseAPI, Method } from './baseAPI';
+import { baseAPI, Method, tagTypes } from './baseAPI';
 
 export const accountServive = baseAPI.injectEndpoints({
   endpoints: buider => ({
@@ -20,6 +20,7 @@ export const accountServive = baseAPI.injectEndpoints({
         method: Method.GET,
         params: query,
       }),
+      providesTags: [tagTypes.Account],
     }),
     createAccountWithEmployee: buider.mutation<Account, CreateAccountWithEmployeeBody>({
       query: data => ({

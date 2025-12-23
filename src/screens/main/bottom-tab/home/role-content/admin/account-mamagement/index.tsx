@@ -2,7 +2,7 @@ import { AddIcon, SearchIcon } from '@assets';
 import { Button, TextInput, View } from '@components';
 import MainLayout from '@components/layout/main-layout';
 import AccountItem from '@components/ui/account-item';
-import { EmployeeRoutes } from '@navigation/routes';
+import { AdminRoutes, MainRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
 import { useGetAccountsQuery } from '@services/account';
 import colors from '@utils/constants/colors';
@@ -55,8 +55,10 @@ const ManageAccount = () => {
     }));
   };
 
-  const onAdditionalLeave = () => {
-    navigation.navigate(EmployeeRoutes.EMPLOYEE_ADDITIONAL_LEAVE);
+  const navigateCreateAccountWithEmployee = () => {
+    navigation.navigate(MainRoutes.MAIN_ADMIN, {
+      screen: AdminRoutes.ADMIN_CREATE_ACOUNT_WITH_EMPLOYEE,
+    });
   };
 
   return (
@@ -66,7 +68,7 @@ const ManageAccount = () => {
       next={
         <Button.IconButton
           icon={<AddIcon width={25} height={25} viewBox="0 0 30 30" />}
-          onPress={onAdditionalLeave}
+          onPress={navigateCreateAccountWithEmployee}
         />
       }
     >

@@ -1,7 +1,7 @@
 import { AccountIcon, LockIcon } from '@assets';
 import { Button, PasswordInput, Text, TextInput, View } from '@components';
 import AuthLayout from '@components/layout/auth-layout';
-import { setString } from '@config/mmkv';
+import { removeKey, setString } from '@config/mmkv';
 import { AuthRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
 import { setAccountInfo } from '@redux/reducers/account.slice';
@@ -11,7 +11,9 @@ import { useLoginMutation } from '@services/auth';
 import { baseAPI } from '@services/baseAPI';
 import colors from '@utils/constants/colors';
 import { AuthErrorsMap } from '@utils/errors/auth.errors';
+import events, { eventKeys } from '@utils/helpers/events';
 import validateSchema from '@utils/validations';
+import axios from 'axios';
 import { Formik, FormikErrors } from 'formik';
 import React, { useEffect, useRef } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
@@ -50,6 +52,9 @@ const Login = () => {
       const roles = res?.data?.roles;
       const permissions = res?.data?.permissions;
       if (token && accountInfo) {
+        removeKey(TokenType.ACCESS_TOKEN);
+        events.emit(eventKeys.resetToken);
+        axios.defaults.headers.common.Authorization = '';
         dispatch(baseAPI.util.resetApiState());
         dispatch(setAccountInfo(accountInfo));
         setString(TokenType.ACCESS_TOKEN, token);

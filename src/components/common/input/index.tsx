@@ -204,11 +204,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: 52,
-    borderWidth: 1,
     borderRadius: 24,
     paddingVertical: 8,
     paddingHorizontal: 12,
     gap: 8,
+    backgroundColor: colors.neutral.c200,
   },
   input: {
     flex: 1,

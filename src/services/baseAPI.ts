@@ -3,6 +3,7 @@ import baseQuery from './axiosBaseQuery';
 
 export enum tagTypes {
   Account = 'Account',
+  Employee = 'Employee',
   Auth = 'Auth',
 }
 

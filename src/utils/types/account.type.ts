@@ -46,7 +46,7 @@ export interface CreateAccountWithEmployeeBody {
   username: string;
   email?: string;
   password: string;
-  roleIds: string[];
+  roleIds: number[];
   employeeCode?: string;
   fullName: string;
   phone?: string;

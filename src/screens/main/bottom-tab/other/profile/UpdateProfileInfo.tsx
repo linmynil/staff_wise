@@ -3,6 +3,7 @@ import { Button, Text, TextInput, View } from '@components';
 import Divider from '@components/common/divider';
 import MultipleSelect, { MultipleSelectOption } from '@components/common/multiple-select';
 import MainLayout from '@components/layout/main-layout';
+import AvatarUploadable from '@components/ui/avatar-uploadable';
 import { useGetAccountInfo } from '@hooks';
 import { useGetRolesQuery } from '@services/role';
 import colors from '@utils/constants/colors';
@@ -11,7 +12,6 @@ import validateSchema from '@utils/validations';
 import { Formik } from 'formik';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
 import * as Yup from 'yup';
-import { AvatarUploadable } from '.';
 
 const UpdateProfileInfo = () => {
   const account = useGetAccountInfo();

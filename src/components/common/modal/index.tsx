@@ -11,6 +11,7 @@ type ModalDataType = {
   button1?: any;
   button2?: any;
   row?: any;
+  closeOnPressWrapper?: boolean;
 };
 
 const ModalContext = createContext<{
@@ -56,7 +57,7 @@ const ModalProvider = ({ children }: any) => {
           <Pressable
             style={styles.modalBlanket}
             onPress={() => {
-              setOpen(false);
+              setOpen(data?.closeOnPressWrapper ? data?.closeOnPressWrapper : false);
             }}
           />
           <View style={styles.container}>
@@ -74,7 +75,7 @@ const ModalProvider = ({ children }: any) => {
             <View>{data.content}</View>
 
             <View
-              marginTop={24}
+              marginTop={data?.button1 || data?.button2 ? 24 : 0}
               gap={8}
               style={data.row ? { flexDirection: 'row', justifyContent: 'space-evenly' } : {}}
             >

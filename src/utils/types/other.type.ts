@@ -4,3 +4,12 @@ export interface IMeta {
   limit: number;
   totalPages: number;
 }
+
+export interface ErrorAPI {
+  status: number;
+  data: {
+    message: string;
+    errorCode: string;
+    timestamp: string;
+  };
+}

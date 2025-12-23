@@ -12,3 +12,11 @@ export const checkIsRequired = (validationSchema: ObjectSchema<any>) => (fieldNa
 
   return false;
 };
+
+export const cleanData = <T extends Record<string, any>>(payload: T): Partial<T> => {
+  return Object.fromEntries(
+    Object.entries(payload).filter(
+      ([_, value]) => value !== '' && value !== null && value !== undefined,
+    ),
+  ) as Partial<T>;
+};
