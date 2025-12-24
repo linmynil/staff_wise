@@ -2,14 +2,16 @@ import Text from '@components/core/text';
 import View from '@components/core/view';
 import colors from '@utils/constants/colors';
 import React from 'react';
+import { TextStyle } from 'react-native';
 
 interface IProps {
   title?: string;
   value?: string | number | null;
   valueHighlight?: boolean;
+  valueStyle?: TextStyle;
 }
 
-const Row = ({ title, value, valueHighlight }: IProps) => {
+const Row = ({ title, value, valueHighlight, valueStyle }: IProps) => {
   return (
     <View>
       <View row space_between padding={12}>
@@ -28,6 +30,7 @@ const Row = ({ title, value, valueHighlight }: IProps) => {
           weight={valueHighlight ? 600 : 400}
           align={'right'}
           maxWidth={valueHighlight ? '50%' : '60%'}
+          style={valueStyle}
         >
           {value || '...'}
         </Text>

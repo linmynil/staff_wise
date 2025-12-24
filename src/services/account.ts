@@ -3,6 +3,7 @@ import {
   CreateAccountWithEmployeeBody,
   GetAccountRequest,
   GetAccountResponse,
+  UpdateAccountBody,
 } from '@utils/types/account.type';
 import { baseAPI, Method, tagTypes } from './baseAPI';
 
@@ -13,6 +14,7 @@ export const accountServive = baseAPI.injectEndpoints({
         endpoint: `/accounts/${id}`,
         method: Method.GET,
       }),
+      providesTags: [tagTypes.Account],
     }),
     getAccounts: buider.query<GetAccountResponse, GetAccountRequest>({
       query: query => ({
@@ -29,8 +31,19 @@ export const accountServive = baseAPI.injectEndpoints({
         data: data,
       }),
     }),
+    updateAccount: buider.mutation<Account, UpdateAccountBody>({
+      query: data => ({
+        endpoint: `/accounts/${data.id}`,
+        method: Method.PATCH,
+        data: data.body,
+      }),
+    }),
   }),
 });
 
-export const { useGetAccountInfoQuery, useGetAccountsQuery, useCreateAccountWithEmployeeMutation } =
-  accountServive;
+export const {
+  useGetAccountInfoQuery,
+  useGetAccountsQuery,
+  useCreateAccountWithEmployeeMutation,
+  useUpdateAccountMutation,
+} = accountServive;

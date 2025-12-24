@@ -47,6 +47,8 @@ enum AdminRoutes {
   ADMIN_UPDATE_INFO_EMPLOYEE = 'admin_update_info_employee',
   // account
   ADMIN_CREATE_ACOUNT_WITH_EMPLOYEE = 'admin_create_account_with_employee',
+  ADMIN_ACCOUNT_INFO = 'admin_account_info',
+  ADMIN_UPDATE_INFO = 'admin_update_info',
 }
 export {
   RootRoutes,

@@ -31,18 +31,5 @@ export const useNotify = () => {
 
   return {
     open,
-    success: (content: string, onDone?: () => void) =>
-      open({
-        title: 'Success',
-        content,
-        duration: 3000,
-        onDone,
-      }),
-
-    error: (content: string) =>
-      open({
-        title: 'Error',
-        content,
-      }),
   };
 };

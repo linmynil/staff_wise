@@ -63,6 +63,14 @@ const ManageAccount = () => {
     });
   };
 
+  const navigateAccountInfo = (id: number) => {
+    navigation.getParent().navigate(MainRoutes.MAIN_ADMIN, {
+      screen: AdminRoutes.ADMIN_ACCOUNT_INFO,
+      params: {
+        id: id,
+      },
+    });
+  };
   return (
     <MainLayout
       back={<MainLayout.BackToPreviousButton />}
@@ -93,7 +101,7 @@ const ManageAccount = () => {
           onEndReached={loadMore}
           onEndReachedThreshold={0.4}
           renderItem={({ item }) => (
-            <AccountItem item={item} onPress={() => console.log('id', item?.id)} />
+            <AccountItem item={item} onPress={() => navigateAccountInfo(item?.id)} />
           )}
         />
       </View>

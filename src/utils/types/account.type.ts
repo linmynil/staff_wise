@@ -54,3 +54,14 @@ export interface CreateAccountWithEmployeeBody {
   position?: string;
   managerId?: number;
 }
+
+export interface UpdateAccountBody {
+  id: number;
+  body: {
+    username?: string;
+    email?: string;
+    password?: string;
+    roleIds?: number[];
+    isActive?: boolean;
+  };
+}
