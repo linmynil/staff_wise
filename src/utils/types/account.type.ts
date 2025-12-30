@@ -65,3 +65,10 @@ export interface UpdateAccountBody {
     isActive?: boolean;
   };
 }
+
+export interface GetAccountWithPaginationRequest {
+  page: number;
+  limit: number;
+  search?: string;
+  // isActive?: boolean;
+}

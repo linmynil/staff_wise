@@ -70,7 +70,7 @@ const axiosBaseQuery =
         timeout: TIMEOUT,
       });
 
-      console.info('DATA of', url, '_____', JSON.stringify(result?.data, null, 2));
+      // console.info('DATA of', url, '_____', JSON.stringify(result?.data, null, 2));
       return { data: result?.data };
     } catch (axiosError) {
       const err = axiosError as AxiosError;

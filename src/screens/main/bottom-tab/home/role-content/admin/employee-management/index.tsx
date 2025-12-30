@@ -36,6 +36,9 @@ const ManageEmployee = () => {
   const { openBottomSheet2, closeBottomSheet2 } = useBottomSheetContext2();
   const [query, setQuery] = useState(initialQuery);
   const [searchText, setSearchText] = useState('');
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const onEndReachedCalledDuringMomentum = React.useRef(true);
 
   const { data: dataGetEmployeesWithPagination, isFetching: isFetchingEmployeesWithPagination } =
     useGetEmployeesWithPaginationQuery(
@@ -67,22 +70,20 @@ const ManageEmployee = () => {
     label: 'Select a manager',
   });
 
-  const [employees, setEmployees] = useState<Employee[]>([]);
-  const [hasMore, setHasMore] = useState(true);
-
   useEffect(() => {
     if (!dataGetEmployeesWithPagination?.data) return;
 
     if (query.page === 1) {
+      console.log('uuuuuu>?>>>>>>>>>>>>>> 1111111111111111111');
       setEmployees(dataGetEmployeesWithPagination?.data);
     } else {
+      console.log('uuuuuu>?>>>>>>>>>>>>>> 2222222222222');
       setEmployees(prev => [...prev, ...dataGetEmployeesWithPagination?.data]);
     }
     setHasMore(dataGetEmployeesWithPagination?.data?.length === LIMIT);
   }, [dataGetEmployeesWithPagination]);
 
   const debouncedSearch = useDebouncedCallback((value: string) => {
-    setEmployees([]);
     setHasMore(true);
     setQuery(prev => ({
       ...prev,
@@ -98,10 +99,11 @@ const ManageEmployee = () => {
   };
 
   const onRefresh = () => {
-    setHasMore(true);
-    setEmployees([]);
     setSearchText('');
     setQuery(initialQuery);
+    setTimeout(() => {
+      setHasMore(true);
+    }, 0);
   };
 
   const handleApplyFilter = (filter: FilterBottomSheetValue) => {
@@ -171,8 +173,15 @@ const ManageEmployee = () => {
           data={employees}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={[styles.containerFlatlist, {}]}
-          onEndReached={loadMore}
-          onEndReachedThreshold={0.4}
+          onMomentumScrollBegin={() => {
+            onEndReachedCalledDuringMomentum.current = false;
+          }}
+          onEndReached={() => {
+            if (onEndReachedCalledDuringMomentum.current) return;
+            loadMore();
+            onEndReachedCalledDuringMomentum.current = true;
+          }}
+          onEndReachedThreshold={0.1}
           renderItem={({ item }) => (
             <EmployeeItem item={item} onPress={() => navigateEmployeeInfo(item?.id)} />
           )}
