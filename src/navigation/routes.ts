@@ -13,9 +13,7 @@ enum TabRoutes {
 enum MainRoutes {
   MAIN_DRAWER_TAB = 'main_drawer_tab',
   MAIN_BOTTOM_TAB = 'main_bottom_tab',
-  MAIN_EMPLOYEE = 'main_employee',
-  MAIN_ADMIN = 'main_admin',
-  MAIN_MANAGER = 'main_manager',
+  MAIN_HOME = 'main_home',
   MAIN_CHAT = 'main_chat',
   MAIN_OTHER = 'main_other',
 }
@@ -35,28 +33,17 @@ enum OtherRoutes {
   OTHER_UPDATE_ACCOUNT_INFO = 'other_update_account_info',
 }
 
-enum EmployeeRoutes {
-  EMPLOYEE_LEAVE_STATUS = 'employee_leave_status',
-  EMPLOYEE_ADDITIONAL_LEAVE = 'employee_additional_leave',
-}
-enum AdminRoutes {
-  ADMIN_MANAGE_EMPLOYEE = 'admin_manage_employee',
-  ADMIN_MANAGE_ACCOUNT = 'admin_manager_account',
+enum HomeRoutes {
   // employee
-  ADMIN_EMPLOYEE_INFO = 'admin_emloyee_info',
-  ADMIN_UPDATE_INFO_EMPLOYEE = 'admin_update_info_employee',
+  HOME_EMPLOYEE_INFO = 'home_emloyee_info',
+  HOME_UPDATE_INFO_EMPLOYEE = 'home_update_info_employee',
+  HOME_MANAGE_EMPLOYEE = 'home_manage_employee',
+
   // account
-  ADMIN_CREATE_ACOUNT_WITH_EMPLOYEE = 'admin_create_account_with_employee',
-  ADMIN_ACCOUNT_INFO = 'admin_account_info',
-  ADMIN_UPDATE_INFO = 'admin_update_info',
+  HOME_CREATE_ACOUNT_WITH_EMPLOYEE = 'home_create_account_with_employee',
+  HOME_ACCOUNT_INFO = 'home_account_info',
+  HOME_UPDATE_INFO_ACCOUNT = 'home_update_info_account',
+  HOME_MANAGE_ACCOUNT = 'home_manager_account',
 }
-export {
-  RootRoutes,
-  AuthRoutes,
-  MainRoutes,
-  TabRoutes,
-  EmployeeRoutes,
-  ChatRoutes,
-  OtherRoutes,
-  AdminRoutes,
-};
+
+export { RootRoutes, AuthRoutes, MainRoutes, TabRoutes, ChatRoutes, OtherRoutes, HomeRoutes };

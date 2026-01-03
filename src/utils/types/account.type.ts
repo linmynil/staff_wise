@@ -34,7 +34,7 @@ export interface GetAccountRequest {
   page: number;
   limit: number;
   search?: string;
-  isActive?: boolean;
+  isActive?: boolean | string;
 }
 
 export interface GetAccountResponse {
@@ -64,11 +64,4 @@ export interface UpdateAccountBody {
     roleIds?: number[];
     isActive?: boolean;
   };
-}
-
-export interface GetAccountWithPaginationRequest {
-  page: number;
-  limit: number;
-  search?: string;
-  // isActive?: boolean;
 }
