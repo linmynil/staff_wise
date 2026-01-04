@@ -44,6 +44,13 @@ enum HomeRoutes {
   HOME_ACCOUNT_INFO = 'home_account_info',
   HOME_UPDATE_INFO_ACCOUNT = 'home_update_info_account',
   HOME_MANAGE_ACCOUNT = 'home_manager_account',
+
+  // leave
+  // leave balance
+  HOME_MANAGE_LEAVE_BALANCE = 'home_manage_leave_balance',
+  HOME_CREATE_LEAVE_BALANCE = 'home_create_leave_balance',
+  HOME_CREATE_LEAVE_BALANCE_REFILL = 'home_create_leave_balance_refill',
+  HOME_CREATE_LEAVE_BALANCE_BONUS = 'home_create_leave_balance_bonus',
 }
 
 export { RootRoutes, AuthRoutes, MainRoutes, TabRoutes, ChatRoutes, OtherRoutes, HomeRoutes };

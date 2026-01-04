@@ -16,6 +16,7 @@ import { FlatList, ScrollView, StyleSheet } from 'react-native';
 enum ManagementType {
   ACCOUNT = 'account',
   EMPLOYEE = 'employee',
+  LEAVE_BALANCE = 'leave-balance',
 }
 
 const managementOptions = [
@@ -33,6 +34,13 @@ const managementOptions = [
     type: ManagementType.EMPLOYEE,
     roles: [Role.ADMIN, Role.HR],
   },
+  {
+    id: '3',
+    title: 'Leave Balance Management',
+    time: dayjs().format('DD/MM/YYYY'),
+    type: ManagementType.LEAVE_BALANCE,
+    roles: [Role.ADMIN, Role.HR],
+  },
 ];
 
 const Home = () => {
@@ -42,6 +50,13 @@ const Home = () => {
   const accountRoles = useAppSelector(state => state.auth.roles);
 
   const avatarKey = storageKeys.avatar + accountInfo?.id;
+
+  // const { data: dataGetLeaveSummary } = useGetLeaveSummaryDashboardQuery(
+  //   {},
+  //   {
+  //     refetchOnMountOrArgChange: true,
+  //   },
+  // );
 
   const filteredManagementOptions = useMemo(() => {
     return managementOptions.filter(option =>
@@ -67,6 +82,11 @@ const Home = () => {
       screen: HomeRoutes.HOME_MANAGE_ACCOUNT,
     });
   };
+  const goScreenLeaveBalanceManagement = () => {
+    navigation.navigate(MainRoutes.MAIN_HOME, {
+      screen: HomeRoutes.HOME_MANAGE_LEAVE_BALANCE,
+    });
+  };
 
   const handleManagement = (type: string) => {
     switch (type) {
@@ -75,6 +95,9 @@ const Home = () => {
         break;
       case ManagementType.ACCOUNT:
         goScreenAccountManagement();
+        break;
+      case ManagementType.LEAVE_BALANCE:
+        goScreenLeaveBalanceManagement();
         break;
       default:
         break;

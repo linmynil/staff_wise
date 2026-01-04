@@ -98,10 +98,7 @@ const ManageAccount = () => {
   };
 
   const handleApplyFilter = (filter: FilterBottomSheetValue) => {
-    console.log('>>>>>>>filter: ', filter);
     const isActive = filter?.isActive === '_' ? '_' : filter?.isActive === 'true' ? true : false;
-    console.log('>>>>>>>isActive: ', isActive);
-
     setQuery(prev => ({
       ...prev,
       page: 1,

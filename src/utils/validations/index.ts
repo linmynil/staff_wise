@@ -13,6 +13,12 @@ const validateSchema = {
   username: Yup.string().trim().required('Please enter your username'),
   email: Yup.string().matches(emailRegExp, 'Invalid email address'),
   phone: Yup.string().matches(phoneRegExp, 'The phone number is not in the correct format'),
+  totalHours: Yup.number()
+    .transform((value, originalValue) => (originalValue === '' ? undefined : Number(originalValue)))
+    .typeError('Total leave hours must be a number')
+    .required('Total leave hours is required')
+    .integer('Total leave hours must be an integer')
+    .positive('Total leave hours must be greater than 0'),
 };
 
 export default validateSchema;

@@ -12,7 +12,7 @@ export interface IProps extends TouchableOpacityProps {
   isMissingMessage?: string;
 }
 
-const OtherItem = ({ icon, title, description, isMissingMessage, ...props }: IProps) => {
+const FeatureItem = ({ icon, title, description, isMissingMessage, ...props }: IProps) => {
   return (
     <TouchableOpacity {...props} style={styles.container}>
       {isMissingMessage && (
@@ -48,7 +48,7 @@ const OtherItem = ({ icon, title, description, isMissingMessage, ...props }: IPr
   );
 };
 
-export default OtherItem;
+export default FeatureItem;
 
 const styles = StyleSheet.create({
   container: {

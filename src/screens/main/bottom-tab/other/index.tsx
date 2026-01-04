@@ -1,7 +1,7 @@
 import { ArrowLogout, SadFace, SwapIcon, UserIdIcon } from '@assets';
 import { Button, Text, useModal, View } from '@components';
 import MainLayout from '@components/layout/main-layout';
-import OtherItem from '@components/ui/other-item';
+import FeatureItem from '@components/ui/feature-item';
 import { removeKey } from '@config/mmkv';
 import { MainRoutes, OtherRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
@@ -20,7 +20,7 @@ const Other = () => {
     <MainLayout title="Other">
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         <View flex={1} gap={12} paddingHorizontal={16} paddingVertical={24}>
-          <OtherItem
+          <FeatureItem
             icon={<UserIdIcon />}
             title={'Account Infomation'}
             description={'Edit edit your information'}
@@ -30,7 +30,7 @@ const Other = () => {
               });
             }}
           />
-          <OtherItem
+          <FeatureItem
             icon={<SwapIcon />}
             title={'Change pasword'}
             description={'Change your app login password.'}

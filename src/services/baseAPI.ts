@@ -5,6 +5,7 @@ export enum tagTypes {
   Account = 'Account',
   Employee = 'Employee',
   Auth = 'Auth',
+  Leave = 'Leave',
 }
 
 export enum Method {

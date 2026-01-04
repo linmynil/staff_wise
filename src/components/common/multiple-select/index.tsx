@@ -20,6 +20,7 @@ import Text from '../../core/text';
 import { useBottomSheetContext3 } from '../bottom-sheet-for-multiple-select';
 import Button from '../button';
 import TextInput from '../input';
+import { width } from '@utils/helpers/dimension';
 
 export type MultipleSelectOption = {
   value: string | number;
@@ -250,7 +251,15 @@ const MultipleSelect = (props: IProps) => {
 
                     return (
                       <View key={v.toString()} style={styles.selectedLabel} row center gap={6}>
-                        <Text color={colors.white}>{label}</Text>
+                        <Text
+                          color={colors.white}
+                          numberOfLines={1}
+                          style={{
+                            maxWidth: '80%',
+                          }}
+                        >
+                          {label}
+                        </Text>
                         <TouchableOpacity onPress={() => removeValue(v)} hitSlop={8}>
                           <CircleCloseIcon fill={colors.white} />
                         </TouchableOpacity>
@@ -324,9 +333,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: 52,
-    borderWidth: 1,
     borderRadius: 24,
     gap: 8,
+    backgroundColor: colors.neutral.c200,
   },
   disabled: {
     opacity: 0.5,
@@ -336,6 +345,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderRadius: 8,
     backgroundColor: colors.primary.default,
+    maxWidth: width / 1.8,
   },
   arrow: {
     width: 30,

@@ -7,6 +7,10 @@ import UpdateInfoAccount from '@screens/main/bottom-tab/home/features/account-ma
 import ManageEmployee from '@screens/main/bottom-tab/home/features/employee-management';
 import EmployeeDetail from '@screens/main/bottom-tab/home/features/employee-management/EmployeeDetail';
 import UpdateInfoEmployee from '@screens/main/bottom-tab/home/features/employee-management/UpdateInfoEmployee';
+import ManageLeave from '@screens/main/bottom-tab/home/features/leave-management';
+import CreateLeaveBalance from '@screens/main/bottom-tab/home/features/leave-management/balance/CreateLeaveBalance';
+import CreateLeaveBalanceBonus from '@screens/main/bottom-tab/home/features/leave-management/balance/CreateLeaveBalanceBonus';
+import CreateLeaveBalanceRefill from '@screens/main/bottom-tab/home/features/leave-management/balance/CreateLeaveBalanceRefill';
 import React from 'react';
 
 const HomeStack = createNativeStackNavigator<any>();
@@ -32,6 +36,22 @@ const HomeNavigation = () => {
       <HomeStack.Screen
         name={HomeRoutes.HOME_UPDATE_INFO_EMPLOYEE}
         component={UpdateInfoEmployee}
+      />
+
+      {/*Leave*/}
+      {/*Leave balance*/}
+      <HomeStack.Screen name={HomeRoutes.HOME_MANAGE_LEAVE_BALANCE} component={ManageLeave} />
+      <HomeStack.Screen
+        name={HomeRoutes.HOME_CREATE_LEAVE_BALANCE}
+        component={CreateLeaveBalance}
+      />
+      <HomeStack.Screen
+        name={HomeRoutes.HOME_CREATE_LEAVE_BALANCE_BONUS}
+        component={CreateLeaveBalanceBonus}
+      />
+      <HomeStack.Screen
+        name={HomeRoutes.HOME_CREATE_LEAVE_BALANCE_REFILL}
+        component={CreateLeaveBalanceRefill}
       />
     </HomeStack.Navigator>
   );
