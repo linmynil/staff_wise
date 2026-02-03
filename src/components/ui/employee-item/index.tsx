@@ -23,7 +23,13 @@ const EmployeeItem = ({ item, ...props }: IProps) => {
           {department}
         </Text>
         <Text>
-          Manager: <Text weight={600}>{!!manager && ` ${manager.fullName} - ${manager.id}`} </Text>
+          Manager:{' '}
+          <Text weight={600}>
+            {!!manager &&
+              ` ${manager.fullName} - ${
+                manager?.employeeCode ? manager?.employeeCode : manager.id
+              }`}{' '}
+          </Text>
         </Text>
       </View>
       <Image style={styles.img_profile} source={require('@assets/images/avatar-default.png')} />

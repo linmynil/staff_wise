@@ -4,7 +4,7 @@ import { useBottomSheetContext2 } from '@components/common/bottom-sheet-outside'
 import SelectBox, { SelectOption } from '@components/common/select-box';
 import MainLayout from '@components/layout/main-layout';
 import EmployeeItem from '@components/ui/employee-item';
-import { AdminRoutes, MainRoutes } from '@navigation/routes';
+import { MainRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
 import {
   useGetEmployeesNoPaginationQuery,

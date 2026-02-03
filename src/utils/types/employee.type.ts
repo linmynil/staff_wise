@@ -33,3 +33,16 @@ export interface GetEmployeeWithPaginationResponse {
   data: Employee[];
   meta: IMeta;
 }
+
+export interface UpdateEmployeeBody {
+  id: number;
+  body: {
+    employeeCode?: string;
+    fullName?: string;
+    phone?: string;
+    department?: string;
+    position?: string;
+    managerId?: number;
+    roleIds?: number[];
+  };
+}

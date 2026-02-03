@@ -16,8 +16,6 @@ const EmployeeDetail = ({ navigation, route }: any) => {
     skip: !id,
   });
 
-  console.log(employee);
-
   const navigateUpdateEmployeeInfo = () => {
     navigation.getParent().navigate(MainRoutes.MAIN_HOME, {
       screen: HomeRoutes.HOME_UPDATE_INFO_EMPLOYEE,

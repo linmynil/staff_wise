@@ -62,7 +62,9 @@ const ManageEmployee = () => {
 
   const employeesOptions = dataGetEmployeesNoPagination?.map(employee => ({
     value: employee?.id?.toString(),
-    label: `${employee?.fullName} - ${employee?.id}`,
+    label: `${employee?.fullName} - ${
+      employee?.employeeCode ? employee?.employeeCode : employee?.id
+    }`,
   }));
 
   employeesOptions?.unshift({
@@ -74,10 +76,8 @@ const ManageEmployee = () => {
     if (!dataGetEmployeesWithPagination?.data) return;
 
     if (query.page === 1) {
-      console.log('uuuuuu>?>>>>>>>>>>>>>> 1111111111111111111');
       setEmployees(dataGetEmployeesWithPagination?.data);
     } else {
-      console.log('uuuuuu>?>>>>>>>>>>>>>> 2222222222222');
       setEmployees(prev => [...prev, ...dataGetEmployeesWithPagination?.data]);
     }
     setHasMore(dataGetEmployeesWithPagination?.data?.length === LIMIT);
