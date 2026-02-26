@@ -1,19 +1,20 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Button, TextInput, View } from '@components';
+import { Button, Text, TextInput, View } from '@components';
+import DatePicker from '@components/common/date-picker';
 import SelectBox from '@components/common/select-box';
+import TimePicker from '@components/common/time-picker';
 import MainLayout from '@components/layout/main-layout';
 import { useNotify } from '@hooks/useNotify';
 import { useNavigation } from '@react-navigation/native';
 import { useAppDispatch } from '@redux/store';
-import { useCreateAccountWithEmployeeMutation } from '@services/account';
 import { baseAPI, tagTypes } from '@services/baseAPI';
-import { useGetEmployeesNoPaginationQuery } from '@services/employee';
-import { useGetRolesQuery } from '@services/role';
+import { useCreateLeaveRequestMutation } from '@services/leave';
 import colors from '@utils/constants/colors';
+import { fullDayOptions, leaveType } from '@utils/constants/leave';
 import { checkIsRequired } from '@utils/helpers/form.helper';
-import { CreateAccountWithEmployeeBody } from '@utils/types/account.type';
+import { CreateLeaveRequest } from '@utils/types/leave.type';
 import { ErrorAPI } from '@utils/types/other.type';
-import validateSchema from '@utils/validations';
+import dayjs from 'dayjs';
 import { Formik } from 'formik';
 import React from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
@@ -25,29 +26,26 @@ const ApplyLeave = () => {
   const dispatch = useAppDispatch();
   const notify = useNotify();
   const initialForm = {
-    username: '',
-    password: '123456',
-    fullName: '',
-    email: '',
-    employeeCode: '',
-    phone: '',
-    department: '',
-    position: '',
-    roleIds: '',
-    managerId: '',
+    startDate: '',
+    endDate: '',
+    isFullDay: '',
+    startTime: '',
+    endTime: '',
+    leaveType: '',
+    reason: '',
   };
 
-  const [createAccountWithEmployee, { isLoading }] = useCreateAccountWithEmployeeMutation();
+  const [createLeaveRequest, { isLoading }] = useCreateLeaveRequestMutation();
 
   const handleWhenCreateSuccess = () => {
-    dispatch(baseAPI.util.invalidateTags([tagTypes.Account]));
+    dispatch(baseAPI.util.invalidateTags([tagTypes.Leave]));
     navigation.goBack();
   };
 
   const openSuccessModal = () => {
     notify.open({
-      title: 'Create Account',
-      content: 'New account created successfully',
+      title: 'Create Apply Leave',
+      content: 'Apply leave created successfully',
       duration: 5000,
       onDone: () => handleWhenCreateSuccess(),
       closeOnPressWrapper: true,
@@ -55,23 +53,20 @@ const ApplyLeave = () => {
   };
 
   const onConfirm = (values: typeof initialForm) => {
-    const dataBody: CreateAccountWithEmployeeBody = {
-      username: values.username,
-      password: values.password,
-      fullName: values.fullName,
-      roleIds: [Number(values.roleIds)],
-      ...(values?.email && { email: values.email }),
-      ...(values?.employeeCode && { employeeCode: values.employeeCode }),
-      ...(values?.phone && { phone: values.phone }),
-      ...(values?.department && { department: values.department }),
-      ...(values?.position && { position: values.position }),
-      ...(values?.managerId && { managerId: Number(values.managerId) }),
+    const dataBody: CreateLeaveRequest = {
+      startDate: values.startDate,
+      endDate: values.endDate,
+      ...(values?.isFullDay && { isFullDay: values.isFullDay === 'true' ? true : false }),
+      ...(values?.startTime && values.isFullDay === 'false' && { startTime: values.startTime }),
+      ...(values?.endTime && values.isFullDay === 'false' && { endTime: values.endTime }),
+      ...(values?.leaveType && { leaveType: values.leaveType }),
+      ...(values?.reason && { reason: values.reason }),
     };
-
-    createAccountWithEmployee(dataBody)
+    createLeaveRequest(dataBody)
       .then(res => {
         const { data, error } = res || {};
         console.log(data);
+
         if (!error) {
           openSuccessModal();
         } else {
@@ -91,12 +86,8 @@ const ApplyLeave = () => {
   };
 
   const validationSchema = Yup.object().shape({
-    username: validateSchema.username,
-    password: validateSchema.password,
-    fullName: Yup.string().trim().required('Please enter your full name'),
-    roleIds: Yup.string().trim().required('Please select your role'),
-    email: validateSchema.email,
-    phone: validateSchema.phone,
+    startDate: Yup.string().trim().required('Please select start day'),
+    endDate: Yup.string().trim().required('Please select end day'),
   });
 
   return (
@@ -105,15 +96,24 @@ const ApplyLeave = () => {
         const isRequired = checkIsRequired(validationSchema);
         const getHandleChangeByName = (name: string) => {
           switch (name) {
-            case 'roleIds': {
+            case 'isFullDay': {
               return (v: any) => {
                 setFieldValue(name, v);
               };
             }
-            case 'managerId':
+            case 'leaveType': {
               return (v: any) => {
                 setFieldValue(name, v);
               };
+            }
+            case 'startDate': {
+              return (v: any) => {
+                setFieldValue(name, v);
+                if (dayjs(v).isAfter(values.endDate) || !values.endDate) {
+                  setFieldValue('endDate', v, false);
+                }
+              };
+            }
             default:
               return (v: any) => {
                 setFieldTouched(name, true);
@@ -132,26 +132,6 @@ const ApplyLeave = () => {
           };
         };
 
-        const { data: rolesData } = useGetRolesQuery({});
-        const roles = rolesData?.data;
-        const rolesOption = roles?.map(role => ({
-          value: role?.id,
-          label: role?.name,
-        }));
-
-        const { data: employees } = useGetEmployeesNoPaginationQuery({});
-        const employeeOptions = employees?.map(employee => ({
-          value: employee?.id?.toString(),
-          label: `${employee?.fullName} ${
-            employee?.employeeCode ? `- ${employee?.employeeCode}` : ''
-          }`,
-        }));
-
-        employeeOptions?.unshift({
-          value: '',
-          label: 'Select...',
-        });
-
         return (
           <MainLayout title="Apply Leave">
             <KeyboardAvoidingView
@@ -167,59 +147,63 @@ const ApplyLeave = () => {
               <ScrollView style={styles.wrapper} showsVerticalScrollIndicator={false}>
                 <View marginVertical={20} gap={4}>
                   <View gap={12}>
-                    <TextInput
-                      label="Username"
-                      placeholder="Enter username"
-                      {...getFormProps('username')}
+                    <Text weight={600} size={16}>
+                      Leave Application From
+                    </Text>
+                    <Text>Please provide information about your leave</Text>
+                    <SelectBox
+                      label="Leave type"
+                      searchPlaceholder="Enter leave type"
+                      searchLabel="Leave type"
+                      placeholder="Select a leave type"
+                      options={leaveType}
+                      {...getFormProps('leaveType')}
                     />
-                    <TextInput
-                      label="Full name"
-                      placeholder="Enter full name"
-                      {...getFormProps('fullName')}
+                    <DatePicker
+                      placeholder="Select start day"
+                      label="Start day"
+                      min={dayjs()}
+                      {...getFormProps('startDate')}
                     />
-                    <TextInput
-                      label="Password"
-                      placeholder="Enter password"
-                      {...getFormProps('password')}
+                    <DatePicker
+                      placeholder="Select end day"
+                      disabled={!values.startDate}
+                      label="End day"
+                      min={values.startDate ? dayjs(values.startDate) : dayjs()}
+                      // max={dayjs().add(12, 'days')}
+                      {...getFormProps('endDate')}
                     />
                     <SelectBox
-                      label="Role"
-                      placeholder="Select a role"
-                      searchPlaceholder="Enter role name"
-                      searchLabel="Role name"
-                      options={rolesOption}
-                      {...getFormProps('roleIds')}
+                      label="Full day"
+                      searchPlaceholder="Enter full day"
+                      searchLabel="Full day"
+                      placeholder="Select a status"
+                      options={fullDayOptions}
+                      {...getFormProps('isFullDay')}
                     />
-                    <TextInput label="Email" placeholder="Enter email" {...getFormProps('email')} />
+                    {values.isFullDay === 'false' && (
+                      <TimePicker
+                        placeholder="Select start time"
+                        label="Start time"
+                        min="08:00"
+                        max="17:00"
+                        {...getFormProps('startTime')}
+                      />
+                    )}
+                    {values.isFullDay === 'false' && (
+                      <TimePicker
+                        placeholder="Select end time"
+                        label="End time"
+                        min="08:00"
+                        max="17:00"
+                        {...getFormProps('endTime')}
+                      />
+                    )}
+
                     <TextInput
-                      label="Employee Code"
-                      placeholder="Enter employee code"
-                      {...getFormProps('employeeCode')}
-                    />
-                    <TextInput
-                      label="Phone"
-                      inputMode="numeric"
-                      maxLength={10}
-                      placeholder="Enter phone"
-                      {...getFormProps('phone')}
-                    />
-                    <TextInput
-                      label="Department"
-                      placeholder="Enter department"
-                      {...getFormProps('department')}
-                    />
-                    <TextInput
-                      label="Position"
-                      placeholder="Enter position"
-                      {...getFormProps('position')}
-                    />
-                    <SelectBox
-                      label="Manager"
-                      placeholder="Select a manager"
-                      searchPlaceholder="Enter manager name"
-                      searchLabel="Manager name"
-                      options={employeeOptions}
-                      {...getFormProps('managerId')}
+                      label="Reason"
+                      placeholder="Enter reason"
+                      {...getFormProps('reason')}
                     />
                   </View>
                 </View>

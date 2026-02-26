@@ -1,3 +1,5 @@
+import { Employee } from './employee.type';
+
 export interface GetLeaveSummaryResponse {
   balance: Balance;
   pendingRequests: number;
@@ -63,4 +65,39 @@ export interface CreateLeaveBalanceBonusResponse {
   bonusHours: number;
   processed: number;
   results: CreateLeaveBalanceBonusResult[];
+}
+
+export interface CreateLeaveRequest {
+  startDate: string;
+  endDate: string;
+  isFullDay?: boolean;
+  startTime?: string;
+  endTime?: string;
+  leaveType?: string;
+  reason?: string;
+}
+export interface CreateLeaveResponse {
+  id?: number;
+  employeeId?: number;
+  leaveType?: string;
+  startDate?: string;
+  endDate?: string;
+  startTime?: string;
+  endTime?: string;
+  isFullDay?: boolean;
+  totalHours?: number;
+  reason?: string;
+  status?: string;
+  approverId?: number;
+  approvedAt?: string;
+  rejectedAt?: string;
+  rejectedReason?: string;
+  isAutoApproved?: boolean;
+  cancelReason?: string;
+  cancelledBy?: string;
+  cancelledAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  employee?: Employee;
+  approver?: Employee;
 }
