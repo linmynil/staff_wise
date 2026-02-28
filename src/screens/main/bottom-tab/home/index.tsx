@@ -1,5 +1,6 @@
-import { PermissionGuard, Text, View } from '@components';
+import { PermissionGuard, View } from '@components';
 import MainLayout from '@components/layout/main-layout';
+import DashboardItem from '@components/ui/dashboard-item';
 import HeaderAction from '@components/ui/header-action';
 import ManagementItem from '@components/ui/management-item';
 import ProfileInfoHeader from '@components/ui/profile-info-header';
@@ -12,6 +13,8 @@ import { Role } from '@utils/types/role.type';
 import dayjs from 'dayjs';
 import React, { useEffect, useMemo } from 'react';
 import { FlatList, ScrollView, StyleSheet } from 'react-native';
+import { useGetLeaveSummaryDashboardQuery } from '@services/leave';
+import { ArrowRightIcon } from '@assets';
 
 enum ManagementType {
   ACCOUNT = 'account',
@@ -51,12 +54,12 @@ const Home = () => {
 
   const avatarKey = storageKeys.avatar + accountInfo?.id;
 
-  // const { data: dataGetLeaveSummary } = useGetLeaveSummaryDashboardQuery(
-  //   {},
-  //   {
-  //     refetchOnMountOrArgChange: true,
-  //   },
-  // );
+  const { data: dataGetLeaveSummary } = useGetLeaveSummaryDashboardQuery(
+    {},
+    {
+      refetchOnMountOrArgChange: true,
+    },
+  );
 
   const filteredManagementOptions = useMemo(() => {
     return managementOptions.filter(option =>
@@ -103,13 +106,39 @@ const Home = () => {
         break;
     }
   };
+
+  const onLeaveStatus = () => {
+    console.log('aaa');
+
+    navigation.navigate(MainRoutes.MAIN_HOME, {
+      screen: HomeRoutes.LEAVE_STATUS,
+    });
+  };
+
   return (
     <MainLayout title="Staff Wise" headerChildren={<ProfileInfoHeader />}>
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <PermissionGuard excludeRoles={[Role.ADMIN]}>
-            <HeaderAction title="Dashboasd" onActionPress={() => {}} />
-            <Text>Đây là phần của employeeee</Text>
+            <HeaderAction
+              title="Dashboard"
+              actionLabel="Leave Status"
+              icon={<ArrowRightIcon width={11} height={11} viewBox="0 0 11 11" />}
+              onActionPress={onLeaveStatus}
+            />
+            <View
+              style={{
+                flexWrap: 'wrap',
+                flexDirection: 'row',
+                alignContent: 'center',
+                alignItems: 'center',
+                gap: 16,
+              }}
+            >
+              {dataGetLeaveSummary?.leaveByType?.map(item => (
+                <DashboardItem key={`${item.leaveType}`} item={item} />
+              ))}
+            </View>
           </PermissionGuard>
 
           <PermissionGuard excludeRoles={[Role.EMPLOYEE]}>

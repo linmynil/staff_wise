@@ -3,6 +3,7 @@ import Text from '@components/core/text';
 import View from '@components/core/view';
 import colors from '@utils/constants/colors';
 import { width } from '@utils/helpers/dimension';
+import { LeaveByType } from '@utils/types/leave.type';
 import React, { ReactNode } from 'react';
 import { StyleSheet, ViewProps } from 'react-native';
 
@@ -14,10 +15,11 @@ const GAP = 16;
 const ITEM_WIDTH = (SCREEN_WIDTH - HORIZONTAL_PADDING * 2 - GAP * 2 - 0.00001) / 3;
 
 export enum LeaveType {
-  ANNUAL = 'Annual',
-  HOLIDAYS = 'Holidays',
+  ANNUAL = 'ANNUAL',
+  SOCIAL_INSURANCE = 'SOCIAL_INSURANCE',
+  UNPAID = 'UNPAID',
+  OTHER = 'OTHER',
 }
-
 interface LeaveTypeMapProps {
   icon: ReactNode;
   label: string;
@@ -28,28 +30,29 @@ const LeaveTypeMap: Record<LeaveType, LeaveTypeMapProps> = {
     icon: <AnnualIcon />,
     label: 'Annual',
   },
-  [LeaveType.HOLIDAYS]: {
+  [LeaveType.SOCIAL_INSURANCE]: {
     icon: <HolidaysIcon />,
-    label: 'Holidays',
+    label: 'Social Insurance',
+  },
+  [LeaveType.UNPAID]: {
+    icon: <HolidaysIcon />,
+    label: 'Unpaid',
+  },
+  [LeaveType.OTHER]: {
+    icon: <HolidaysIcon />,
+    label: 'Other',
   },
 };
 
-export interface Dashboard {
-  id: string;
-  typeDate: string;
-  date: string | number;
-  totalDate: string | number;
-}
-
 interface IProps extends ViewProps {
-  item: Dashboard;
+  item: LeaveByType;
 }
 
 const DashboardItem = ({ item, ...props }: IProps) => {
-  const { typeDate, date, totalDate } = item;
-  const { icon, label } = LeaveTypeMap[typeDate as LeaveType];
+  const { leaveType, usedHours, totalHours } = item;
+  const { icon, label } = LeaveTypeMap[leaveType as LeaveType];
 
-  const pad = (n: string | number) => {
+  const pad = (n: number | undefined) => {
     const num = Number(n);
     return num < 10 ? `0${num}` : `${num}`;
   };
@@ -57,25 +60,28 @@ const DashboardItem = ({ item, ...props }: IProps) => {
   return (
     <View {...props} style={[styles.card, { width: ITEM_WIDTH }]}>
       {icon}
+      <Text size={12} weight={600} color={colors.neutral.c900}>
+        {label}
+      </Text>
       <View
         style={{
+          position: 'absolute',
+          right: 10,
+          top: 10,
           flexDirection: 'row',
-          width: '100%',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
+          alignItems: 'flex-end',
         }}
       >
         <Text size={30} weight={600} color={colors.neutral.c900}>
-          {pad(date)}
+          {pad(usedHours ? usedHours / 8 : usedHours)}
         </Text>
-        <Text size={14} color={colors.neutral.c500}>
-          /{pad(totalDate)}
-        </Text>
+        <View>
+          <Text size={14} color={colors.neutral.c500}>
+            /{pad(totalHours ? totalHours / 8 : totalHours)}
+          </Text>
+          <View height={6} />
+        </View>
       </View>
-
-      <Text size={14} color={colors.neutral.c500}>
-        {label}
-      </Text>
     </View>
   );
 };
@@ -84,8 +90,8 @@ export default DashboardItem;
 
 const styles = StyleSheet.create({
   card: {
-    paddingVertical: 12,
-    paddingHorizontal: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
     borderRadius: 12,
     backgroundColor: colors.white,
     shadowColor: colors.blue.c500,
@@ -93,5 +99,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.18,
     shadowRadius: 3,
     elevation: 2,
+    height: 75,
+    justifyContent: 'space-between',
   },
 });

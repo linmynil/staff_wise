@@ -46,6 +46,8 @@ enum HomeRoutes {
   HOME_MANAGE_ACCOUNT = 'home_manager_account',
 
   // leave
+  LEAVE_STATUS = 'leave_status',
+  APPLY_LEAVE = 'apply_leave',
   // leave balance
   HOME_MANAGE_LEAVE_BALANCE = 'home_manage_leave_balance',
   HOME_CREATE_LEAVE_BALANCE = 'home_create_leave_balance',

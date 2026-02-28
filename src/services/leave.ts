@@ -7,7 +7,9 @@ import {
   CreateLeaveBalanceBonusResponse,
   CreateLeaveBalanceBonusBody,
   CreateLeaveResponse,
-  CreateLeaveRequest,
+  CreateLeaveRequests,
+  GetLeaveRequest,
+  GetLeaveResponse,
 } from '@utils/types/leave.type';
 import { baseAPI, Method, tagTypes } from './baseAPI';
 
@@ -17,6 +19,14 @@ export const leaveServive = baseAPI.injectEndpoints({
       query: () => ({
         endpoint: `/leave/summary`,
         method: Method.GET,
+      }),
+      providesTags: [tagTypes.Leave],
+    }),
+    getLeaves: buider.query<GetLeaveResponse, GetLeaveRequest>({
+      query: query => ({
+        endpoint: `/leave/requests`,
+        method: Method.GET,
+        params: query,
       }),
       providesTags: [tagTypes.Leave],
     }),
@@ -61,7 +71,7 @@ export const leaveServive = baseAPI.injectEndpoints({
         data: data,
       }),
     }),
-    CreateLeaveRequest: buider.mutation<CreateLeaveResponse, CreateLeaveRequest>({
+    createLeaveRequests: buider.mutation<CreateLeaveResponse, CreateLeaveRequests>({
       query: data => ({
         endpoint: '/leave/requests',
         method: Method.POST,
@@ -73,10 +83,11 @@ export const leaveServive = baseAPI.injectEndpoints({
 
 export const {
   useGetLeaveSummaryDashboardQuery,
+  useGetLeavesQuery,
   useGetCurrentLeaveBalanceQuery,
   useGetEmployeeLeaveBalanceQuery,
   useCreateLeaveBalanceMutation,
   useCreateLeaveBalanceRefillMutation,
   useCreateLeaveBalanceBonusMutation,
-  useCreateLeaveRequestMutation,
+  useCreateLeaveRequestsMutation,
 } = leaveServive;

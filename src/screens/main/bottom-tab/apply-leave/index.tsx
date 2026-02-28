@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { Button, Text, TextInput, View } from '@components';
 import DatePicker from '@components/common/date-picker';
 import SelectBox from '@components/common/select-box';
@@ -8,15 +7,16 @@ import { useNotify } from '@hooks/useNotify';
 import { useNavigation } from '@react-navigation/native';
 import { useAppDispatch } from '@redux/store';
 import { baseAPI, tagTypes } from '@services/baseAPI';
-import { useCreateLeaveRequestMutation } from '@services/leave';
+import { useCreateLeaveRequestsMutation } from '@services/leave';
+
 import colors from '@utils/constants/colors';
 import { fullDayOptions, leaveType } from '@utils/constants/leave';
 import { checkIsRequired } from '@utils/helpers/form.helper';
-import { CreateLeaveRequest } from '@utils/types/leave.type';
+import { CreateLeaveRequests } from '@utils/types/leave.type';
 import { ErrorAPI } from '@utils/types/other.type';
 import dayjs from 'dayjs';
 import { Formik } from 'formik';
-import React from 'react';
+import React, { useRef } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
 import * as Yup from 'yup';
@@ -24,6 +24,7 @@ import * as Yup from 'yup';
 const ApplyLeave = () => {
   const navigation = useNavigation<any>();
   const dispatch = useAppDispatch();
+  const setFieldErrorRef = useRef<(field: string, message: string | undefined) => void>(() => {});
   const notify = useNotify();
   const initialForm = {
     startDate: '',
@@ -35,7 +36,7 @@ const ApplyLeave = () => {
     reason: '',
   };
 
-  const [createLeaveRequest, { isLoading }] = useCreateLeaveRequestMutation();
+  const [createLeaveRequest, { isLoading }] = useCreateLeaveRequestsMutation();
 
   const handleWhenCreateSuccess = () => {
     dispatch(baseAPI.util.invalidateTags([tagTypes.Leave]));
@@ -53,7 +54,27 @@ const ApplyLeave = () => {
   };
 
   const onConfirm = (values: typeof initialForm) => {
-    const dataBody: CreateLeaveRequest = {
+    const startDate = dayjs(values.startDate);
+    const endDate = dayjs(values.endDate);
+
+    if (values.isFullDay === 'false') {
+      if (startDate.isSame(endDate, 'day')) {
+        const startTime = dayjs(values.startTime, 'HH:mm');
+        const endTime = dayjs(values.endTime, 'HH:mm');
+
+        if (!endTime.isAfter(startTime)) {
+          Toast.show({
+            type: 'error',
+            text1: 'End time must be after start time',
+          });
+          setFieldErrorRef.current('startTime', 'End time must be after start time');
+          setFieldErrorRef.current('endTime', 'End time must be after start time');
+          return;
+        }
+      }
+    }
+
+    const dataBody: CreateLeaveRequests = {
       startDate: values.startDate,
       endDate: values.endDate,
       ...(values?.isFullDay && { isFullDay: values.isFullDay === 'true' ? true : false }),
@@ -88,17 +109,39 @@ const ApplyLeave = () => {
   const validationSchema = Yup.object().shape({
     startDate: Yup.string().trim().required('Please select start day'),
     endDate: Yup.string().trim().required('Please select end day'),
+    startTime: Yup.string().when('isFullDay', {
+      is: (val: string) => val === 'false',
+      then: schema => schema.trim().required('Please select start time'),
+      otherwise: schema => schema.notRequired(),
+    }),
+
+    endTime: Yup.string().when('isFullDay', {
+      is: (val: string) => val === 'false',
+      then: schema => schema.trim().required('Please select end time'),
+      otherwise: schema => schema.notRequired(),
+    }),
   });
 
   return (
     <Formik initialValues={initialForm} onSubmit={onConfirm} validationSchema={validationSchema}>
-      {({ values, setFieldTouched, setFieldValue, errors, handleSubmit, touched }) => {
+      {({
+        values,
+        setFieldTouched,
+        setFieldValue,
+        setFieldError,
+        errors,
+        handleSubmit,
+        touched,
+      }) => {
+        setFieldErrorRef.current = setFieldError;
         const isRequired = checkIsRequired(validationSchema);
         const getHandleChangeByName = (name: string) => {
           switch (name) {
             case 'isFullDay': {
               return (v: any) => {
                 setFieldValue(name, v);
+                setFieldValue('startTime', v, false);
+                setFieldValue('endTime', v, false);
               };
             }
             case 'leaveType': {
@@ -188,6 +231,7 @@ const ApplyLeave = () => {
                         min="08:00"
                         max="17:00"
                         {...getFormProps('startTime')}
+                        isRequired
                       />
                     )}
                     {values.isFullDay === 'false' && (
@@ -197,6 +241,7 @@ const ApplyLeave = () => {
                         min="08:00"
                         max="17:00"
                         {...getFormProps('endTime')}
+                        isRequired
                       />
                     )}
 

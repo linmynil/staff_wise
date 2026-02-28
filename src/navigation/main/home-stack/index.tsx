@@ -1,5 +1,6 @@
 import { HomeRoutes } from '@navigation/routes';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ApplyLeave from '@screens/main/bottom-tab/apply-leave';
 import ManageAccount from '@screens/main/bottom-tab/home/features/account-mamagement';
 import AccountDetail from '@screens/main/bottom-tab/home/features/account-mamagement/AccountDetail';
 import CreateAccountWithEmployee from '@screens/main/bottom-tab/home/features/account-mamagement/CreateAccountWithEmployee';
@@ -7,10 +8,11 @@ import UpdateInfoAccount from '@screens/main/bottom-tab/home/features/account-ma
 import ManageEmployee from '@screens/main/bottom-tab/home/features/employee-management';
 import EmployeeDetail from '@screens/main/bottom-tab/home/features/employee-management/EmployeeDetail';
 import UpdateInfoEmployee from '@screens/main/bottom-tab/home/features/employee-management/UpdateInfoEmployee';
-import ManageLeave from '@screens/main/bottom-tab/home/features/leave-management';
+import ManageLeave from '@screens/main/bottom-tab/home/features/leave-management/balance';
 import CreateLeaveBalance from '@screens/main/bottom-tab/home/features/leave-management/balance/CreateLeaveBalance';
 import CreateLeaveBalanceBonus from '@screens/main/bottom-tab/home/features/leave-management/balance/CreateLeaveBalanceBonus';
 import CreateLeaveBalanceRefill from '@screens/main/bottom-tab/home/features/leave-management/balance/CreateLeaveBalanceRefill';
+import LeaveStatus from '@screens/main/bottom-tab/home/features/leave-management/requests';
 import React from 'react';
 
 const HomeStack = createNativeStackNavigator<any>();
@@ -39,6 +41,8 @@ const HomeNavigation = () => {
       />
 
       {/*Leave*/}
+      <HomeStack.Screen name={HomeRoutes.APPLY_LEAVE} component={ApplyLeave} />
+      <HomeStack.Screen name={HomeRoutes.LEAVE_STATUS} component={LeaveStatus} />
       {/*Leave balance*/}
       <HomeStack.Screen name={HomeRoutes.HOME_MANAGE_LEAVE_BALANCE} component={ManageLeave} />
       <HomeStack.Screen
