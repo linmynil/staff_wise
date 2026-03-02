@@ -46,6 +46,7 @@ const colors = {
     c700: '#CA7C14',
   },
   yellow: {
+    c200: '#f5f2e9ff',
     c500: '#FFD700',
   },
 };

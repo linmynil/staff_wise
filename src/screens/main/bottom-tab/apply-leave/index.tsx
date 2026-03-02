@@ -10,7 +10,7 @@ import { baseAPI, tagTypes } from '@services/baseAPI';
 import { useCreateLeaveRequestsMutation } from '@services/leave';
 
 import colors from '@utils/constants/colors';
-import { fullDayOptions, leaveType } from '@utils/constants/leave';
+import { fullDayOptions, leaveTypeOptions } from '@utils/constants/leave';
 import { checkIsRequired } from '@utils/helpers/form.helper';
 import { CreateLeaveRequests } from '@utils/types/leave.type';
 import { ErrorAPI } from '@utils/types/other.type';
@@ -199,7 +199,7 @@ const ApplyLeave = () => {
                       searchPlaceholder="Enter leave type"
                       searchLabel="Leave type"
                       placeholder="Select a leave type"
-                      options={leaveType}
+                      options={leaveTypeOptions}
                       {...getFormProps('leaveType')}
                     />
                     <DatePicker

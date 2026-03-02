@@ -1,8 +1,7 @@
-import Button from '@components/common/button';
 import Text from '@components/core/text';
 import View from '@components/core/view';
 import colors from '@utils/constants/colors';
-import { width } from '@utils/helpers/dimension';
+import { LeaveStatus, leaveStatusMap } from '@utils/constants/leave';
 import { Leave } from '@utils/types/leave.type';
 import dayjs from 'dayjs';
 import { StyleSheet, TouchableOpacity, TouchableOpacityProps } from 'react-native';
@@ -17,6 +16,8 @@ const LeaveItem = ({ item, isEmployee, ...props }: IProps) => {
     item;
   const formattedStart = dayjs(startDate).format('DD/MM/YYYY');
   const formattedEnd = dayjs(endDate).format('DD/MM/YYYY');
+
+  const { color, backgroundColor, value } = leaveStatusMap[status as LeaveStatus];
 
   return (
     <TouchableOpacity {...props} style={styles.container}>
@@ -37,7 +38,15 @@ const LeaveItem = ({ item, isEmployee, ...props }: IProps) => {
           {reason}
         </Text>
       </View>
-      <Button
+      <View
+        backgroundColor={backgroundColor}
+        borderRadius={10}
+        paddingVertical={6}
+        paddingHorizontal={12}
+      >
+        <Text color={color}>{value}</Text>
+      </View>
+      {/* <Button
         title={
           status === 'PENDING'
             ? 'PENDING'
@@ -64,7 +73,7 @@ const LeaveItem = ({ item, isEmployee, ...props }: IProps) => {
               : 'green',
         }}
         onPress={() => {}}
-      />
+      /> */}
     </TouchableOpacity>
   );
 };

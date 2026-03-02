@@ -5,7 +5,7 @@ import View from '../../core/view';
 import colors from '../../../utils/constants/colors';
 import RNDatePicker, { DatePickerProps } from 'react-native-date-picker';
 import dayjs, { Dayjs } from 'dayjs';
-import { Calendar } from '@assets';
+import { Calendar, CloseIcon } from '@assets';
 
 interface IProps extends Omit<DatePickerProps, 'onConfirm' | 'onCancel' | 'date'> {
   label?: string;
@@ -15,6 +15,7 @@ interface IProps extends Omit<DatePickerProps, 'onConfirm' | 'onCancel' | 'date'
   error?: any;
   disabled?: boolean;
   rightIcon?: React.ReactNode;
+  resetIcon?: boolean;
   style?: StyleProp<ViewStyle>;
   labelStyle?: StyleProp<TextStyle>;
   textStyle?: StyleProp<TextStyle>;
@@ -33,6 +34,7 @@ const DatePicker = ({
   max,
   disabled = false,
   rightIcon,
+  resetIcon = false,
   style,
   labelStyle,
   textStyle,
@@ -84,6 +86,13 @@ const DatePicker = ({
           <Text style={[styles.text, textStyle, { color: colors.neutral.c300 }]}>
             {placeholder || ''}
           </Text>
+        )}
+        {resetIcon && value && (
+          <CloseIcon
+            onPress={() => {
+              onChange && onChange('');
+            }}
+          />
         )}
         {rightIcon || <Calendar />}
       </Pressable>
