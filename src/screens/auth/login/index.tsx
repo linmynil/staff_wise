@@ -51,6 +51,7 @@ const Login = () => {
       const mustChangePassword = res?.data?.account?.mustChangePassword;
       const roles = res?.data?.roles;
       const permissions = res?.data?.permissions;
+      const account = res?.data?.account;
       if (token && accountInfo) {
         removeKey(TokenType.ACCESS_TOKEN);
         events.emit(eventKeys.resetToken);
@@ -74,6 +75,7 @@ const Login = () => {
             access_token: token,
             roles: roles,
             permissions: permissions,
+            account: account,
           }),
         );
       }

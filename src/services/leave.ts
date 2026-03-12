@@ -10,6 +10,7 @@ import {
   CreateLeaveRequests,
   GetLeaveRequest,
   GetLeaveResponse,
+  Leave,
 } from '@utils/types/leave.type';
 import { baseAPI, Method, tagTypes } from './baseAPI';
 
@@ -78,6 +79,18 @@ export const leaveServive = baseAPI.injectEndpoints({
         data: data,
       }),
     }),
+    getLeaveDetail: buider.query<Leave, number>({
+      query: id => ({
+        endpoint: `/leave/requests/${id}`,
+        method: Method.GET,
+      }),
+    }),
+    cancelPendingLeaveRequest: buider.query<Leave, number>({
+      query: id => ({
+        endpoint: `/leave/requests/${id}/cancel`,
+        method: Method.POST,
+      }),
+    }),
   }),
 });
 
@@ -90,4 +103,7 @@ export const {
   useCreateLeaveBalanceRefillMutation,
   useCreateLeaveBalanceBonusMutation,
   useCreateLeaveRequestsMutation,
+  useGetLeaveDetailQuery,
+  useLazyGetLeaveDetailQuery,
+  useCancelPendingLeaveRequestQuery,
 } = leaveServive;

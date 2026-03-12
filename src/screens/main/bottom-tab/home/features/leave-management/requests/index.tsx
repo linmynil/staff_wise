@@ -5,19 +5,24 @@ import DatePicker from '@components/common/date-picker';
 import SelectBox, { SelectOption } from '@components/common/select-box';
 import MainLayout from '@components/layout/main-layout';
 import LeaveItem from '@components/ui/leave-item';
-import { HomeRoutes, MainRoutes } from '@navigation/routes';
-import { useNavigation } from '@react-navigation/native';
 import { useAppSelector } from '@redux/store';
 import { useGetEmployeesNoPaginationQuery } from '@services/employee';
-import { useGetLeavesQuery } from '@services/leave';
+import { useGetLeavesQuery, useLazyGetLeaveDetailQuery } from '@services/leave';
 import colors from '@utils/constants/colors';
 import { LIMIT } from '@utils/constants/constants';
-import { leaveStatusOptions, leaveTypeOptions, roleForGetEmployee } from '@utils/constants/leave';
+import {
+  LeaveStatus as TypeLeaveStatus,
+  leaveStatusMap,
+  leaveStatusOptions,
+  leaveTypeOptions,
+  roleForGetEmployee,
+} from '@utils/constants/leave';
 import { height } from '@utils/helpers/dimension';
 import { GetLeaveRequest, Leave } from '@utils/types/leave.type';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Keyboard, RefreshControl, StyleSheet } from 'react-native';
+import { FlatList, Keyboard, RefreshControl, ScrollView, StyleSheet } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 interface FilterBottomSheetValue {
   status?: string;
@@ -38,14 +43,16 @@ const initialQuery: GetLeaveRequest = {
 };
 
 const LeaveStatus = () => {
-  const navigation = useNavigation<any>();
   const roles = useAppSelector(state => state.auth.roles ?? []);
+  const account = useAppSelector(state => state.auth.account ?? {});
   const { openBottomSheet2, closeBottomSheet2 } = useBottomSheetContext2();
   const [query, setQuery] = useState(initialQuery);
   // const [searchText, setSearchText] = useState('');
   const [leaves, setLeaves] = useState<Leave[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const onEndReachedCalledDuringMomentum = React.useRef(true);
+
+  const [getLeaveDetail] = useLazyGetLeaveDetailQuery();
 
   const { data: dataGetLeaves, isFetching: isFetchingLeaves } = useGetLeavesQuery(
     {
@@ -82,11 +89,16 @@ const LeaveStatus = () => {
     if (!dataGetLeaves?.data) return;
 
     if (query.page === 1) {
-      setLeaves(dataGetLeaves?.data);
+      setLeaves(dataGetLeaves?.data.filter(l => l.employeeId === account?.employee?.id));
     } else {
-      setLeaves(prev => [...prev, ...dataGetLeaves?.data]);
+      setLeaves(prev => [
+        ...prev,
+        ...dataGetLeaves?.data.filter(l => l.employeeId === account?.employee?.id),
+      ]);
     }
-    setHasMore(dataGetLeaves?.data?.length === LIMIT);
+    setHasMore(
+      dataGetLeaves?.data?.filter(l => l.employeeId === account?.employee?.id).length === LIMIT,
+    );
   }, [dataGetLeaves]);
 
   // const debouncedSearch = useDebouncedCallback((value: string) => {
@@ -128,7 +140,7 @@ const LeaveStatus = () => {
   const showBottomFilter = () => {
     Keyboard.dismiss();
     openBottomSheet2({
-      snapPoints: [height * 0.6, height * 0.75],
+      snapPoints: [height * 0.7, height * 0.85],
       fixSnapPoints: true,
       content: (
         <LeaveFilterContent
@@ -141,15 +153,28 @@ const LeaveStatus = () => {
     });
   };
 
-  const navigateLeaveInfo = (id: number) => {
-    navigation.getParent().navigate(MainRoutes.MAIN_HOME, {
-      screen: HomeRoutes.HOME_EMPLOYEE_INFO,
-      params: {
-        id: id,
-      },
-    });
+  const openLeaveDetail = async (id: number) => {
+    Keyboard.dismiss();
+    await getLeaveDetail(id)
+      .unwrap()
+      .then(res => {
+        openBottomSheet2({
+          fixSnapPoints: true,
+          content: <LeaveDetailContent detail={res} />,
+        });
+      })
+      .catch(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'An error occurred. Please try again!',
+        });
+      });
   };
+  //  const handleCancelLeave = (id: number) => {
+  //     const { data: detail } = useCancelPendingLeaveRequestQuery(id, { skip: !id });
 
+  //     closeBottomSheet2();
+  //   };
   return (
     <MainLayout
       back={<MainLayout.BackToPreviousButton />}
@@ -199,9 +224,9 @@ const LeaveStatus = () => {
             loadMore();
             onEndReachedCalledDuringMomentum.current = true;
           }}
-          onEndReachedThreshold={0.1}
+          onEndReachedThreshold={0.05}
           renderItem={({ item }) => (
-            <LeaveItem item={item} isEmployee={true} onPress={() => navigateLeaveInfo(item?.id)} />
+            <LeaveItem item={item} isEmployee={true} onPress={() => openLeaveDetail(item?.id)} />
           )}
           ListEmptyComponent={isFetchingLeaves ? <></> : <EmptyData title="Leave is empty" />}
         />
@@ -301,6 +326,65 @@ const LeaveFilterContent: React.FC<LeaveFilterContentProps> = ({
   );
 };
 
+interface DetailLeaveRequestProps {
+  detail: Leave;
+}
+
+const LeaveDetailContent = (props: DetailLeaveRequestProps) => {
+  const { detail } = props;
+  const { status } = detail;
+  const { color, backgroundColor, value } = leaveStatusMap[status as TypeLeaveStatus];
+  return (
+    <View
+      style={{
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        height: '100%',
+        gap: 12,
+        paddingHorizontal: 16,
+      }}
+    >
+      <Text weight={600} size={20} style={{ textAlign: 'center' }}>
+        Detail Leave
+      </Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View backgroundColor={backgroundColor} borderRadius={8} paddingVertical={12}>
+          <Text
+            color={color}
+            size={20}
+            style={{
+              textTransform: 'uppercase',
+              textAlign: 'center',
+            }}
+          >
+            {value}
+          </Text>
+        </View>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc</Text>
+        <Text>abc1</Text>
+      </ScrollView>
+      <Button title="Cancel" onPress={() => {}} />
+    </View>
+  );
+};
 export default LeaveStatus;
 
 const styles = StyleSheet.create({

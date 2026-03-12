@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import Text from '@components/core/text';
 import View from '@components/core/view';
 import { useGetAccountInfo, useGetEmployeeInfo } from '@hooks';
@@ -10,10 +9,23 @@ import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 
 const ProfileInfoHeader = () => {
+  // const roles = useAppSelector(state => state.auth.roles);
+  // const isAdmin = roles?.includes(Role.ADMIN);
+  // const avatarUri = useAppSelector(state => state.auth.avatarUri);
+  // const info = isAdmin ? useGetAccountInfo() : useGetEmployeeInfo();
+  // const displayName = isAdmin ? '' : `, ${(info as Employee)?.fullName}`;
+  // const role = isAdmin ? Role.ADMIN : (info as Employee)?.phone;
   const roles = useAppSelector(state => state.auth.roles);
-  const isAdmin = roles?.includes(Role.ADMIN);
   const avatarUri = useAppSelector(state => state.auth.avatarUri);
-  const info = isAdmin ? useGetAccountInfo() : useGetEmployeeInfo();
+
+  const isAdmin = roles?.includes(Role.ADMIN);
+
+  const accountInfo = useGetAccountInfo();
+
+  const employeeInfo = useGetEmployeeInfo();
+
+  const info = isAdmin ? accountInfo : employeeInfo;
+
   const displayName = isAdmin ? '' : `, ${(info as Employee)?.fullName}`;
   const role = isAdmin ? Role.ADMIN : (info as Employee)?.phone;
 

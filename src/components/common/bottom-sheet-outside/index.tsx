@@ -1,4 +1,9 @@
-import { BottomSheetModal, BottomSheetModalProvider, BottomSheetView } from '@gorhom/bottom-sheet';
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+  BottomSheetView,
+  BottomSheetScrollView,
+} from '@gorhom/bottom-sheet';
 import { useKeyboardStatus } from '@hooks/useKeyboardStatus';
 import { height } from '@utils/helpers/dimension';
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
@@ -9,6 +14,7 @@ type OpenPayload2 = {
   content: React.ReactNode;
   snapPoints?: number[];
   fixSnapPoints?: boolean;
+  scrollView?: boolean;
 };
 
 const BottomSheetContext2 = createContext<{
@@ -26,6 +32,7 @@ const BottomSheetProvider2 = ({ children }: { children: any }) => {
 
   const [snapPoints, setSnapPoints] = useState<number[]>(DEFAULT_SNAP_POINTS);
   const [sheetContent2, setSheetContent2] = useState<React.ReactNode>(null);
+  const [isScrollView, setIsScrollView] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [enableDynamicSizing, setEnableDynamicSizing] = useState(true);
 
@@ -40,6 +47,12 @@ const BottomSheetProvider2 = ({ children }: { children: any }) => {
       setEnableDynamicSizing(false);
     } else {
       setEnableDynamicSizing(true);
+    }
+
+    if (payload.scrollView) {
+      setIsScrollView(true);
+    } else {
+      setIsScrollView(false);
     }
 
     setSheetContent2(payload.content);
@@ -96,20 +109,29 @@ const BottomSheetProvider2 = ({ children }: { children: any }) => {
             borderTopRightRadius: 12,
           }}
         >
-          <BottomSheetView
-            style={[
-              styles.contentContainer,
-              {
-                height: enableDynamicSizing
-                  ? 'auto'
-                  : isOpenKeyboard
-                  ? snapPoints[1] - 32
-                  : snapPoints[0] - 32,
-              },
-            ]}
-          >
-            {sheetContent2}
-          </BottomSheetView>
+          {isScrollView ? (
+            <BottomSheetScrollView
+              contentContainerStyle={styles.contentContainer}
+              keyboardShouldPersistTaps="handled"
+            >
+              {sheetContent2}
+            </BottomSheetScrollView>
+          ) : (
+            <BottomSheetView
+              style={[
+                styles.contentContainer,
+                {
+                  height: enableDynamicSizing
+                    ? 'auto'
+                    : isOpenKeyboard
+                    ? snapPoints[1] - 32
+                    : snapPoints[0] - 32,
+                },
+              ]}
+            >
+              {sheetContent2}
+            </BottomSheetView>
+          )}
         </BottomSheetModal>
       </BottomSheetModalProvider>
     </BottomSheetContext2.Provider>
@@ -120,7 +142,6 @@ export default BottomSheetProvider2;
 
 const styles = StyleSheet.create({
   contentContainer: {
-    flex: 1,
     paddingBottom: 16,
   },
   blur: {
