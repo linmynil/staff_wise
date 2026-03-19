@@ -31,6 +31,14 @@ export const leaveServive = baseAPI.injectEndpoints({
       }),
       providesTags: [tagTypes.Leave],
     }),
+    getLeavesPendingApprovals: buider.query<GetLeaveResponse, GetLeaveRequest>({
+      query: query => ({
+        endpoint: `/leave/requests/pending-approvals`,
+        method: Method.GET,
+        params: query,
+      }),
+      providesTags: [tagTypes.Leave],
+    }),
     getEmployeeLeaveBalance: buider.query<Balance, number>({
       query: id => ({
         endpoint: `/leave/balance/${id}`,
@@ -97,6 +105,7 @@ export const leaveServive = baseAPI.injectEndpoints({
 export const {
   useGetLeaveSummaryDashboardQuery,
   useGetLeavesQuery,
+  useGetLeavesPendingApprovalsQuery,
   useGetCurrentLeaveBalanceQuery,
   useGetEmployeeLeaveBalanceQuery,
   useCreateLeaveBalanceMutation,

@@ -20,6 +20,7 @@ enum ManagementType {
   ACCOUNT = 'account',
   EMPLOYEE = 'employee',
   LEAVE_BALANCE = 'leave-balance',
+  LEAVE_REQUESTS = 'leave-requests',
 }
 
 const managementOptions = [
@@ -35,14 +36,21 @@ const managementOptions = [
     title: 'Employee Management',
     time: dayjs().format('DD/MM/YYYY'),
     type: ManagementType.EMPLOYEE,
-    roles: [Role.ADMIN, Role.HR],
+    roles: [Role.HR],
   },
   {
     id: '3',
     title: 'Leave Balance Management',
     time: dayjs().format('DD/MM/YYYY'),
     type: ManagementType.LEAVE_BALANCE,
-    roles: [Role.ADMIN, Role.HR],
+    roles: [Role.HR],
+  },
+  {
+    id: '4',
+    title: 'List Leave Management',
+    time: dayjs().format('DD/MM/YYYY'),
+    type: ManagementType.LEAVE_REQUESTS,
+    roles: [Role.MANAGER],
   },
 ];
 
@@ -90,6 +98,11 @@ const Home = () => {
       screen: HomeRoutes.HOME_MANAGE_LEAVE_BALANCE,
     });
   };
+  const goScreenLeaveRequestsManagement = () => {
+    navigation.navigate(MainRoutes.MAIN_HOME, {
+      screen: HomeRoutes.HOME_MANAGE_LEAVE_REQUESTS,
+    });
+  };
 
   const handleManagement = (type: string) => {
     switch (type) {
@@ -101,6 +114,9 @@ const Home = () => {
         break;
       case ManagementType.LEAVE_BALANCE:
         goScreenLeaveBalanceManagement();
+        break;
+      case ManagementType.LEAVE_REQUESTS:
+        goScreenLeaveRequestsManagement();
         break;
       default:
         break;

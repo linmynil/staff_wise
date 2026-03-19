@@ -332,8 +332,10 @@ interface DetailLeaveRequestProps {
 
 const LeaveDetailContent = (props: DetailLeaveRequestProps) => {
   const { detail } = props;
-  const { status } = detail;
+  const { status, leaveType, startDate, endDate, isFullDay, startTime, endTime, reason } = detail;
   const { color, backgroundColor, value } = leaveStatusMap[status as TypeLeaveStatus];
+  const formattedStart = dayjs(startDate).format('DD/MM/YYYY');
+  const formattedEnd = dayjs(endDate).format('DD/MM/YYYY');
   return (
     <View
       style={{
@@ -347,7 +349,7 @@ const LeaveDetailContent = (props: DetailLeaveRequestProps) => {
       <Text weight={600} size={20} style={{ textAlign: 'center' }}>
         Detail Leave
       </Text>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }}>
         <View backgroundColor={backgroundColor} borderRadius={8} paddingVertical={12}>
           <Text
             color={color}
@@ -360,26 +362,46 @@ const LeaveDetailContent = (props: DetailLeaveRequestProps) => {
             {value}
           </Text>
         </View>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc</Text>
-        <Text>abc1</Text>
+        <View
+          style={{
+            flex: 0.5,
+            justifyContent: 'space-between',
+            paddingVertical: '10%',
+          }}
+        >
+          <View
+            style={{
+              flex: 0.2,
+              justifyContent: 'space-between',
+              borderBottomWidth: 1,
+              paddingBottom: 20,
+            }}
+          >
+            <Text weight={600}>Leave Type:</Text>
+            <Text weight={600} size={18}>
+              {leaveType}
+            </Text>
+            <Text>
+              {formattedStart} - {formattedEnd}
+            </Text>
+          </View>
+          <View
+            style={{
+              flex: 0.2,
+              justifyContent: 'space-between',
+              borderBottomWidth: 1,
+              paddingBottom: 30,
+            }}
+          >
+            <Text weight={600}>Leave Period:</Text>
+            <Text>{isFullDay ? 'Full Day' : `${startTime || ''} - ${endTime || ''}`}</Text>
+          </View>
+
+          <View>
+            <Text weight={600}>Reason:</Text>
+            <Text>{reason || '...'}</Text>
+          </View>
+        </View>
       </ScrollView>
       <Button title="Cancel" onPress={() => {}} />
     </View>

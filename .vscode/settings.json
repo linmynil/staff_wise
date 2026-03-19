@@ -1,5 +1,6 @@
 {
-    "editor.wordWrapColumn": 110,
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "editor.wordWrapColumn": 110,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.fontSize": 14
 }

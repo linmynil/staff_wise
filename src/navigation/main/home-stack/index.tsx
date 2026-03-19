@@ -13,6 +13,7 @@ import CreateLeaveBalance from '@screens/main/bottom-tab/home/features/leave-man
 import CreateLeaveBalanceBonus from '@screens/main/bottom-tab/home/features/leave-management/balance/CreateLeaveBalanceBonus';
 import CreateLeaveBalanceRefill from '@screens/main/bottom-tab/home/features/leave-management/balance/CreateLeaveBalanceRefill';
 import LeaveStatus from '@screens/main/bottom-tab/home/features/leave-management/requests';
+import ListLeave from '@screens/main/bottom-tab/home/features/leave-management/requests/ListLeave';
 import React from 'react';
 
 const HomeStack = createNativeStackNavigator<any>();
@@ -43,6 +44,7 @@ const HomeNavigation = () => {
       {/*Leave*/}
       <HomeStack.Screen name={HomeRoutes.APPLY_LEAVE} component={ApplyLeave} />
       <HomeStack.Screen name={HomeRoutes.LEAVE_STATUS} component={LeaveStatus} />
+      <HomeStack.Screen name={HomeRoutes.HOME_MANAGE_LEAVE_REQUESTS} component={ListLeave} />
       {/*Leave balance*/}
       <HomeStack.Screen name={HomeRoutes.HOME_MANAGE_LEAVE_BALANCE} component={ManageLeave} />
       <HomeStack.Screen
