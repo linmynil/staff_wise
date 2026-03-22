@@ -93,9 +93,27 @@ export const leaveServive = baseAPI.injectEndpoints({
         method: Method.GET,
       }),
     }),
-    cancelPendingLeaveRequest: buider.query<Leave, number>({
+    cancelPendingLeaveRequest: buider.mutation<Leave, number>({
       query: id => ({
         endpoint: `/leave/requests/${id}/cancel`,
+        method: Method.POST,
+      }),
+    }),
+    rejectPendingLeaveRequest: buider.mutation<Leave, number>({
+      query: id => ({
+        endpoint: `/leave/requests/${id}/reject`,
+        method: Method.POST,
+      }),
+    }),
+    approvePendingLeaveRequest: buider.mutation<Leave, number>({
+      query: id => ({
+        endpoint: `/leave/requests/${id}/approve`,
+        method: Method.POST,
+      }),
+    }),
+    cancelApprovedPendingLeaveRequest: buider.mutation<Leave, number>({
+      query: id => ({
+        endpoint: `/leave/requests/${id}/cancel-approved`,
         method: Method.POST,
       }),
     }),
@@ -114,5 +132,8 @@ export const {
   useCreateLeaveRequestsMutation,
   useGetLeaveDetailQuery,
   useLazyGetLeaveDetailQuery,
-  useCancelPendingLeaveRequestQuery,
+  useCancelPendingLeaveRequestMutation,
+  useApprovePendingLeaveRequestMutation,
+  useRejectPendingLeaveRequestMutation,
+  useCancelApprovedPendingLeaveRequestMutation,
 } = leaveServive;

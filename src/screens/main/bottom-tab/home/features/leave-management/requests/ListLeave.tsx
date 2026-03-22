@@ -5,9 +5,15 @@ import DatePicker from '@components/common/date-picker';
 import SelectBox, { SelectOption } from '@components/common/select-box';
 import MainLayout from '@components/layout/main-layout';
 import LeaveItem from '@components/ui/leave-item';
-import { useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
+import { baseAPI, tagTypes } from '@services/baseAPI';
 import { useGetEmployeesNoPaginationQuery } from '@services/employee';
-import { useGetLeavesPendingApprovalsQuery, useLazyGetLeaveDetailQuery } from '@services/leave';
+import {
+  useApprovePendingLeaveRequestMutation,
+  useGetLeavesQuery,
+  useLazyGetLeaveDetailQuery,
+  useRejectPendingLeaveRequestMutation,
+} from '@services/leave';
 import colors from '@utils/constants/colors';
 import { LIMIT } from '@utils/constants/constants';
 import {
@@ -19,6 +25,7 @@ import {
 } from '@utils/constants/leave';
 import { height } from '@utils/helpers/dimension';
 import { GetLeaveRequest, Leave } from '@utils/types/leave.type';
+import { ErrorAPI } from '@utils/types/other.type';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Keyboard, RefreshControl, ScrollView, StyleSheet } from 'react-native';
@@ -43,8 +50,8 @@ const initialQuery: GetLeaveRequest = {
 };
 
 const ListLeave = () => {
+  const dispatch = useAppDispatch();
   const roles = useAppSelector(state => state.auth.roles ?? []);
-  //   const account = useAppSelector(state => state.auth.account ?? {});
   const { openBottomSheet2, closeBottomSheet2 } = useBottomSheetContext2();
   const [query, setQuery] = useState(initialQuery);
   // const [searchText, setSearchText] = useState('');
@@ -52,9 +59,7 @@ const ListLeave = () => {
   const [hasMore, setHasMore] = useState(true);
   const onEndReachedCalledDuringMomentum = React.useRef(true);
 
-  const [getLeaveDetail] = useLazyGetLeaveDetailQuery();
-
-  const { data: dataGetLeaves, isFetching: isFetchingLeaves } = useGetLeavesPendingApprovalsQuery(
+  const { data: dataGetLeaves, isFetching: isFetchingLeaves } = useGetLeavesQuery(
     {
       ...query,
     },
@@ -73,6 +78,10 @@ const ListLeave = () => {
     },
   );
 
+  const [getLeaveDetail] = useLazyGetLeaveDetailQuery();
+  const [rejectLeave, { isLoading: isLoadingRejectLeave }] = useRejectPendingLeaveRequestMutation();
+  const [approveLeave, { isLoading: isLoadingApproveLeave }] =
+    useApprovePendingLeaveRequestMutation();
   const employeesOptions = dataGetEmployeesNoPagination?.map(employee => ({
     value: employee?.id?.toString(),
     label: `${employee?.fullName} - ${
@@ -96,6 +105,16 @@ const ListLeave = () => {
     setHasMore(dataGetLeaves?.data?.length === LIMIT);
   }, [dataGetLeaves]);
 
+  useEffect(() => {
+    if (!dataGetLeaves?.data) return;
+
+    if (query.page === 1) {
+      setLeaves(dataGetLeaves?.data.filter(l => l.status === 'PENDING'));
+    } else {
+      setLeaves(prev => [...prev, ...dataGetLeaves?.data.filter(l => l.status === 'PENDING')]);
+    }
+    setHasMore(dataGetLeaves?.data?.filter(l => l.status === 'PENDING').length === LIMIT);
+  }, [dataGetLeaves]);
   // const debouncedSearch = useDebouncedCallback((value: string) => {
   //   setHasMore(true);
   //   setQuery(prev => ({
@@ -155,7 +174,15 @@ const ListLeave = () => {
       .then(res => {
         openBottomSheet2({
           fixSnapPoints: true,
-          content: <LeaveDetailContent detail={res} />,
+          content: (
+            <LeaveDetailContent
+              detail={res}
+              isLoadingApprove={isLoadingApproveLeave}
+              isLoadingReject={isLoadingRejectLeave}
+              onApprove={handleApproveLeave}
+              onReject={handleRejectLeave}
+            />
+          ),
         });
       })
       .catch(() => {
@@ -165,11 +192,65 @@ const ListLeave = () => {
         });
       });
   };
-  //  const handleCancelLeave = (id: number) => {
-  //     const { data: detail } = useCancelPendingLeaveRequestQuery(id, { skip: !id });
 
-  //     closeBottomSheet2();
-  //   };
+  const handleApproveLeave = (id: number) => {
+    console.log('id', id);
+    approveLeave(id)
+      .then(res => {
+        const { data, error } = res || {};
+        console.log(data);
+
+        if (!error) {
+          Toast.show({
+            type: 'success',
+            text1: 'Approve leave success',
+          });
+          dispatch(baseAPI.util.invalidateTags([tagTypes.Leave]));
+        } else {
+          const message = (error as ErrorAPI)?.data?.message;
+          Toast.show({
+            type: 'error',
+            text1: message,
+          });
+        }
+      })
+      .catch(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'An error occurred, please try again.',
+        });
+      });
+    closeBottomSheet2();
+  };
+  const handleRejectLeave = (id: number) => {
+    console.log('id', id);
+    rejectLeave(id)
+      .then(res => {
+        const { data, error } = res || {};
+        console.log(data);
+
+        if (!error) {
+          Toast.show({
+            type: 'success',
+            text1: 'Reject leave success',
+          });
+          dispatch(baseAPI.util.invalidateTags([tagTypes.Leave]));
+        } else {
+          const message = (error as ErrorAPI)?.data?.message;
+          Toast.show({
+            type: 'error',
+            text1: message,
+          });
+        }
+      })
+      .catch(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'An error occurred, please try again.',
+        });
+      });
+    closeBottomSheet2();
+  };
   return (
     <MainLayout
       back={<MainLayout.BackToPreviousButton />}
@@ -221,7 +302,7 @@ const ListLeave = () => {
           }}
           onEndReachedThreshold={0.05}
           renderItem={({ item }) => (
-            <LeaveItem item={item} isEmployee={true} onPress={() => openLeaveDetail(item?.id)} />
+            <LeaveItem item={item} isEmployee={false} onPress={() => openLeaveDetail(item?.id)} />
           )}
           ListEmptyComponent={isFetchingLeaves ? <></> : <EmptyData title="Leave is empty" />}
         />
@@ -323,11 +404,26 @@ const LeaveFilterContent: React.FC<LeaveFilterContentProps> = ({
 
 interface DetailLeaveRequestProps {
   detail: Leave;
+  onReject: (id: number) => void;
+  onApprove: (id: number) => void;
+  isLoadingReject: boolean;
+  isLoadingApprove: boolean;
 }
 
 const LeaveDetailContent = (props: DetailLeaveRequestProps) => {
-  const { detail } = props;
-  const { status, leaveType, startDate, endDate, isFullDay, startTime, endTime, reason } = detail;
+  const { detail, onApprove, onReject, isLoadingApprove, isLoadingReject } = props;
+  const {
+    id,
+    status,
+    leaveType,
+    startDate,
+    endDate,
+    isFullDay,
+    startTime,
+    endTime,
+    employee,
+    reason,
+  } = detail;
   const { color, backgroundColor, value } = leaveStatusMap[status as TypeLeaveStatus];
   const formattedStart = dayjs(startDate).format('DD/MM/YYYY');
   const formattedEnd = dayjs(endDate).format('DD/MM/YYYY');
@@ -393,39 +489,35 @@ const LeaveDetailContent = (props: DetailLeaveRequestProps) => {
           </View>
 
           <View>
+            <Text weight={600}>Sender: {employee?.fullName}</Text>
             <Text weight={600}>Reason:</Text>
             <Text>{reason || '...'}</Text>
           </View>
         </View>
       </ScrollView>
-      {status === 'APPROVED' ? (
+
+      <View row gap={3}>
         <Button
-          title="Cancel"
-          onPress={() => {}}
+          title="Reject"
+          loading={isLoadingReject}
+          disabled={isLoadingReject}
+          onPress={() => onReject(id)}
           style={{
-            backgroundColor: colors.neutral.c500,
+            width: '50%',
+            backgroundColor: colors.red.c500,
           }}
         />
-      ) : (
-        <View row gap={3}>
-          <Button
-            title="Reject"
-            onPress={() => {}}
-            style={{
-              width: '50%',
-              backgroundColor: colors.red.c500,
-            }}
-          />
-          <Button
-            title="Approve"
-            onPress={() => {}}
-            style={{
-              width: '50%',
-              backgroundColor: colors.blue.c500,
-            }}
-          />
-        </View>
-      )}
+        <Button
+          title="Approve"
+          loading={isLoadingApprove}
+          disabled={isLoadingApprove}
+          onPress={() => onApprove(id)}
+          style={{
+            width: '50%',
+            backgroundColor: colors.blue.c500,
+          }}
+        />
+      </View>
     </View>
   );
 };

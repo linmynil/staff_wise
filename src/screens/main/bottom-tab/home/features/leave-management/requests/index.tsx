@@ -5,9 +5,15 @@ import DatePicker from '@components/common/date-picker';
 import SelectBox, { SelectOption } from '@components/common/select-box';
 import MainLayout from '@components/layout/main-layout';
 import LeaveItem from '@components/ui/leave-item';
-import { useAppSelector } from '@redux/store';
+import { useAppDispatch, useAppSelector } from '@redux/store';
+import { baseAPI, tagTypes } from '@services/baseAPI';
 import { useGetEmployeesNoPaginationQuery } from '@services/employee';
-import { useGetLeavesQuery, useLazyGetLeaveDetailQuery } from '@services/leave';
+import {
+  useCancelApprovedPendingLeaveRequestMutation,
+  useCancelPendingLeaveRequestMutation,
+  useGetLeavesQuery,
+  useLazyGetLeaveDetailQuery,
+} from '@services/leave';
 import colors from '@utils/constants/colors';
 import { LIMIT } from '@utils/constants/constants';
 import {
@@ -19,6 +25,7 @@ import {
 } from '@utils/constants/leave';
 import { height } from '@utils/helpers/dimension';
 import { GetLeaveRequest, Leave } from '@utils/types/leave.type';
+import { ErrorAPI } from '@utils/types/other.type';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Keyboard, RefreshControl, ScrollView, StyleSheet } from 'react-native';
@@ -43,6 +50,7 @@ const initialQuery: GetLeaveRequest = {
 };
 
 const LeaveStatus = () => {
+  const dispatch = useAppDispatch();
   const roles = useAppSelector(state => state.auth.roles ?? []);
   const account = useAppSelector(state => state.auth.account ?? {});
   const { openBottomSheet2, closeBottomSheet2 } = useBottomSheetContext2();
@@ -51,8 +59,6 @@ const LeaveStatus = () => {
   const [leaves, setLeaves] = useState<Leave[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const onEndReachedCalledDuringMomentum = React.useRef(true);
-
-  const [getLeaveDetail] = useLazyGetLeaveDetailQuery();
 
   const { data: dataGetLeaves, isFetching: isFetchingLeaves } = useGetLeavesQuery(
     {
@@ -72,6 +78,11 @@ const LeaveStatus = () => {
       refetchOnMountOrArgChange: true,
     },
   );
+
+  const [getLeaveDetail] = useLazyGetLeaveDetailQuery();
+  const [cancelLeave, { isLoading: isLoadingCancelLeave }] = useCancelPendingLeaveRequestMutation();
+  const [cancelApprovedLeave, { isLoading: isLoadingCancelApproved }] =
+    useCancelApprovedPendingLeaveRequestMutation();
 
   const employeesOptions = dataGetEmployeesNoPagination?.map(employee => ({
     value: employee?.id?.toString(),
@@ -160,7 +171,15 @@ const LeaveStatus = () => {
       .then(res => {
         openBottomSheet2({
           fixSnapPoints: true,
-          content: <LeaveDetailContent detail={res} />,
+          content: (
+            <LeaveDetailContent
+              detail={res}
+              onCancel={handleCancelLeave}
+              isLoadingLeave={isLoadingCancelLeave}
+              onCancelApproved={handleCancelApproveLeave}
+              isLoadingCancelApprove={isLoadingCancelApproved}
+            />
+          ),
         });
       })
       .catch(() => {
@@ -170,11 +189,65 @@ const LeaveStatus = () => {
         });
       });
   };
-  //  const handleCancelLeave = (id: number) => {
-  //     const { data: detail } = useCancelPendingLeaveRequestQuery(id, { skip: !id });
 
-  //     closeBottomSheet2();
-  //   };
+  const handleCancelLeave = (id: number) => {
+    console.log('id', id);
+    cancelLeave(id)
+      .then(res => {
+        const { data, error } = res || {};
+        console.log(data);
+
+        if (!error) {
+          Toast.show({
+            type: 'success',
+            text1: 'Cancel leave success',
+          });
+          dispatch(baseAPI.util.invalidateTags([tagTypes.Leave]));
+        } else {
+          const message = (error as ErrorAPI)?.data?.message;
+          Toast.show({
+            type: 'error',
+            text1: message,
+          });
+        }
+      })
+      .catch(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'An error occurred, please try again.',
+        });
+      });
+    closeBottomSheet2();
+  };
+  const handleCancelApproveLeave = (id: number) => {
+    console.log('id', id);
+    cancelApprovedLeave(id)
+      .then(res => {
+        const { data, error } = res || {};
+        console.log(data);
+
+        if (!error) {
+          Toast.show({
+            type: 'success',
+            text1: 'Cancel approved leave success',
+          });
+          dispatch(baseAPI.util.invalidateTags([tagTypes.Leave]));
+        } else {
+          const message = (error as ErrorAPI)?.data?.message;
+          Toast.show({
+            type: 'error',
+            text1: message,
+          });
+        }
+      })
+      .catch(() => {
+        Toast.show({
+          type: 'error',
+          text1: 'An error occurred, please try again.',
+        });
+      });
+    closeBottomSheet2();
+  };
   return (
     <MainLayout
       back={<MainLayout.BackToPreviousButton />}
@@ -328,11 +401,16 @@ const LeaveFilterContent: React.FC<LeaveFilterContentProps> = ({
 
 interface DetailLeaveRequestProps {
   detail: Leave;
+  onCancel: (id: number) => void;
+  isLoadingLeave: boolean;
+  onCancelApproved: (id: number) => void;
+  isLoadingCancelApprove: boolean;
 }
 
 const LeaveDetailContent = (props: DetailLeaveRequestProps) => {
-  const { detail } = props;
-  const { status, leaveType, startDate, endDate, isFullDay, startTime, endTime, reason } = detail;
+  const { detail, onCancel, isLoadingLeave, onCancelApproved, isLoadingCancelApprove } = props;
+  const { id, status, leaveType, startDate, endDate, isFullDay, startTime, endTime, reason } =
+    detail;
   const { color, backgroundColor, value } = leaveStatusMap[status as TypeLeaveStatus];
   const formattedStart = dayjs(startDate).format('DD/MM/YYYY');
   const formattedEnd = dayjs(endDate).format('DD/MM/YYYY');
@@ -403,7 +481,25 @@ const LeaveDetailContent = (props: DetailLeaveRequestProps) => {
           </View>
         </View>
       </ScrollView>
-      <Button title="Cancel" onPress={() => {}} />
+      {status === 'PENDING' && (
+        <Button
+          title="Cancel"
+          loading={isLoadingLeave}
+          disabled={isLoadingLeave}
+          onPress={() => onCancel(id)}
+        />
+      )}
+      {status === 'APPROVED' && (
+        <Button
+          title="Cancel"
+          loading={isLoadingCancelApprove}
+          disabled={isLoadingCancelApprove}
+          onPress={() => onCancelApproved(id)}
+          style={{
+            backgroundColor: colors.neutral.c500,
+          }}
+        />
+      )}
     </View>
   );
 };
