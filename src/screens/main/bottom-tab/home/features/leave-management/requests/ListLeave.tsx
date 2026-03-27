@@ -10,6 +10,7 @@ import { baseAPI, tagTypes } from '@services/baseAPI';
 import { useGetEmployeesNoPaginationQuery } from '@services/employee';
 import {
   useApprovePendingLeaveRequestMutation,
+  useGetLeavesPendingApprovalsQuery,
   useGetLeavesQuery,
   useLazyGetLeaveDetailQuery,
   useRejectPendingLeaveRequestMutation,
@@ -59,7 +60,7 @@ const ListLeave = () => {
   const [hasMore, setHasMore] = useState(true);
   const onEndReachedCalledDuringMomentum = React.useRef(true);
 
-  const { data: dataGetLeaves, isFetching: isFetchingLeaves } = useGetLeavesQuery(
+  const { data: dataGetLeaves, isFetching: isFetchingLeaves } = useGetLeavesPendingApprovalsQuery(
     {
       ...query,
     },
@@ -105,16 +106,16 @@ const ListLeave = () => {
     setHasMore(dataGetLeaves?.data?.length === LIMIT);
   }, [dataGetLeaves]);
 
-  useEffect(() => {
-    if (!dataGetLeaves?.data) return;
+  // useEffect(() => {
+  //   if (!dataGetLeaves?.data) return;
 
-    if (query.page === 1) {
-      setLeaves(dataGetLeaves?.data.filter(l => l.status === 'PENDING'));
-    } else {
-      setLeaves(prev => [...prev, ...dataGetLeaves?.data.filter(l => l.status === 'PENDING')]);
-    }
-    setHasMore(dataGetLeaves?.data?.filter(l => l.status === 'PENDING').length === LIMIT);
-  }, [dataGetLeaves]);
+  //   if (query.page === 1) {
+  //     setLeaves(dataGetLeaves?.data.filter(l => l.status === 'PENDING'));
+  //   } else {
+  //     setLeaves(prev => [...prev, ...dataGetLeaves?.data.filter(l => l.status === 'PENDING')]);
+  //   }
+  //   setHasMore(dataGetLeaves?.data?.filter(l => l.status === 'PENDING').length === LIMIT);
+  // }, [dataGetLeaves]);
   // const debouncedSearch = useDebouncedCallback((value: string) => {
   //   setHasMore(true);
   //   setQuery(prev => ({

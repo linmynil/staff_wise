@@ -73,14 +73,14 @@ const ManageEmployee = () => {
   });
 
   useEffect(() => {
-    if (!dataGetEmployeesWithPagination?.data) return;
+    if (!dataGetEmployeesWithPagination?.data.filter(e => e.account?.isActive === true)) return;
 
     if (query.page === 1) {
-      setEmployees(dataGetEmployeesWithPagination?.data);
+      setEmployees(dataGetEmployeesWithPagination?.data.filter(e => e.account?.isActive === true));
     } else {
-      setEmployees(prev => [...prev, ...dataGetEmployeesWithPagination?.data]);
+      setEmployees(prev => [...prev, ...dataGetEmployeesWithPagination?.data.filter(e => e.account?.isActive === true)]);
     }
-    setHasMore(dataGetEmployeesWithPagination?.data?.length === LIMIT);
+    setHasMore(dataGetEmployeesWithPagination?.data?.filter(e => e.account?.isActive === true).length === LIMIT);
   }, [dataGetEmployeesWithPagination]);
 
   const debouncedSearch = useDebouncedCallback((value: string) => {

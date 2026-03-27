@@ -4,6 +4,7 @@ import SelectBox from '@components/common/select-box';
 import TimePicker from '@components/common/time-picker';
 import MainLayout from '@components/layout/main-layout';
 import { useNotify } from '@hooks/useNotify';
+import { HomeRoutes, MainRoutes } from '@navigation/routes';
 import { useNavigation } from '@react-navigation/native';
 import { useAppDispatch } from '@redux/store';
 import { baseAPI, tagTypes } from '@services/baseAPI';
@@ -25,6 +26,7 @@ const ApplyLeave = () => {
   const navigation = useNavigation<any>();
   const dispatch = useAppDispatch();
   const setFieldErrorRef = useRef<(field: string, message: string | undefined) => void>(() => {});
+  const resetFormRef = useRef<(() => void) | null>(null);
   const notify = useNotify();
   const initialForm = {
     startDate: '',
@@ -40,7 +42,9 @@ const ApplyLeave = () => {
 
   const handleWhenCreateSuccess = () => {
     dispatch(baseAPI.util.invalidateTags([tagTypes.Leave]));
-    navigation.goBack();
+     navigation.getParent().navigate(MainRoutes.MAIN_HOME, {
+      screen: HomeRoutes.LEAVE_STATUS,
+    });
   };
 
   const openSuccessModal = () => {
@@ -89,7 +93,9 @@ const ApplyLeave = () => {
         console.log(data);
 
         if (!error) {
+           resetFormRef.current?.();
           openSuccessModal();
+
         } else {
           const message = (error as ErrorAPI)?.data?.message;
           Toast.show({
@@ -132,8 +138,10 @@ const ApplyLeave = () => {
         errors,
         handleSubmit,
         touched,
+        resetForm
       }) => {
         setFieldErrorRef.current = setFieldError;
+        resetFormRef.current = resetForm;
         const isRequired = checkIsRequired(validationSchema);
         const getHandleChangeByName = (name: string) => {
           switch (name) {

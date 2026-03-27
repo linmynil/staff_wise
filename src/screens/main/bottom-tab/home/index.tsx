@@ -50,7 +50,7 @@ const managementOptions = [
     title: 'List Leave Management',
     time: dayjs().format('DD/MM/YYYY'),
     type: ManagementType.LEAVE_REQUESTS,
-    roles: [Role.MANAGER],
+    roles: [Role.MANAGER, Role.CEO],
   },
 ];
 
