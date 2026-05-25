@@ -53,8 +53,11 @@ const DashboardItem = ({ item, ...props }: IProps) => {
   const { icon, label } = LeaveTypeMap[leaveType as LeaveType];
 
   const pad = (n: number | undefined) => {
-    const num = Number(n);
-    return num < 10 ? `0${num}` : `${num}`;
+    if(!n){
+      return '00';
+    }
+    const num = Number(n) /8;
+    return num?.toString().padStart(2, '0');
   };
 
   return (
@@ -73,11 +76,11 @@ const DashboardItem = ({ item, ...props }: IProps) => {
         }}
       >
         <Text size={30} weight={600} color={colors.neutral.c900}>
-          {pad(usedHours ? usedHours / 8 : usedHours)}
+          {pad(usedHours)}
         </Text>
         <View>
           <Text size={14} color={colors.neutral.c500}>
-            /{pad(totalHours ? totalHours / 8 : totalHours)}
+            /{pad(totalHours)}
           </Text>
           <View height={6} />
         </View>
