@@ -42,7 +42,7 @@ const ApplyLeave = () => {
 
   const handleWhenCreateSuccess = () => {
     dispatch(baseAPI.util.invalidateTags([tagTypes.Leave]));
-     navigation.getParent().navigate(MainRoutes.MAIN_HOME, {
+    navigation.getParent().navigate(MainRoutes.MAIN_HOME, {
       screen: HomeRoutes.LEAVE_STATUS,
     });
   };
@@ -93,9 +93,8 @@ const ApplyLeave = () => {
         console.log(data);
 
         if (!error) {
-           resetFormRef.current?.();
+          resetFormRef.current?.();
           openSuccessModal();
-
         } else {
           const message = (error as ErrorAPI)?.data?.message;
           Toast.show({
@@ -138,7 +137,7 @@ const ApplyLeave = () => {
         errors,
         handleSubmit,
         touched,
-        resetForm
+        resetForm,
       }) => {
         setFieldErrorRef.current = setFieldError;
         resetFormRef.current = resetForm;

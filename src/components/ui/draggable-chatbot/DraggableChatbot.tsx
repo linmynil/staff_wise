@@ -1,4 +1,4 @@
-import { MainRoutes } from '@navigation/routes';
+import { ChatRoutes, MainRoutes } from '@navigation/routes';
 import colors from '@utils/constants/colors';
 import { height as SCREEN_HEIGHT, width as SCREEN_WIDTH } from '@utils/helpers/dimension';
 import React from 'react';
@@ -96,7 +96,11 @@ DraggableChatbotProps) => {
         </Animated.View> */}
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => navigation.getParent().navigate(MainRoutes.MAIN_CHAT)}
+          onPress={() =>
+            navigation.navigate(MainRoutes.MAIN_CHAT, {
+              screen: ChatRoutes.CHAT_SCREEN,
+            })
+          }
         >
           <Animated.View style={styles.icon}>
             <Image

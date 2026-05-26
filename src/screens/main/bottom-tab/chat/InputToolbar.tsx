@@ -25,7 +25,8 @@ export const RenderInputToolbar = (props: InputToolbarProps<IMessage>) => {
       containerStyle={[
         styles.shadow,
         {
-          backgroundColor: isDark ? '#1a1a1a' : colors.white,
+          // backgroundColor: isDark ? '#1a1a1a' : colors.white,
+          backgroundColor: isDark ? '#2a2a2a' : colors.white,
           borderTopWidth: 0,
           marginBottom: 24,
           marginHorizontal: 16,

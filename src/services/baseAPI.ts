@@ -6,6 +6,7 @@ export enum tagTypes {
   Employee = 'Employee',
   Auth = 'Auth',
   Leave = 'Leave',
+  Chat = 'Chat',
 }
 
 export enum Method {

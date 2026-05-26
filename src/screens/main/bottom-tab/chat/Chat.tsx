@@ -16,7 +16,6 @@ import { GiftedChat, IMessage } from 'react-native-gifted-chat';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { renderAvatar, renderBubble, renderMessage, renderMessageText } from './customComponents';
 import { RenderInputToolbar, renderSend } from './InputToolbar';
-import initialMessages from './messages';
 import {
   startListening,
   stopListening,
@@ -24,8 +23,31 @@ import {
 } from '@ascendtis/react-native-voice-to-text';
 import { requestMicrophonePermission } from '@utils/helpers/permisson.helper';
 import { useFocusEffect } from '@react-navigation/native';
+import {
+  useCreateChatThreadMutation,
+  useGetChatThreadDetailQuery,
+  useSendMessageMutation,
+} from '@services/chat';
+import { useGiftedChatMessages } from '@hooks/useGiftedChatMessages';
+import { useAppDispatch } from '@redux/store';
+import { baseAPI, tagTypes } from '@services/baseAPI';
 
-const Chat = () => {
+const Chat = ({ navigation, route }: any) => {
+  const { chatThreadId } = route.params || {};
+  const dispatch = useAppDispatch();
+
+  const [chatThreadIdState, setChatThreadIdState] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (chatThreadId) {
+      setChatThreadIdState(chatThreadId);
+    }
+  }, [chatThreadId]);
+
+  const { messagesData } = useGiftedChatMessages(chatThreadIdState);
+  const [sendMessage, { isLoading: isLoadingSendingMessage }] = useSendMessageMutation();
+  const [createNewChatThread] = useCreateChatThreadMutation();
+
   const [text, setText] = useState('');
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [isListening, setIsListening] = useState(false);
@@ -37,6 +59,12 @@ const Chat = () => {
   const tabbarHeight = 50;
   const keyboardVerticalOffset = insets.bottom + tabbarHeight;
 
+  useEffect(() => {
+    if (messagesData?.length > 0) {
+      setMessages(messagesData);
+    }
+  }, [messagesData]);
+
   useFocusEffect(
     React.useCallback(() => {
       return () => {
@@ -44,10 +72,6 @@ const Chat = () => {
       };
     }, []),
   );
-
-  useEffect(() => {
-    setMessages(initialMessages.reverse());
-  }, []);
 
   useEffect(() => {
     requestMicrophonePermission();
@@ -101,7 +125,35 @@ const Chat = () => {
   };
 
   const onSend = async (newMessages: IMessage[] = []) => {
+    if (!chatThreadIdState) {
+      try {
+        const res = await createNewChatThread({ title: newMessages[0].text }).unwrap();
+
+        if (res?.id) {
+          setChatThreadIdState(res.id);
+          dispatch(baseAPI.util.invalidateTags([tagTypes.Chat]));
+        }
+        return;
+      } catch (error) {
+        console.log('error', error);
+      }
+    }
     setMessages(prevMessages => GiftedChat.append(prevMessages, newMessages));
+    const content = newMessages[0].text;
+    try {
+      const res = await sendMessage({
+        threadId: chatThreadIdState as unknown as number,
+        body: {
+          content,
+          messageType: 'TEXT',
+        },
+      }).unwrap();
+      if (res) {
+        dispatch(baseAPI.util.invalidateTags([tagTypes.Chat]));
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
   };
 
   const showRecordAudio = () => {
@@ -109,14 +161,10 @@ const Chat = () => {
     setIsVisibleRecordAudio(!isVisibleRecordAudio);
   };
 
-  console.log('>>>>>>>>>>>>>>', isListening);
-
   return (
-    <MainLayout
-      back={<MainLayout.BackToPreviousButton />}
-      next={<Button.IconButton icon={<AddIcon width={25} height={25} viewBox="0 0 30 30" />} />}
-    >
+    <MainLayout back={<MainLayout.BackToPreviousButton />}>
       <GiftedChat
+        isTyping={isLoadingSendingMessage}
         messages={messages}
         text={text}
         onSend={onSend}
