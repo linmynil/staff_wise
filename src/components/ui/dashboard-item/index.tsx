@@ -52,12 +52,24 @@ const DashboardItem = ({ item, ...props }: IProps) => {
   const { leaveType, usedHours, totalHours } = item;
   const { icon, label } = LeaveTypeMap[leaveType as LeaveType];
 
+  const isAnnualLeave = leaveType === LeaveType.ANNUAL;
+
+  // const pad = (n: number | undefined) => {
+  //   if(!n){
+  //     return '00';
+  //   }
+  //   const num = Number(n) /8;
+  //   return num?.toString().padStart(2, '0');
+  // };
+
   const pad = (n: number | undefined) => {
-    if(!n){
+    if (!n) {
       return '00';
     }
-    const num = Number(n) /8;
-    return num?.toString().padStart(2, '0');
+
+    const num = Math.round(Number(n) / 8);
+
+    return num.toString().padStart(2, '0');
   };
 
   return (
@@ -78,12 +90,14 @@ const DashboardItem = ({ item, ...props }: IProps) => {
         <Text size={30} weight={600} color={colors.neutral.c900}>
           {pad(usedHours)}
         </Text>
-        <View>
-          <Text size={14} color={colors.neutral.c500}>
-            /{pad(totalHours)}
-          </Text>
-          <View height={6} />
-        </View>
+        {isAnnualLeave && (
+          <View>
+            <Text size={14} color={colors.neutral.c500}>
+              /{pad(totalHours)}
+            </Text>
+            <View height={6} />
+          </View>
+        )}
       </View>
     </View>
   );
