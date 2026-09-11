@@ -34,6 +34,7 @@ module.exports = {
           '@redux': './src/redux',
           '@hooks': './src/hooks',
           '@config': './src/config',
+          '@notification': './src/notification',
         },
       },
     ],

@@ -19,6 +19,7 @@
       "@redux": ["redux"],
       "@hooks": ["hooks"],
       "@config": ["config"],
+      "@notification": ["notification"],
 
       "@assets/*": ["assets/*"],
       "@components/*": ["components/*"],
@@ -29,7 +30,8 @@
       "@services/*": ["services/*"],
       "@redux/*": ["redux/*"],
       "@hooks/*": ["hooks/*"],
-      "@config/*": ["config/*"]
+      "@config/*": ["config/*"],
+      "@notification/*": ["notification/*"]
     }
   }
 }

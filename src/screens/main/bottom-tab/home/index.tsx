@@ -12,15 +12,18 @@ import { getData, storageKeys } from '@utils/helpers/asyncStorage.helper';
 import { Role } from '@utils/types/role.type';
 import dayjs from 'dayjs';
 import React, { useEffect, useMemo } from 'react';
-import { FlatList, ScrollView, StyleSheet } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useGetLeaveSummaryDashboardQuery } from '@services/leave';
 import { ArrowRightIcon } from '@assets';
+import { initNotification } from '@notification';
+import NotificationBell from '../notification/NotificationBell';
 
 enum ManagementType {
   ACCOUNT = 'account',
   EMPLOYEE = 'employee',
   LEAVE_BALANCE = 'leave-balance',
   LEAVE_REQUESTS = 'leave-requests',
+  MONITORING = 'monitoring',
 }
 
 const managementOptions = [
@@ -52,6 +55,13 @@ const managementOptions = [
     type: ManagementType.LEAVE_REQUESTS,
     roles: [Role.MANAGER, Role.CEO],
   },
+  {
+    id: '5',
+    title: 'Monitoring Employee',
+    time: dayjs().format('DD/MM/YYYY'),
+    type: ManagementType.MONITORING,
+    roles: [Role.MANAGER, Role.CEO, Role.HR],
+  },
 ];
 
 const Home = () => {
@@ -59,6 +69,10 @@ const Home = () => {
   const dispatch = useAppDispatch();
   const accountInfo = useAppSelector(state => state.account.accountInfo);
   const accountRoles = useAppSelector(state => state.auth.roles);
+
+  useEffect(() => {
+    initNotification(!!accountInfo?.employee);
+  }, [accountInfo?.employee]);
 
   const avatarKey = storageKeys.avatar + accountInfo?.id;
 
@@ -103,6 +117,11 @@ const Home = () => {
       screen: HomeRoutes.HOME_MANAGE_LEAVE_REQUESTS,
     });
   };
+  const goScreengoMonitoringManagement = () => {
+    navigation.navigate(MainRoutes.MAIN_HOME, {
+      screen: HomeRoutes.HOME_MANAGE_MONITORING,
+    });
+  };
 
   const handleManagement = (type: string) => {
     switch (type) {
@@ -118,6 +137,9 @@ const Home = () => {
       case ManagementType.LEAVE_REQUESTS:
         goScreenLeaveRequestsManagement();
         break;
+      case ManagementType.MONITORING:
+        goScreengoMonitoringManagement();
+        break;
       default:
         break;
     }
@@ -132,7 +154,17 @@ const Home = () => {
   };
 
   return (
-    <MainLayout title="Staff Wise" headerChildren={<ProfileInfoHeader />}>
+    <MainLayout
+      title="Staff Wise"
+      headerChildren={<ProfileInfoHeader />}
+      next={
+        <TouchableOpacity onPress={() => console.log('Notification')}>
+          <View>
+            <NotificationBell navigation={navigation} />
+          </View>
+        </TouchableOpacity>
+      }
+    >
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <PermissionGuard excludeRoles={[Role.ADMIN]}>

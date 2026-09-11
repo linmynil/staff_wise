@@ -14,6 +14,10 @@ import CreateLeaveBalanceBonus from '@screens/main/bottom-tab/home/features/leav
 import CreateLeaveBalanceRefill from '@screens/main/bottom-tab/home/features/leave-management/balance/CreateLeaveBalanceRefill';
 import LeaveStatus from '@screens/main/bottom-tab/home/features/leave-management/requests';
 import ListLeave from '@screens/main/bottom-tab/home/features/leave-management/requests/ListLeave';
+import MonitoringScreen from '@screens/main/bottom-tab/monitoring';
+import MonitoringLogScreen from '@screens/main/bottom-tab/monitoring/MonitoringLogScreen';
+import NotificationScreen from '@screens/main/bottom-tab/notification';
+import NotificationDetailScreen from '@screens/main/bottom-tab/notification/NotificationDetailScreen';
 import React from 'react';
 
 const HomeStack = createNativeStackNavigator<any>();
@@ -59,6 +63,16 @@ const HomeNavigation = () => {
         name={HomeRoutes.HOME_CREATE_LEAVE_BALANCE_REFILL}
         component={CreateLeaveBalanceRefill}
       />
+
+      {/* Notification */}
+      <HomeStack.Screen name={HomeRoutes.NOTIFICATION} component={NotificationScreen} />
+      <HomeStack.Screen
+        name={HomeRoutes.NOTIFICATION_DETAIL}
+        component={NotificationDetailScreen}
+      />
+      {/* Monitoring */}
+      <HomeStack.Screen name={HomeRoutes.HOME_MANAGE_MONITORING} component={MonitoringScreen} />
+      <HomeStack.Screen name={HomeRoutes.MONITORING_LOG} component={MonitoringLogScreen} />
     </HomeStack.Navigator>
   );
 };

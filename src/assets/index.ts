@@ -31,6 +31,7 @@ import ErrorCircleIcon from './icons/ErrorCircleIcon';
 import FilterIcon from './icons/FilterIcon';
 import InfoCircleIcon from './icons/InfoCircleIcon';
 import OclockIcon from './icons/OclockIcon';
+import Notification from './icons/Notification';
 
 export {
   AccountIcon,
@@ -66,4 +67,5 @@ export {
   SwapIcon,
   UserIdIcon,
   OclockIcon,
+  Notification,
 };

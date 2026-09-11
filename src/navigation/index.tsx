@@ -9,11 +9,14 @@ import { RootRoutes } from './routes';
 import { useAuthen } from '@hooks';
 import { useAppDispatch } from '@redux/store';
 
+import { navigationRef } from './navigationRef';
+
 const RootStack = createNativeStackNavigator<any>();
 
 const RootNavigator = () => {
   return (
-    <NavigationContainer>
+    // <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <RootContent />
     </NavigationContainer>
   );

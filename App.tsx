@@ -39,13 +39,8 @@ const FallbackComponent = ({ error }: { error?: any }) => {
         paddingHorizontal={16}
         gap={8}
       >
-        <Image
-          style={{ width: 200, height: 200 }}
-          source={require('@assets/images/error.png')}
-        />
-        <Text color={colors.neutral.c700}>
-          {'Uh oh! There was an error :('}
-        </Text>
+        <Image style={{ width: 200, height: 200 }} source={require('@assets/images/error.png')} />
+        <Text color={colors.neutral.c700}>{'Uh oh! There was an error :('}</Text>
         <Text style={styles.error}>{error ? error.toString() : ''}</Text>
         <View height={100} />
       </View>
@@ -96,6 +91,7 @@ const AppContent = () => {
 const PreLoadApp = ({ children }: any) => {
   const getConfig = () => {
     axios.defaults.baseURL = API_URL;
+    console.log('axios.defaults.baseURL:', axios.defaults.baseURL);
   };
 
   useEffect(() => {

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "344645214092",
+    "project_id": "staff-c8a44",
+    "storage_bucket": "staff-c8a44.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344645214092:android:25e65193cfad775b5480a9",
+        "android_client_info": {
+          "package_name": "com.staffwise"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNEqaGpqQqOM6ib9iJcjDxY1HihfKdzOE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

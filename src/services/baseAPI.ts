@@ -7,6 +7,8 @@ export enum tagTypes {
   Auth = 'Auth',
   Leave = 'Leave',
   Chat = 'Chat',
+  Notifications = 'Notifications',
+  Monitoring = 'Monitoring',
 }
 
 export enum Method {
