@@ -207,7 +207,7 @@ const MonitoringLogScreen = ({ route }: MonitoringLogScreenProps) => {
 
         {/* CONFIDENCE */}
 
-        <View style={styles.infoRow}>
+        {/* <View style={styles.infoRow}>
           <Text size={12} style={styles.infoLabel}>
             Confidence
           </Text>
@@ -215,7 +215,7 @@ const MonitoringLogScreen = ({ route }: MonitoringLogScreenProps) => {
           <Text size={13} weight={600}>
             {(Number(item.confidence) * 100).toFixed(1)}%
           </Text>
-        </View>
+        </View> */}
 
         {/* TIME */}
 

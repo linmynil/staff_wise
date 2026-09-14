@@ -1,6 +1,5 @@
 import { EmptyData, Text, View } from '@components';
 import MainLayout from '@components/layout/main-layout';
-import { HomeRoutes, MainRoutes } from '@navigation/routes';
 import {
   useGetNotificationsQuery,
   useMarkNotificationAsReadMutation,
@@ -15,7 +14,7 @@ const initialQuery = {
   limit: LIMIT,
 };
 
-const NotificationScreen = ({ navigation }: any) => {
+const NotificationScreen = ({}: any) => {
   /**
    * ==========================================================
    * Query phân trang
@@ -131,38 +130,28 @@ const NotificationScreen = ({ navigation }: any) => {
    * Bấm notification
    * ==========================================================
    */
+
   const handleNotificationPress = async (notification: NotificationItem) => {
     try {
-      /**
-       * Nếu chưa đọc
-       * => PATCH /notifications/{id}/read
-       */
       if (notification.readAt === null) {
         await markNotificationAsRead(notification.id).unwrap();
-      }
 
-      navigation.navigate(MainRoutes.MAIN_HOME, {
-        screen: HomeRoutes.NOTIFICATION_DETAIL,
-        params: {
-          notification,
-        },
-      });
+        // Cập nhật UI ngay lập tức thành đã đọc
+        setNotifications(prev =>
+          prev.map(item =>
+            item.id === notification.id
+              ? {
+                  ...item,
+                  readAt: new Date().toISOString(),
+                }
+              : item,
+          ),
+        );
+      }
     } catch (error) {
       console.log('Mark notification read error:', error);
-
-      /**
-       * API mark read lỗi
-       * vẫn cho phép xem detail.
-       */
-      navigation.navigate(MainRoutes.MAIN_HOME, {
-        screen: HomeRoutes.NOTIFICATION_DETAIL,
-        params: {
-          notification,
-        },
-      });
     }
   };
-
   /**
    * ==========================================================
    * Render từng notification
